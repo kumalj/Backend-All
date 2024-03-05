@@ -9,7 +9,7 @@ import { CrpModule } from './cr-p/cr-p.module';
 import {Crp} from './cr-p/cr-p.entity'
 
 import { AdminModule } from './admin/admin.module';
-import { AuthorizationMiddleware } from './authorization.middleware';
+
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { AuthorizationMiddleware } from './authorization.middleware';
       UserModule,
       JwtModule.register({
         secret: 'pass@123', 
-        signOptions: { expiresIn: '6h' },
+        signOptions: { expiresIn: '1m' },
       }),
       UserModule,
       
@@ -35,10 +35,4 @@ import { AuthorizationMiddleware } from './authorization.middleware';
       AdminModule,
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthorizationMiddleware)
-      .forRoutes('user');
-  }
-}
+export class AppModule {}

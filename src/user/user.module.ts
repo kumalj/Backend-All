@@ -12,8 +12,8 @@ import { UserController } from './user.controller';
   imports: [
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: 'secret-key',
-      signOptions: { expiresIn: '1h' },
+      secret: 'pass@123',
+      signOptions: { expiresIn: '1m' },
     }),
     // Other modules...
   ],

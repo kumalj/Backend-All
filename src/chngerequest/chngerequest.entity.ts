@@ -24,6 +24,12 @@ export class CR {
   @Column()
   priority: string;
 
+  @Column()
+    priorityOrder: number;
+
+  // @ManyToOne(type => User, user => user.changeRequests)
+  // user: User;
+
 
  
 

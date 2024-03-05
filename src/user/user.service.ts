@@ -47,32 +47,39 @@ export class UserService {
     return await this.userRepository.findOne({ where: { username } });
   }
 
-  async login(username: string, password: string): Promise<{ user: User; accessToken: string }> {
-    const user = await this.findByUsername(username);
 
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+        // Logi part service code
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+        async login(username: string, password: string): Promise<{ user: User; accessToken: string }> {
+          const user = await this.findByUsername(username);
+      
+          if (!user) {
+            throw new NotFoundException('User not found');
+          }
+      
+          const passwordMatch = await bcrypt.compare(password, user.password);
+      
+          if (!passwordMatch) {
+            throw new UnauthorizedException('Invalid credentials');
+          }
+      
+          if (user.status === 'rejected') {
+            throw new UnauthorizedException('Your account has been rejected. Please contact support.');
+          }
+      
+          if (user.status !== 'approved') {
+            throw new UnauthorizedException('Your account is pending approval.');
+          }
+      
+          const payload = { username: user.username, sub: user.userId, userType: user.userType };
+          const accessToken = this.jwtService.sign(payload);
+      
+          return { user, accessToken };
+      }
+      
 
-    if (!passwordMatch) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
 
-    if (user.status === 'rejected') {
-      throw new UnauthorizedException('Your account has been rejected. Please contact support.');
-    }
 
-    if (user.status !== 'approved') {
-      throw new UnauthorizedException('Your account is pending approval.');
-    }
-
-    const payload = { username: user.username, sub: user.userId, userType: user.userType };
-    const accessToken = this.jwtService.sign(payload);
-
-    return { user, accessToken };
-  }
 
 
 
@@ -94,6 +101,8 @@ export class UserService {
     User.status = 'rejected';
     await this.userRepository.save(User);
   }
+
+
 
   async updateUser(userId: number, updatedUser: User): Promise<User> {
     const user = await this.findUserById(userId);

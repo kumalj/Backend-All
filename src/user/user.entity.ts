@@ -1,6 +1,6 @@
 // src/user/user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { Crp } from '../cr-p/cr-p.entity'
+import { CR } from '../chngerequest/chngerequest.entity'
 
 @Entity()
 export class User {
@@ -24,6 +24,9 @@ export class User {
 
   @Column()
   status: string;
+
+  // @OneToMany(type => CR, changeRequest => changeRequest.user)
+  // changeRequests: CR[];
 
 
 }

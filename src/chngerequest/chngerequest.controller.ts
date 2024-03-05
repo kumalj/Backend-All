@@ -4,6 +4,7 @@ import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards,Res } from '
 import { CR } from './chngerequest.entity';
 import { CrService } from './chngerequest.service';
 import { JwtService } from '@nestjs/jwt';
+import { JwtAuthGuard } from '../authantication/jwtAuthGuard';
 
 
 @Controller('crs')
@@ -11,7 +12,8 @@ import { JwtService } from '@nestjs/jwt';
 export class CrController {
   constructor(private readonly crService: CrService) {}
 
-  @Get('add')
+  @Get()
+  @UseGuards(JwtAuthGuard)
   findAll(): Promise<CR[]> {
     return this.crService.findAll();
   }
