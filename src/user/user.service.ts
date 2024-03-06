@@ -32,10 +32,10 @@ export class UserService {
 
   
 
-  async findAll(req): Promise<User[]> {
-    const user = req['user'];
+  async findAll(accessToken: string): Promise<User[]> {
     return await this.userRepository.find();
   }
+
 
 
 
@@ -51,29 +51,23 @@ export class UserService {
         // Logi part service code
 
         async login(username: string, password: string): Promise<{ user: User; accessToken: string }> {
-          const user = await this.findByUsername(username);
-      
+          const user = await this.findByUsername(username);      
           if (!user) {
             throw new NotFoundException('User not found');
           }
-      
-          const passwordMatch = await bcrypt.compare(password, user.password);
-      
+          const passwordMatch = await bcrypt.compare(password, user.password);     
           if (!passwordMatch) {
             throw new UnauthorizedException('Invalid credentials');
-          }
-      
+          }    
           if (user.status === 'rejected') {
             throw new UnauthorizedException('Your account has been rejected. Please contact support.');
-          }
-      
+          } 
           if (user.status !== 'approved') {
             throw new UnauthorizedException('Your account is pending approval.');
           }
-      
           const payload = { username: user.username, sub: user.userId, userType: user.userType };
           const accessToken = this.jwtService.sign(payload);
-      
+          
           return { user, accessToken };
       }
       

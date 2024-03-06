@@ -1,5 +1,5 @@
 // src/user/user.controller.ts
-import { Controller, Post, Body, Get, Put, UnauthorizedException, NotFoundException, Param, UseGuards  } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Req, UnauthorizedException, NotFoundException, Param, UseGuards  } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -30,10 +30,17 @@ export class UserController {
     }
   }
 
+  
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getAllUsers(): Promise<User[]> {
-    return await this.userService.findAll(User);
+  async getAllUsers(@Req() req: Request): Promise<{ users: User[]; accessToken: string }> {
+    try {
+      const accessToken = req.headers['authorization'].split(' ')[1]; // Extract accessToken from request header
+      const users = await this.userService.findAll(accessToken); // Pass the accessToken to findAll method
+      return { users, accessToken }; // Return users along with accessToken
+    } catch (error) {
+      throw new UnauthorizedException('Invalid access token');
+    }
   }
 
 
