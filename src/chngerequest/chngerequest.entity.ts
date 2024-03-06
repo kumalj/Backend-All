@@ -8,28 +8,31 @@ export class CR {
 
   @Column()
   name: string;
-  
+
   @Column()
   department: string;
 
   @Column()
   topic: string;
-  
+
   @Column()
-  description : string;
+  description: string;
 
   @Column()
   priority: string;
 
   @Column()
-    priorityOrder: number;
+  priorityOrder: number;
 
-    @ManyToOne(() => User, user => user.changeRequests)
-    @JoinColumn({ name: 'userId' }) 
-    userId: User; 
-  
+  // @Column({ type: 'longblob', nullable: true }) // Change the data type to LONGBLOB
+  // file: Buffer; // Use Buffer type for binary data
+
+  @ManyToOne(() => User, user => user.changeRequests)
+  @JoinColumn({ name: 'userId' })
+  userId: User;
 
 
- 
+
+
 
 }

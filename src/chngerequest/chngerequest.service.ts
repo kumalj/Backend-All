@@ -16,7 +16,6 @@ export class CrService {
   async findAll(): Promise<CR[]> {
     return await this.CrRepository.find();
   }
-
   
 
   async create(cr: CR): Promise<CR> {

@@ -13,15 +13,15 @@ import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
-      TypeOrmModule.forRoot({
-        type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        username: 'root',
-        password: 'root',
-        database: 'crms',
-        entities: [User, CR, Crp],
-        synchronize: true,
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '',
+      database: 'crms',
+      entities: [User, CR, Crp],
+      synchronize: true,
       }),
       UserModule,
       JwtModule.register({
