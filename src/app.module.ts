@@ -26,7 +26,7 @@ import { AdminModule } from './admin/admin.module';
       UserModule,
       JwtModule.register({
         secret: 'pass@123', 
-        signOptions: { expiresIn: '1m' },
+        signOptions: { expiresIn: '1h' },
       }),
       UserModule,
       
