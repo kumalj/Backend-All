@@ -17,9 +17,13 @@ export class CrService {
     return await this.CrRepository.find();
   }
 
+  
+
   async create(cr: CR): Promise<CR> {
     return await this.CrRepository.save(cr);
   }
+
+
 
   async update(crId: number, cr: CR): Promise<CR> {
     await this.CrRepository.update(crId, cr);

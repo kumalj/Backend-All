@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 import { User } from '../user/user.entity';
 
 @Entity()
@@ -27,8 +27,9 @@ export class CR {
   @Column()
     priorityOrder: number;
 
-  @ManyToOne(() => User, user => user.changeRequests)
-  user: User; 
+    @ManyToOne(() => User, user => user.changeRequests)
+    @JoinColumn({ name: 'userId' }) 
+    userId: User; 
   
 
 
