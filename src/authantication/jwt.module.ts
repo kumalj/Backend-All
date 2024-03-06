@@ -9,7 +9,7 @@ import { JwtAuthGuard } from './jwtAuthGuard';
   imports: [
     JwtModule.register({
       secret: 'pass@123', 
-      signOptions: { expiresIn: '1m' }, 
+      signOptions: { expiresIn: '1h' }, 
     }),
   ],
   providers: [

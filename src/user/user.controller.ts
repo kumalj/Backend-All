@@ -18,10 +18,13 @@ export class UserController {
   }
 
   @Post('login')
-  async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string }> {
+  async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number }> {
     try {
-      const { user, accessToken } = await this.userService.login(credentials.username, credentials.password);
-      return { user, accessToken };
+      const { user, userId, accessToken } = await this.userService.login(credentials.username, credentials.password);
+
+      
+      return { user, userId, accessToken };
+      
     } catch (error) {
       if (error instanceof NotFoundException || error instanceof UnauthorizedException) {
         throw new UnauthorizedException('Invalid credentials');
@@ -32,15 +35,18 @@ export class UserController {
 
   
   @Get()
-  @UseGuards(JwtAuthGuard)
-  async getAllUsers(@Req() req: Request): Promise<{ users: User[]; accessToken: string }> {
-    try {
-      const accessToken = req.headers['authorization'].split(' ')[1]; // Extract accessToken from request header
-      const users = await this.userService.findAll(accessToken); // Pass the accessToken to findAll method
-      return { users, accessToken }; // Return users along with accessToken
-    } catch (error) {
-      throw new UnauthorizedException('Invalid access token');
+  @UseGuards(JwtAuthGuard) // Applying JwtAuthGuard
+  async getAllUsers(@Req() req: Request): Promise<User[]> {
+    const authorizationHeader = req.headers['authorization'];
+    if (!authorizationHeader) {
+      throw new UnauthorizedException('Authorization header missing');
     }
+  
+    // Extracting the access token from the authorization header
+    const accessToken = authorizationHeader.split(' ')[1]; 
+
+    // Call userService.findAll and pass accessToken
+    return await this.userService.findAll(accessToken);
   }
 
 

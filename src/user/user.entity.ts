@@ -25,8 +25,8 @@ export class User {
   @Column()
   status: string;
 
-  // @OneToMany(type => CR, changeRequest => changeRequest.user)
-  // changeRequests: CR[];
+  @OneToMany(() => CR, cr => cr.user)
+  changeRequests: CR[]; 
 
 
 }

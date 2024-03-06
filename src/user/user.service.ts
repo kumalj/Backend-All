@@ -50,7 +50,7 @@ export class UserService {
 
         // Logi part service code
 
-        async login(username: string, password: string): Promise<{ user: User; accessToken: string }> {
+        async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number }> {
           const user = await this.findByUsername(username);      
           if (!user) {
             throw new NotFoundException('User not found');
@@ -66,9 +66,12 @@ export class UserService {
             throw new UnauthorizedException('Your account is pending approval.');
           }
           const payload = { username: user.username, sub: user.userId, userType: user.userType };
-          const accessToken = this.jwtService.sign(payload);
           
-          return { user, accessToken };
+          const accessToken = this.jwtService.sign(payload);
+          return { user, accessToken, userId: user.userId };
+
+          
+          
       }
       
 

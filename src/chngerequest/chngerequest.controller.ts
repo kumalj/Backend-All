@@ -19,6 +19,7 @@ export class CrController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Body() cr: CR): Promise<CR> {
     return this.crService.create(cr);
   }
