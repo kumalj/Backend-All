@@ -19,9 +19,6 @@ export class CR {
   description : string;
 
   @Column()
-  type : string;
-
-  @Column()
   priority: string;
 
   @Column()
