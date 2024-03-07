@@ -1,5 +1,5 @@
 // src/user/user.controller.ts
-import { Controller, Post, Body, Get, Put, Req, UnauthorizedException, NotFoundException, Param, UseGuards  } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Req, UnauthorizedException, NotFoundException, Param, UseGuards, ForbiddenException, BadRequestException  } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -18,20 +18,18 @@ export class UserController {
   }
 
   @Post('login')
-  async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number }> {
-    try {
-      const { user, userId, accessToken } = await this.userService.login(credentials.username, credentials.password);
-
-      
-      return { user, userId, accessToken };
-      
-    } catch (error) {
-      if (error instanceof NotFoundException || error instanceof UnauthorizedException) {
-        throw new UnauthorizedException('Invalid credentials');
-      }
+async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number }> {
+  try {
+    const { user, accessToken, userId } = await this.userService.login(credentials.username, credentials.password);
+    return { user, accessToken, userId };
+  } catch (error) {
+    if (error instanceof NotFoundException || error instanceof ForbiddenException) {
       throw error;
+    } else {
+      throw new UnauthorizedException(error.message);
     }
   }
+}
 
   
   @Get()

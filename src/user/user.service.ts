@@ -1,5 +1,5 @@
 // src/user/user.service.ts
-import { Injectable, NotFoundException, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -13,10 +13,8 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-
-    
-
   ) { }
+
   async create(user: User): Promise<User> {
     const existingUser = await this.findByUsername(user.username);
     if (existingUser) {
@@ -28,16 +26,9 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-
-
-  
-
   async findAll(accessToken: string): Promise<User[]> {
     return await this.userRepository.find();
   }
-
-
-
 
   async findUserById(userId: number): Promise<User> {
     return this.userRepository.findOne({ where: { userId } });
@@ -47,39 +38,25 @@ export class UserService {
     return await this.userRepository.findOne({ where: { username } });
   }
 
-
-        // Logi part service code
-
-        async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number }> {
-          const user = await this.findByUsername(username);      
-          if (!user) {
-            throw new NotFoundException('User not found');
-          }
-          const passwordMatch = await bcrypt.compare(password, user.password);     
-          if (!passwordMatch) {
-            throw new UnauthorizedException('Invalid credentials');
-          }    
-          if (user.status === 'rejected') {
-            throw new UnauthorizedException('Your account has been rejected. Please contact support.');
-          } 
-          if (user.status !== 'approved') {
-            throw new UnauthorizedException('Your account is pending approval.');
-          }
-          const payload = { username: user.username, sub: user.userId, userType: user.userType };
-          
-          const accessToken = this.jwtService.sign(payload);
-          return { user, accessToken, userId: user.userId };
-
-          
-          
-      }
-      
-
-
-
-
-
-
+  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number }> {
+    const user = await this.findByUsername(username);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      throw new UnauthorizedException('Invalid username or password');
+    }
+    if (user.status === 'rejected') {
+      throw new ForbiddenException('Your account has been rejected. Please contact support.');
+    }
+    if (user.status !== 'approved') {
+      throw new ForbiddenException('Your account is pending approval.');
+    }
+    const payload = { username: user.username, sub: user.userId, userType: user.userType };
+    const accessToken = this.jwtService.sign(payload);
+    return { user, accessToken, userId: user.userId };
+  }
 
   async approveUser(userId: number): Promise<void> {
     const User = await this.findUserById(userId);
@@ -99,8 +76,6 @@ export class UserService {
     await this.userRepository.save(User);
   }
 
-
-
   async updateUser(userId: number, updatedUser: User): Promise<User> {
     const user = await this.findUserById(userId);
     if (!user) {
@@ -113,6 +88,4 @@ export class UserService {
 
     return await this.userRepository.save(user);
   }
-
-
 }
