@@ -27,6 +27,10 @@ export class CrService {
     }
   }
   
+
+  async findByStatus(status: string): Promise<CR[]> {
+    return this.CrRepository.find({ where: { status } });
+  }
   
 
   async create(cr: CR): Promise<CR> {

@@ -40,5 +40,9 @@ export class CrController {
     return this.crService.startDevelopment(id);
   }
   
+  @Get('start-development')
+  async getCRsInStartDevelopment(): Promise<CR[]> {
+    return this.crService.findByStatus('Starting Development');
+  }
   
 }
