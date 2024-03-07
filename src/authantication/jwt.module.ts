@@ -7,7 +7,7 @@ import { JwtAuthGuard } from './jwtAuthGuard';
 
 @Module({
   imports: [
-    JwtModule.register({
+    JwtModule.register({  
       secret: 'pass@123', 
       signOptions: { expiresIn: '1h' }, 
     }),

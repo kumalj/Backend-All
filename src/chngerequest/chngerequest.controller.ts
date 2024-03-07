@@ -19,9 +19,9 @@ export class CrController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  create(@Body() cr: CR): Promise<CR> {
-    return this.crService.create(cr);
+  async create(@Body() cr: CR): Promise<CR> {
+    const createdCR = await this.crService.create(cr);
+    return createdCR;
   }
 
 

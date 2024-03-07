@@ -1,5 +1,5 @@
 // src/user/user.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn,CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { CR } from '../chngerequest/chngerequest.entity'
 
 @Entity()
@@ -25,7 +25,8 @@ export class User {
   @Column()
   status: string;
 
-  @OneToMany(() => CR, cr => cr.user)
+  @OneToMany(() => CR, cr => cr.userId)
+  @JoinColumn({ name: 'userId' }) 
   changeRequests: CR[]; 
 
 
