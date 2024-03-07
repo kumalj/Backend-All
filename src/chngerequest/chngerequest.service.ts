@@ -16,6 +16,17 @@ export class CrService {
   async findAll(): Promise<CR[]> {
     return await this.CrRepository.find();
   }
+
+  async startDevelopment(crId: number): Promise<CR> {
+    const cr = await this.CrRepository.findOne({ where: { crId } }); // Use 'id' instead of 'crId'
+    if (cr) {
+      cr.status = 'Starting Development'; // Update the CR status
+      return this.CrRepository.save(cr);
+    } else {
+      throw new Error(`CR with ID ${crId} not found`);
+    }
+  }
+  
   
 
   async create(cr: CR): Promise<CR> {
