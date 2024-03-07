@@ -5,10 +5,10 @@ import { User } from './user/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ChngerequestModule } from './chngerequest/chngerequest.module';
 import { CR } from './chngerequest/chngerequest.entity';
-import { CrpModule } from './cr-p/cr-p.module';
-import {Crp} from './cr-p/cr-p.entity'
+import { CRPrototype } from './cr-prototype/cr-prototype.entity'
 
 import { AdminModule } from './admin/admin.module';
+import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
 
 
 @Module({
@@ -20,7 +20,7 @@ import { AdminModule } from './admin/admin.module';
       username: 'root',
       password: '',
       database: 'crms',
-      entities: [User, CR, Crp],
+      entities: [User, CR, CRPrototype],
       synchronize: true,
       }),
       UserModule,
@@ -29,10 +29,9 @@ import { AdminModule } from './admin/admin.module';
         signOptions: { expiresIn: '1h' },
       }),
       UserModule,
-      
       ChngerequestModule,
-      CrpModule,
       AdminModule,
+      CrPrototypeModule,
   ],
 })
 export class AppModule {}

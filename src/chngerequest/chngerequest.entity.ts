@@ -1,5 +1,6 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne,OneToMany, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 import { User } from '../user/user.entity';
+import { CRPrototype } from '../cr-prototype/cr-prototype.entity';
 
 @Entity()
 export class CR {
@@ -30,6 +31,12 @@ export class CR {
   @ManyToOne(() => User, user => user.changeRequests)
   @JoinColumn({ name: 'userId' })
   userId: User;
+
+
+
+  @OneToMany(() => CRPrototype, crPrototype => crPrototype.cr) // Specify ManyToOne relationship
+  @JoinColumn({ name: 'crId' })
+  prototype: CRPrototype; 
 
 
 
