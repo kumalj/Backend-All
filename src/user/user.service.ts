@@ -38,25 +38,29 @@ export class UserService {
     return await this.userRepository.findOne({ where: { username } });
   }
 
-  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number }> {
+
+  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string }> {
     const user = await this.findByUsername(username);
     if (!user) {
-      throw new NotFoundException('User not found');
+        throw new NotFoundException('User not found');
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      throw new UnauthorizedException('Invalid username or password');
+        throw new UnauthorizedException('Invalid username or password');
     }
     if (user.status === 'rejected') {
-      throw new ForbiddenException('Your account has been rejected. Please contact support.');
+        throw new ForbiddenException('Your account has been rejected. Please contact support.');
     }
     if (user.status !== 'approved') {
-      throw new ForbiddenException('Your account is pending approval.');
+        throw new ForbiddenException('Your account is pending approval.');
     }
     const payload = { username: user.username, sub: user.userId, userType: user.userType };
     const accessToken = this.jwtService.sign(payload);
-    return { user, accessToken, userId: user.userId };
-  }
+    return { user, accessToken, userId: user.userId, userType: user.userType };
+}
+
+
+
 
   async approveUser(userId: number): Promise<void> {
     const User = await this.findUserById(userId);

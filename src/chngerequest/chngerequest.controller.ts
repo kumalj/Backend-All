@@ -34,6 +34,15 @@ export class CrController {
   delete(@Param('crId') crId: string): Promise<void> {
     return this.crService.delete(+crId);
   }
+
+  @Put(':id/start-development')
+  async startDevelopment(@Param('id') id: number) {
+    return this.crService.startDevelopment(id);
+  }
   
+  @Get('start-development')
+  async getCRsInStartDevelopment(): Promise<CR[]> {
+    return this.crService.findByStatus('Starting Development');
+  }
   
 }

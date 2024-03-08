@@ -25,6 +25,9 @@ export class CR {
   @Column()
   priorityOrder: number;
 
+  @Column()
+  status: string;
+
   // @Column({ type: 'longblob', nullable: true }) // Change the data type to LONGBLOB
   // file: Buffer; // Use Buffer type for binary data
 
