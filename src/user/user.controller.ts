@@ -13,15 +13,16 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('register')
+  
   async register(@Body() user: User): Promise<User> {
     return await this.userService.create(user);
   }
 
   @Post('login')
-async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number; userType: string }> {
+async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number; userType: string; uniqueKey: string; }> {
   try {
-    const { user, accessToken, userId, userType, } = await this.userService.login(credentials.username, credentials.password);
-    return { user, accessToken, userId, userType, };
+    const { user, accessToken, userId, userType, uniqueKey, } = await this.userService.login(credentials.username, credentials.password);
+    return { user, accessToken, userId, userType, uniqueKey,};
   } catch (error) {
     if (error instanceof NotFoundException || error instanceof ForbiddenException) {
       throw error;

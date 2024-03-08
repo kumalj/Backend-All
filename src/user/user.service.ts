@@ -15,31 +15,47 @@ export class UserService {
     private readonly jwtService: JwtService,
   ) { }
 
+  //Register part of the system
   async create(user: User): Promise<User> {
     const existingUser = await this.findByUsername(user.username);
     if (existingUser) {
-      throw new BadRequestException('Username is already taken');
+        throw new BadRequestException('Username is already taken');
     }
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(user.password, saltRounds);
     user.password = hashedPassword;
+
+    // Generate uniqueKey
+    const uniqueKey = await this.generateUniqueKey();
+    user.uniqueKey = uniqueKey;
+
     return await this.userRepository.save(user);
-  }
+}
+
+async generateUniqueKey(): Promise<string> {
+    const min = 1000;
+    const max = 9999;
+    return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
+}
+
 
   async findAll(accessToken: string): Promise<User[]> {
     return await this.userRepository.find();
   }
-
   async findUserById(userId: number): Promise<User> {
     return this.userRepository.findOne({ where: { userId } });
   }
-
   async findByUsername(username: string): Promise<User | undefined> {
     return await this.userRepository.findOne({ where: { username } });
   }
 
+  // async findByUsername(username: string): Promise<User> {
+  //   return await this.userRepository.findOne({ username });
+  // }
 
-  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string }> {
+//Login part of the  database
+  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; uniqueKey: string; }> {
     const user = await this.findByUsername(username);
     if (!user) {
         throw new NotFoundException('User not found');
@@ -56,12 +72,12 @@ export class UserService {
     }
     const payload = { username: user.username, sub: user.userId, userType: user.userType };
     const accessToken = this.jwtService.sign(payload);
-    return { user, accessToken, userId: user.userId, userType: user.userType };
+    return { user, accessToken, userId: user.userId, userType: user.userType, uniqueKey: user.uniqueKey };
 }
 
 
 
-
+//Account approve part of the 
   async approveUser(userId: number): Promise<void> {
     const User = await this.findUserById(userId);
     if (!User) {
@@ -79,6 +95,9 @@ export class UserService {
     User.status = 'rejected';
     await this.userRepository.save(User);
   }
+
+
+  //satatus update part
 
   async updateUser(userId: number, updatedUser: User): Promise<User> {
     const user = await this.findUserById(userId);
