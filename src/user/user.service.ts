@@ -3,7 +3,7 @@ import { Injectable, NotFoundException, UnauthorizedException, BadRequestExcepti
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';//make sure install this  package by npm i --save bcrypt
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
