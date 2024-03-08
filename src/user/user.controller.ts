@@ -12,6 +12,8 @@ import { JwtAuthGuard } from '../authantication/jwtAuthGuard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+
+  //user login controls
   @Post('register')
   
   async register(@Body() user: User): Promise<User> {
@@ -40,11 +42,7 @@ async login(@Body() credentials: { username: string; password: string }): Promis
     if (!authorizationHeader) {
       throw new UnauthorizedException('Authorization header missing');
     }
-  
-    // Extracting the access token from the authorization header
     const accessToken = authorizationHeader.split(' ')[1]; 
-
-    // Call userService.findAll and pass accessToken
     return await this.userService.findAll(accessToken);
   }
 

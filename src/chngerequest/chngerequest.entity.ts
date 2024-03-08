@@ -8,6 +8,9 @@ export class CR {
   crId: number;
 
   @Column()
+  uniqueKey: string;
+
+  @Column()
   name: string;
 
   @Column()
