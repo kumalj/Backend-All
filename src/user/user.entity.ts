@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 // src/user/user.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn,CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from 'typeorm';
 import { CR } from '../chngerequest/chngerequest.entity'
 
 @Entity()
@@ -7,7 +8,7 @@ export class User {
   @PrimaryGeneratedColumn()
   userId: number;
 
-  @Column({ nullable: true }) 
+  @Column() 
   uniqueKey: string;
 
   @Column()

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Catch, ExceptionFilter, ArgumentsHost, ForbiddenException } from '@nestjs/common';
 import { Response } from 'express';
 

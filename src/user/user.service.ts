@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // src/user/user.service.ts
 import { Injectable, NotFoundException, UnauthorizedException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';

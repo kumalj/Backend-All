@@ -1,9 +1,12 @@
+/* eslint-disable prettier/prettier */
 // src/user/user.controller.ts
-import { Controller, Post, Body, Get, Put, Req, UnauthorizedException, NotFoundException, Param, UseGuards, ForbiddenException, BadRequestException  } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Req, UnauthorizedException, NotFoundException, Param, UseGuards, ForbiddenException  } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from '../authantication/jwtAuthGuard';
+import { RoleGuard } from 'src/guard/role.guard';
+import { Constants } from 'src/utils/constants';
 
 
 
@@ -34,7 +37,7 @@ async login(@Body() credentials: { username: string; password: string }): Promis
   }
 }
 
-  
+ @UseGuards(new RoleGuard(Constants.ROLES.Admin))
   @Get()
   @UseGuards(JwtAuthGuard) // Applying JwtAuthGuard
   async getAllUsers(@Req() req: Request): Promise<User[]> {
@@ -47,19 +50,21 @@ async login(@Body() credentials: { username: string; password: string }): Promis
   }
 
 
-
+  //@UseGuards(new RoleGuard(Constants.ROLES.Admin))
   @Post('approve/:userId')
   async approveUser(@Param('userId') userId: number): Promise<string> {
     await this.userService.approveUser(userId);
     return 'User approved';
   }
 
+  //@UseGuards(new RoleGuard(Constants.ROLES.Admin))
   @Post('reject/:userId')
   async rejectUser(@Param('userId') userId: number): Promise<string> {
     await this.userService.rejectUser(userId);
     return 'User rejected';
   }
 
+  //@UseGuards(new RoleGuard(Constants.ROLES.Admin))
   @Put(':userId')
   async update(@Param('userId') userId: string, @Body() updatedUser: User): Promise<User> {
     return await this.userService.updateUser(parseInt(userId, 10), updatedUser);
