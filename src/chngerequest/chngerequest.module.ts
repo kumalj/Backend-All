@@ -6,7 +6,7 @@ import { CR } from './chngerequest.entity';
 import { CrController } from './chngerequest.controller';
 import { CrService } from './chngerequest.service';
 import { JwtModule } from '@nestjs/jwt';
-
+import { MulterModule } from '@nestjs/platform-express';
 
 
 @Module({
@@ -16,7 +16,9 @@ import { JwtModule } from '@nestjs/jwt';
       secret: 'pass@123',
       signOptions: { expiresIn: '1h' },
     }),
-    // Other modules...
+    MulterModule.register({
+      dest: './uploads',
+    }),
   ],
   controllers: [CrController],
   providers: [CrService],

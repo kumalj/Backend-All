@@ -1,11 +1,14 @@
 // src/cat.controller.ts
 
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards,Res } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards,Res, UploadedFile, UseInterceptors} from '@nestjs/common';
 import { CR } from './chngerequest.entity';
 import { CrService } from './chngerequest.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from '../authantication/jwtAuthGuard';
-
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { Multer } from 'multer';
 
 @Controller('crs')
 @UseGuards(JwtService)
@@ -24,6 +27,22 @@ export class CrController {
     return createdCR;
   }
 
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: './uploads',
+      filename: (req, file, cb) => {
+        const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+        return cb(null, `${randomName}${extname(file.originalname)}`);
+      },
+    }),
+  }))
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    // Handle file processing or database storage here
+    console.log(file);
+    return { message: 'File uploaded successfully', filename: file.filename };
+  }
+
 
   @Put(':crId/priority')
   async updateCrPriority(@Param('crId') crId: number, @Body('priority') priority: string) {
@@ -37,7 +56,7 @@ export class CrController {
 
   @Put(':id/start-development')
   async startDevelopment(@Param('id') crId: number, @Body('uniqueKey') uniqueKey: string): Promise<CR> {
-      return this.crService.startDevelopment(crId, uniqueKey); // Pass both id and uniqueKey
+      return this.crService.startDevelopment(crId, uniqueKey); 
   }
   
   @Get('start-development')

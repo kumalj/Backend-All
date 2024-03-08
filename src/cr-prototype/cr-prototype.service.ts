@@ -1,9 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCrPrototypeDto } from './dto/create-cr-prototype.dto';
 import { UpdateCrPrototypeDto } from './dto/update-cr-prototype.dto';
+import { CRPrototype } from './cr-prototype.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CrPrototypeService {
+    constructor(
+        @InjectRepository(CRPrototype)
+        private readonly prototypeRepository: Repository<CRPrototype>,
+    ) {}
+
+    
+
+
   create(createCrPrototypeDto: CreateCrPrototypeDto) {
     return 'This action adds a new crPrototype';
   }

@@ -9,7 +9,6 @@ import { RoleGuard } from 'src/guard/role.guard';
 import { Constants } from 'src/utils/constants';
 
 
-
 @Controller('users')
 @UseGuards(JwtService)
 export class UserController {
