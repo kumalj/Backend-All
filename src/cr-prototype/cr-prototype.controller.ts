@@ -1,11 +1,18 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CrPrototypeService } from './cr-prototype.service';
 import { CreateCrPrototypeDto } from './dto/create-cr-prototype.dto';
 import { UpdateCrPrototypeDto } from './dto/update-cr-prototype.dto';
+import { CrPrototypeService } from './cr-prototype.service'
+import { CRPrototype } from './cr-prototype.entity';
 
 @Controller('cr-prototype')
 export class CrPrototypeController {
   constructor(private readonly crPrototypeService: CrPrototypeService) {}
+
+  
+
+  
+  
+  
 
   @Post()
   create(@Body() createCrPrototypeDto: CreateCrPrototypeDto) {

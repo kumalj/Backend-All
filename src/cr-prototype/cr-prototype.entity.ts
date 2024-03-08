@@ -7,13 +7,13 @@ export class CRPrototype {
   crpId: number;
 
   @Column()
-  department: string;
-
-  @Column()
-  topic: string;
+  uniqueKey: string;
 
   @Column()
   description: string;
+
+  @Column()
+  comment: string;
 
   
   @ManyToOne(() => CR, cr => cr.prototype) // Specify ManyToOne relationship
