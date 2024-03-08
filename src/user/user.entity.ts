@@ -7,6 +7,9 @@ export class User {
   @PrimaryGeneratedColumn()
   userId: number;
 
+  @Column({ nullable: true }) 
+  uniqueKey: string;
+
   @Column()
   firstname: string;
 
@@ -29,5 +32,8 @@ export class User {
   @JoinColumn({ name: 'userId' }) 
   changeRequests: CR[]; 
 
+  
+
+  
 
 }

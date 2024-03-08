@@ -11,6 +11,7 @@ import { AdminModule } from './admin/admin.module';
 import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
 
 
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -32,6 +33,7 @@ import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
       ChngerequestModule,
       AdminModule,
       CrPrototypeModule,
+      
   ],
 })
 export class AppModule {}
