@@ -58,7 +58,7 @@ async generateUniqueKey(): Promise<string> {
   // }
 
 //Login part of the  database
-  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; uniqueKey: string; }> {
+  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; uniqueKey: string; firstname:string }> {
     const user = await this.findByUsername(username);
     if (!user) {
         throw new NotFoundException('User not found');
@@ -73,9 +73,9 @@ async generateUniqueKey(): Promise<string> {
     if (user.status !== 'approved') {
         throw new ForbiddenException('Your account is pending approval.');
     }
-    const payload = { username: user.username, sub: user.userId, userType: user.userType };
+    const payload = { username: user.username, sub: user.userId, userType: user.userType, firstname:user.firstname };
     const accessToken = this.jwtService.sign(payload);
-    return { user, accessToken, userId: user.userId, userType: user.userType, uniqueKey: user.uniqueKey };
+    return { user, accessToken, userId: user.userId, userType: user.userType, uniqueKey: user.uniqueKey, firstname:user.firstname };
 }
 
 

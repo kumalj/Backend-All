@@ -3,7 +3,7 @@ export const Constants = {
     ROLES : {
         Admin: 'Admin',
         Developer: 'Developer',
-        SFA_User: 'SFA User',
+        SFA_User: 'SFA_User',
 
     },
 }

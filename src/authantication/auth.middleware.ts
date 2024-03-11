@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // auth.middleware.ts
 
 import { Request, Response, NextFunction } from 'express';

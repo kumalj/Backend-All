@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // src/cat.service.ts
 
 import { Injectable } from '@nestjs/common';

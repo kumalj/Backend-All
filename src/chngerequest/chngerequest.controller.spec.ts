@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChngerequestController } from './chngerequest.controller';
 import { ChngerequestService } from './chngerequest.service';

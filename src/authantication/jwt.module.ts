@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // jwt.module.ts
 
 import { Module } from '@nestjs/common';

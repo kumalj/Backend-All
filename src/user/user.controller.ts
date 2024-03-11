@@ -23,10 +23,10 @@ export class UserController {
   }
 
   @Post('login')
-async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number; userType: string; uniqueKey: string; }> {
+async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number; userType: string; uniqueKey: string; firstname:string }> {
   try {
-    const { user, accessToken, userId, userType, uniqueKey, } = await this.userService.login(credentials.username, credentials.password);
-    return { user, accessToken, userId, userType, uniqueKey,};
+    const { user, accessToken, userId, userType, uniqueKey,firstname } = await this.userService.login(credentials.username, credentials.password);
+    return { user, accessToken, userId, userType, uniqueKey,firstname};
   } catch (error) {
     if (error instanceof NotFoundException || error instanceof ForbiddenException) {
       throw error;
@@ -49,21 +49,19 @@ async login(@Body() credentials: { username: string; password: string }): Promis
   }
 
 
-  //@UseGuards(new RoleGuard(Constants.ROLES.Admin))
   @Post('approve/:userId')
   async approveUser(@Param('userId') userId: number): Promise<string> {
     await this.userService.approveUser(userId);
     return 'User approved';
   }
 
-  //@UseGuards(new RoleGuard(Constants.ROLES.Admin))
   @Post('reject/:userId')
   async rejectUser(@Param('userId') userId: number): Promise<string> {
     await this.userService.rejectUser(userId);
     return 'User rejected';
   }
 
-  //@UseGuards(new RoleGuard(Constants.ROLES.Admin))
+
   @Put(':userId')
   async update(@Param('userId') userId: string, @Body() updatedUser: User): Promise<User> {
     return await this.userService.updateUser(parseInt(userId, 10), updatedUser);
