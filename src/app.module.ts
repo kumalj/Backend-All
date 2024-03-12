@@ -6,10 +6,14 @@ import { User } from './user/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ChngerequestModule } from './chngerequest/chngerequest.module';
 import { CR } from './chngerequest/chngerequest.entity';
-import { CRPrototype } from './cr-prototype/cr-prototype.entity'
-
+import { Getcr } from './getcr/getcr.entity'
 import { AdminModule } from './admin/admin.module';
 import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
+import { CRPrototype } from './cr-prototype/cr-prototype.entity'
+import { GetCrModule} from './getcr/getcr.module'
+
+
+
 
 
 
@@ -20,9 +24,9 @@ import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'root',
+      password: '',
       database: 'crms',
-      entities: [User, CR, CRPrototype],
+      entities: [User, CR, Getcr,CRPrototype],
       synchronize: true,
       }),
       UserModule,
@@ -34,6 +38,10 @@ import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
       ChngerequestModule,
       AdminModule,
       CrPrototypeModule,
+      GetCrModule,
+
+
+
       
   ],
 })

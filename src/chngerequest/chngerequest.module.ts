@@ -6,7 +6,7 @@ import { CR } from './chngerequest.entity';
 import { CrController } from './chngerequest.controller';
 import { CrService } from './chngerequest.service';
 import { JwtModule } from '@nestjs/jwt';
-import { MulterModule } from '@nestjs/platform-express';
+import { MulterModule } from '@nestjs/platform-express'
 
 
 @Module({

@@ -27,18 +27,12 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(user.password, saltRounds);
     user.password = hashedPassword;
 
-    // Generate uniqueKey
-    const uniqueKey = await this.generateUniqueKey();
-    user.uniqueKey = uniqueKey;
+   
 
     return await this.userRepository.save(user);
 }
 
-async generateUniqueKey(): Promise<string> {
-    const min = 1000;
-    const max = 9999;
-    return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
-}
+
 
 
 
@@ -58,7 +52,7 @@ async generateUniqueKey(): Promise<string> {
   // }
 
 //Login part of the  database
-  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; uniqueKey: string; }> {
+  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string;  }> {
     const user = await this.findByUsername(username);
     if (!user) {
         throw new NotFoundException('User not found');
@@ -75,7 +69,7 @@ async generateUniqueKey(): Promise<string> {
     }
     const payload = { username: user.username, sub: user.userId, userType: user.userType };
     const accessToken = this.jwtService.sign(payload);
-    return { user, accessToken, userId: user.userId, userType: user.userType, uniqueKey: user.uniqueKey };
+    return { user, accessToken, userId: user.userId, userType: user.userType };
 }
 
 

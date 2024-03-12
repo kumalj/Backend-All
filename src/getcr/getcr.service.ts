@@ -1,19 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCrPrototypeDto } from './dto/create-cr-prototype.dto';
-import { UpdateCrPrototypeDto } from './dto/update-cr-prototype.dto';
-import { CRPrototype } from './cr-prototype.entity';
+import { CreateGetCrDto } from './dto/create-getcr.dto';
+import { UpdateGetCrDto } from './dto/update-getcr.dto';
+import { Getcr } from './getcr.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 
 @Injectable()
-export class CrPrototypeService {
-  create(createDdDto: CreateCrPrototypeDto) {
+export class GetCrService {
+  create(createDdDto: CreateGetCrDto) {
     return 'This action adds a new dd';
   }
     
-
-
 
   findAll() {
     return `This action returns all crPrototype`;
@@ -23,7 +21,7 @@ export class CrPrototypeService {
     return `This action returns a #${id} crPrototype`;
   }
 
-  update(id: number, updateCrPrototypeDto: UpdateCrPrototypeDto) {
+  update(id: number, updateCrPrototypeDto: UpdateGetCrDto) {
     return `This action updates a #${id} crPrototype`;
   }
 

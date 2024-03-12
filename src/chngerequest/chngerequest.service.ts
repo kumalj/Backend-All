@@ -22,7 +22,7 @@ export class CrService {
     if (cr) {
         // Update CR status and uniqueKey
         cr.status = 'Starting Development';
-        cr.uniqueKey = uniqueKey; // Save the uniqueKey
+        
         return this.CrRepository.save(cr);
     } else {
         throw new Error(`CR with ID ${crId} not found`);
