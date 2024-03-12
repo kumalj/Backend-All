@@ -24,7 +24,7 @@ import { GetCrModule } from './getcr/getcr.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'root',
+      password: '',
       database: 'crms',
       entities: [User, CR, Getcr,CRPrototype],
       synchronize: true,
