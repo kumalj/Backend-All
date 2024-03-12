@@ -1,6 +1,7 @@
+/* eslint-disable prettier/prettier */
 // src/cat.controller.ts
 
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards,Res, UploadedFile, UseInterceptors} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, UploadedFile, UseInterceptors} from '@nestjs/common';
 import { CR } from './chngerequest.entity';
 import { CrService } from './chngerequest.service';
 import { JwtService } from '@nestjs/jwt';
@@ -8,7 +9,7 @@ import { JwtAuthGuard } from '../authantication/jwtAuthGuard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { Multer } from 'multer';
+
 
 @Controller('crs')
 @UseGuards(JwtService)

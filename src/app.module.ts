@@ -9,8 +9,6 @@ import { CR } from './chngerequest/chngerequest.entity';
 
 
 
-import { ChangeRequestService } from './change-request/change-request.service';
-import { ChangeRequestController } from './change-request/change-request.controller';
 import { Getcr } from './getcr/getcr.entity';
 import { CRPrototype } from './cr-prototype/cr-prototype.entity';
 import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
@@ -44,7 +42,7 @@ import { GetCrModule } from './getcr/getcr.module';
       
       
   ],
-  providers: [ChangeRequestService],
-  controllers: [ChangeRequestController],
+  providers: [],
+  controllers: [],
 })
 export class AppModule {}
