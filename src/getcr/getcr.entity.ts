@@ -1,20 +1,18 @@
 import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 import { CR } from '../chngerequest/chngerequest.entity';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Getcr {
   @PrimaryGeneratedColumn()
-  crpId: number;
+  getId: number;
 
+  
+  @ManyToOne(() => User, user => user.changeRequests)
+  @JoinColumn({ name: 'userId' })
+  userId: User;
 
-  @Column()
-  description: string;
-
-  @Column()
-  comment: string;
-
-  @Column()
-  username: string;
+  
 
   
   @ManyToOne(() => CR, cr => cr.getCr) // Specify ManyToOne relationship
