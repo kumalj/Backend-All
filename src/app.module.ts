@@ -8,9 +8,13 @@ import { ChngerequestModule } from './chngerequest/chngerequest.module';
 import { CR } from './chngerequest/chngerequest.entity';
 
 
-import { AdminModule } from './admin/admin.module';
+
 import { ChangeRequestService } from './change-request/change-request.service';
 import { ChangeRequestController } from './change-request/change-request.controller';
+import { Getcr } from './getcr/getcr.entity';
+import { CRPrototype } from './cr-prototype/cr-prototype.entity';
+import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
+import { GetCrModule } from './getcr/getcr.module';
 
 
 
@@ -24,7 +28,7 @@ import { ChangeRequestController } from './change-request/change-request.control
       username: 'root',
       password: 'root',
       database: 'crms',
-      entities: [User, CR,],
+      entities: [User, CR, Getcr,CRPrototype],
       synchronize: true,
       }),
       UserModule,
@@ -34,7 +38,9 @@ import { ChangeRequestController } from './change-request/change-request.control
       }),
       UserModule,
       ChngerequestModule,
-      AdminModule,
+      CrPrototypeModule,
+      GetCrModule,
+      
       
       
   ],

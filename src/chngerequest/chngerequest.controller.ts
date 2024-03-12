@@ -55,8 +55,8 @@ export class CrController {
   }
 
   @Put(':id/start-development')
-  async startDevelopment(@Param('id') crId: number, @Body('uniqueKey') uniqueKey: string): Promise<CR> {
-      return this.crService.startDevelopment(crId, uniqueKey); 
+  async startDevelopment(@Param('id') crId: number): Promise<CR> {
+      return this.crService.startDevelopment(crId); 
   }
   
   @Get('start-development')
