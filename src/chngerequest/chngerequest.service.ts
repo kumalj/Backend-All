@@ -5,6 +5,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CR } from './chngerequest.entity';
+import { Getcr} from '../getcr/getcr.entity';
+import { User } from 'src/user/user.entity';
 
 
 @Injectable()
@@ -12,23 +14,46 @@ export class CrService {
   constructor(
     @InjectRepository(CR)
     private readonly CrRepository: Repository<CR>,
+    @InjectRepository(Getcr)
+    private readonly GetCrRepository: Repository<Getcr>,
+    @InjectRepository(User)
+    private readonly UserRepository : Repository <User> ,
+
   ) {}
 
   async findAll(): Promise<CR[]> {
     return await this.CrRepository.find();
   }
 
-  async startDevelopment(crId: number): Promise<CR> {
-    const cr = await this.CrRepository.findOne({ where: { crId } });
-    if (cr) {
-        
-        cr.status = 'Starting Development';
- 
-        return this.CrRepository.save(cr);
-    } else {
+  async startDevelopment(crId: number, userId: number): Promise<CR> {
+    try {
+      const cr = await this.CrRepository.findOne({ where: { crId } });
+      if (!cr) {
         throw new Error(`CR with ID ${crId} not found`);
+      }
+  
+      // Update CR status
+      cr.status = 'Starting Development';
+  
+      // Save the updated CR
+      await this.CrRepository.save(cr);
+  
+      // Log the crId and userId in Getcr table
+      const getcr = new Getcr();
+      getcr.cr = cr;
+      
+      
+      // getcr.userId = await this.UserRepository.findOne({ where: { userId } });
+     
+      // Ensure userId is correctly passed and of the correct type
+      await this.GetCrRepository.save(getcr);
+  
+      return cr;
+    } catch (error) {
+      console.error("Error in startDevelopment:", error);
+      throw error; // Rethrow the error to be handled by the caller
     }
-}
+  }
   
 
   async findByStatus(status: string): Promise<CR[]> {

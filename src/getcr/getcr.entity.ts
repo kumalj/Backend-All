@@ -5,18 +5,17 @@ import { User } from '../user/user.entity';
 @Entity()
 export class Getcr {
   @PrimaryGeneratedColumn()
-  getId: number;
+  getid: number;
 
   
-  @ManyToOne(() => User, user => user.changeRequests)
+  @ManyToOne(() => User, user => user.getcrs)
   @JoinColumn({ name: 'userId' })
-  userId: User;
+  user: User;
 
   
-  
-  @ManyToOne(() => CR, cr => cr.getCr) // Specify ManyToOne relationship
-  @JoinColumn({ name: 'crId' }) // Define the foreign key column
-  cr: CR; // Create a property to hold the CR instance
+  @ManyToOne(() => CR, cr => cr.getCr)
+  @JoinColumn({ name: 'crId' }) 
+  cr: CR; 
 }
 
 

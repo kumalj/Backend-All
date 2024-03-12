@@ -2,6 +2,7 @@
 // src/user/user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from 'typeorm';
 import { CR } from '../chngerequest/chngerequest.entity'
+import { Getcr } from 'src/getcr/getcr.entity';
 
 @Entity()
 export class User {
@@ -33,7 +34,9 @@ export class User {
   @JoinColumn({ name: 'userId' }) 
   changeRequests: CR[]; 
 
-  
+  @OneToMany(() => Getcr, getcr => getcr.user)
+  @JoinColumn({ name: 'userId' }) 
+  getcrs: Getcr[];
 
   
 
