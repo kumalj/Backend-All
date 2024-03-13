@@ -59,7 +59,7 @@ export class CrService {
         throw error; // Rethrow the error to be handled by the caller
     }
 }
-Replace 
+
   
 
   async findByStatus(status: string): Promise<CR[]> {
@@ -98,10 +98,25 @@ Replace
     await this.CrRepository.delete(crId);
   }
 
-  async updatePriority(crId: number, priority: string): Promise<CR> {
-    const cr = await this.CrRepository.findOne({ where: { crId } });
-    cr.priority = priority;
-    return await this.CrRepository.save(cr);
+//   async updatePriority(crId: number, priority: string): Promise<CR> {
+//     const cr = await this.CrRepository.findOne({ where: { crId } });
+//     cr.priority = priority;
+//     return await this.CrRepository.save(cr);
+// }
+
+
+async updatePriority(crId: number, priority: number) {
+  const cr = await this.CrRepository.findOne({ where: { crId } });
+  if (!cr) {
+    throw new Error(`CR with ID ${crId} not found`);
+  }
+
+  cr.priority = String(priority);
+
+
+  return await this.CrRepository.save(cr);
 }
 
 }
+
+

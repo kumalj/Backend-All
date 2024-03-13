@@ -45,8 +45,13 @@ export class CrController {
   }
 
 
+  // @Put('update-priorities')
+  // async updatePriorities(@Body() crs: CR[]): Promise<void> {
+  //   await this.crService.updatePriorities(crs);
+  // }
+
   @Put(':crId/priority')
-  async updateCrPriority(@Param('crId') crId: number, @Body('priority') priority: string) {
+  async updatePriority(@Param('crId') crId: number, @Body('priority') priority: number) {
     return await this.crService.updatePriority(crId, priority);
   }
 
@@ -66,5 +71,7 @@ export class CrController {
   async getCRsInStartDevelopment(): Promise<CR[]> {
     return this.crService.findByStatus('Starting Development');
   }
+
+  
   
 }
