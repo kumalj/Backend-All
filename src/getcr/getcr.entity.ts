@@ -17,11 +17,3 @@ export class Getcr {
   @JoinColumn({ name: 'crId' }) 
   cr: CR; 
 }
-
-
-
-
-
-
-
-

@@ -17,7 +17,8 @@ export class CrService {
     @InjectRepository(Getcr)
     private readonly GetCrRepository: Repository<Getcr>,
     @InjectRepository(User)
-    private readonly UserRepository : Repository <User> ,
+    private readonly  UserRepository: Repository<User>
+    
 
   ) {}
 
@@ -27,33 +28,38 @@ export class CrService {
 
   async startDevelopment(crId: number, userId: number): Promise<CR> {
     try {
-      const cr = await this.CrRepository.findOne({ where: { crId } });
-      if (!cr) {
-        throw new Error(`CR with ID ${crId} not found`);
-      }
-  
-      // Update CR status
-      cr.status = 'Starting Development';
-  
-      // Save the updated CR
-      await this.CrRepository.save(cr);
-  
-      // Log the crId and userId in Getcr table
-      const getcr = new Getcr();
-      getcr.cr = cr;
-      
-      
-      // getcr.userId = await this.UserRepository.findOne({ where: { userId } });
-     
-      // Ensure userId is correctly passed and of the correct type
-      await this.GetCrRepository.save(getcr);
-  
-      return cr;
+        const cr = await this.CrRepository.findOne({ where: { crId } });
+        if (!cr) {
+            throw new Error(`CR with ID ${crId} not found`);
+        }
+
+        // Update CR status
+        cr.status = 'Starting Development';
+
+        // Save the updated CR
+        await this.CrRepository.save(cr);
+
+        // Retrieve the user by ID
+        const user = await this.UserRepository.findOne({ where: { userId } });
+        if (!user) {
+            throw new Error(`User with ID ${userId} not found`);
+        }
+
+        // Log the crId and userId in Getcr table
+        const getcr = new Getcr();
+        getcr.cr = cr;
+        getcr.user = user;
+
+        // Ensure getcr is correctly passed and of the correct type
+        await this.GetCrRepository.save(getcr);
+
+        return cr;
     } catch (error) {
-      console.error("Error in startDevelopment:", error);
-      throw error; // Rethrow the error to be handled by the caller
+        console.error("Error in startDevelopment:", error);
+        throw error; // Rethrow the error to be handled by the caller
     }
-  }
+}
+Replace 
   
 
   async findByStatus(status: string): Promise<CR[]> {
