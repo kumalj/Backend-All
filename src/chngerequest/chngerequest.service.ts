@@ -5,8 +5,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CR } from './chngerequest.entity';
-import { Getcr} from '../getcr/getcr.entity';
+import { Getcr } from '../getcr/getcr.entity';
 import { User } from 'src/user/user.entity';
+import {MoreThan , LessThan} from "typeorm";
 
 
 @Injectable()
@@ -17,10 +18,10 @@ export class CrService {
     @InjectRepository(Getcr)
     private readonly GetCrRepository: Repository<Getcr>,
     @InjectRepository(User)
-    private readonly  UserRepository: Repository<User>
-    
+    private readonly UserRepository: Repository<User>
 
-  ) {}
+
+  ) { }
 
   async findAll(): Promise<CR[]> {
     return await this.CrRepository.find();
@@ -28,44 +29,65 @@ export class CrService {
 
   async startDevelopment(crId: number, userId: number): Promise<CR> {
     try {
-        const cr = await this.CrRepository.findOne({ where: { crId } });
-        if (!cr) {
-            throw new Error(`CR with ID ${crId} not found`);
-        }
+      // Find the CR by ID
+      const cr = await this.CrRepository.findOne({ where: { crId } });
+      if (!cr) {
+        throw new Error(`CR with ID ${crId} not found`);
+      }
 
-        // Update CR status
-        cr.status = 'Starting Development';
+      // Update CR status
+      cr.status = 'Starting Development';
 
-        // Save the updated CR
-        await this.CrRepository.save(cr);
+      // Save the updated CR
+      await this.CrRepository.save(cr);
 
-        // Retrieve the user by ID
-        const user = await this.UserRepository.findOne({ where: { userId } });
-        if (!user) {
-            throw new Error(`User with ID ${userId} not found`);
-        }
+      // Retrieve the user by ID
+      const user = await this.UserRepository.findOne({ where: { userId } });
+      if (!user) {
+        throw new Error(`User with ID ${userId} not found`);
+      }
 
-        // Log the crId and userId in Getcr table
-        const getcr = new Getcr();
-        getcr.cr = cr;
-        getcr.user = user;
+      // Log the crId and userId in Getcr table
+      const getcr = new Getcr();
+      getcr.cr = cr;
+      getcr.user = user;
 
-        // Ensure getcr is correctly passed and of the correct type
-        await this.GetCrRepository.save(getcr);
+      // Ensure getcr is correctly passed and of the correct type
+      await this.GetCrRepository.save(getcr);
 
-        return cr;
+      // Update priorities
+      await this.updatePriorities();
+
+      return cr;
     } catch (error) {
-        console.error("Error in startDevelopment:", error);
-        throw error; // Rethrow the error to be handled by the caller
+      console.error("Error in startDevelopment:", error);
+      throw error; // Rethrow the error to be handled by the caller
+    }
+  }
+
+  async updatePriorities(): Promise<void> {
+    // Get all CRs ordered by priority
+    const crs = await this.CrRepository.find({ order: { priority: 'ASC' } });
+
+    // Update priorities based on their order, starting from the first CR
+    for (let i = 0; i < crs.length; i++) {
+        const cr = crs[i];
+        cr.priority = (parseInt(cr.priority) - 1).toString(); // Decrease priority by one
+        await this.CrRepository.save(cr);
     }
 }
 
+
+
   
+
+
+
 
   async findByStatus(status: string): Promise<CR[]> {
     return this.CrRepository.find({ where: { status } });
   }
-  
+
 
   async create(cr: CR): Promise<CR> {
     // Find the maximum priority in the database
@@ -98,24 +120,24 @@ export class CrService {
     await this.CrRepository.delete(crId);
   }
 
-//   async updatePriority(crId: number, priority: string): Promise<CR> {
-//     const cr = await this.CrRepository.findOne({ where: { crId } });
-//     cr.priority = priority;
-//     return await this.CrRepository.save(cr);
-// }
+  //   async updatePriority(crId: number, priority: string): Promise<CR> {
+  //     const cr = await this.CrRepository.findOne({ where: { crId } });
+  //     cr.priority = priority;
+  //     return await this.CrRepository.save(cr);
+  // }
 
 
-async updatePriority(crId: number, priority: number) {
-  const cr = await this.CrRepository.findOne({ where: { crId } });
-  if (!cr) {
-    throw new Error(`CR with ID ${crId} not found`);
+  async updatePriority(crId: number, priority: number) {
+    const cr = await this.CrRepository.findOne({ where: { crId } });
+    if (!cr) {
+      throw new Error(`CR with ID ${crId} not found`);
+    }
+
+    cr.priority = String(priority);
+
+
+    return await this.CrRepository.save(cr);
   }
-
-  cr.priority = String(priority);
-
-
-  return await this.CrRepository.save(cr);
-}
 
 }
 
