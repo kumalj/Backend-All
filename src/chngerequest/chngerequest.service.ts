@@ -19,6 +19,7 @@ export class CrService {
     @InjectRepository(User)
     private readonly UserRepository : Repository <User> ,
 
+
   ) {}
 
   async findAll(): Promise<CR[]> {
@@ -34,6 +35,7 @@ export class CrService {
   
       // Update CR status
       cr.status = 'Starting Development';
+
   
       // Save the updated CR
       await this.CrRepository.save(cr);
@@ -62,9 +64,24 @@ export class CrService {
   
 
   async create(cr: CR): Promise<CR> {
-    return await this.CrRepository.save(cr);
-  }
+    // Find the maximum priority in the database
+    const maxPriorityCR = await this.CrRepository
+      .createQueryBuilder("cr")
+      .select("MAX(cr.priority)", "maxPriority")
+      .getRawOne();
 
+    let maxPriority = 0;
+    if (maxPriorityCR && maxPriorityCR.maxPriority) {
+      maxPriority = parseInt(maxPriorityCR.maxPriority);
+    }
+
+    // Assign the new priority
+    cr.priority = (maxPriority + 1).toString();
+
+    // Save the CR
+    const createdCR = await this.CrRepository.save(cr);
+    return createdCR;
+  }
 
 
   async update(crId: number, cr: CR): Promise<CR> {
@@ -81,5 +98,25 @@ export class CrService {
     cr.priority = priority;
     return await this.CrRepository.save(cr);
 }
+
+async uploadFile(crId: number, file: string): Promise<string> {
+  try {
+    const cr = await this.CrRepository.findOne({ where: { crId } });
+    if (!cr) {
+      throw new Error(`CR with ID ${crId} not found`);
+    }
+    
+    // Update the file property of the CR entity
+    cr.file = file;
+
+    // Save the updated CR entity back to the database
+    await this.CrRepository.save(cr);
+
+    return 'Success';
+  } catch (error) {
+    throw new Error('Error updating file');
+  }
+}
+
 
 }

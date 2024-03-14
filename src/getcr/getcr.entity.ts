@@ -1,4 +1,5 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+/* eslint-disable prettier/prettier */
+import { Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 import { CR } from '../chngerequest/chngerequest.entity';
 import { User } from '../user/user.entity';
 

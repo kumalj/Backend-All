@@ -22,28 +22,41 @@ export class CrController {
     return this.crService.findAll();
   }
 
+  // file-upload.controller.ts
+
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: './uploads/',
+      filename: (req, file, cb) => {
+        const fileName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+        cb(null, `${fileName}${extname(file.originalname)}`);
+      },
+    }),
+  }))
+  async uploadFile(
+    @Body('crId') crId: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    try {
+
+      const fileName = file.filename;
+      const status = await this.crService.uploadFile(crId, fileName);
+      return { Status: status };
+    } catch (error) {
+      return { Message: 'Error', Error: error.message };
+    }
+  }
+  
+
+
   @Post()
   async create(@Body() cr: CR): Promise<CR> {
     const createdCR = await this.crService.create(cr);
     return createdCR;
   }
-
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file', {
-    storage: diskStorage({
-      destination: './uploads',
-      filename: (req, file, cb) => {
-        const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-        return cb(null, `${randomName}${extname(file.originalname)}`);
-      },
-    }),
-  }))
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    // Handle file processing or database storage here
-    console.log(file);
-    return { message: 'File uploaded successfully', filename: file.filename };
-  }
-
+  
 
   @Put(':crId/priority')
   async updateCrPriority(@Param('crId') crId: number, @Body('priority') priority: string) {
