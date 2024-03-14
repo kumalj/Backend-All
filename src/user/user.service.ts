@@ -27,10 +27,6 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(user.password, saltRounds);
     user.password = hashedPassword;
 
-    // Generate uniqueKey
-    const uniqueKey = await this.generateUniqueKey();
-    user.uniqueKey = uniqueKey;
-
     return await this.userRepository.save(user);
 }
 async findAll(accessToken: string): Promise<User[]> {
@@ -48,7 +44,7 @@ async findAll(accessToken: string): Promise<User[]> {
   // }
 
 //Login part of the  database
-  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; uniqueKey: string; firstname:string }> {
+  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; firstname:string }> {
     const user = await this.findByUsername(username);
     if (!user) {
         throw new NotFoundException('User not found');
@@ -65,7 +61,7 @@ async findAll(accessToken: string): Promise<User[]> {
     }
     const payload = { username: user.username, sub: user.userId, userType: user.userType, firstname:user.firstname, department: user.department };
     const accessToken = this.jwtService.sign(payload);
-    return { user, accessToken, userId: user.userId, userType: user.userType, uniqueKey: user.uniqueKey, firstname:user.firstname };
+    return { user, accessToken, userId: user.userId, userType: user.userType,firstname:user.firstname };
 }
 
 
