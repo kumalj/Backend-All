@@ -27,21 +27,13 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(user.password, saltRounds);
     user.password = hashedPassword;
 
-
+    // Generate uniqueKey
+    const uniqueKey = await this.generateUniqueKey();
+    user.uniqueKey = uniqueKey;
 
     return await this.userRepository.save(user);
 }
-
-async generateUniqueKey(): Promise<string> {
-    const min = 1000;
-    const max = 9999;
-    return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
-}
-
-
-
-
-  async findAll(accessToken: string): Promise<User[]> {
+async findAll(accessToken: string): Promise<User[]> {
     return await this.userRepository.find();
   }
   async findUserById(userId: number): Promise<User> {
@@ -56,7 +48,7 @@ async generateUniqueKey(): Promise<string> {
   // }
 
 //Login part of the  database
-  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; firstname:string }> {
+  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; uniqueKey: string; firstname:string }> {
     const user = await this.findByUsername(username);
     if (!user) {
         throw new NotFoundException('User not found');
@@ -71,9 +63,9 @@ async generateUniqueKey(): Promise<string> {
     if (user.status !== 'approved') {
         throw new ForbiddenException('Your account is pending approval.');
     }
-    const payload = { username: user.username, sub: user.userId, userType: user.userType, firstname:user.firstname };
+    const payload = { username: user.username, sub: user.userId, userType: user.userType, firstname:user.firstname, department: user.department };
     const accessToken = this.jwtService.sign(payload);
-    return { user, accessToken, userId: user.userId, userType: user.userType, firstname:user.firstname };
+    return { user, accessToken, userId: user.userId, userType: user.userType, uniqueKey: user.uniqueKey, firstname:user.firstname };
 }
 
 

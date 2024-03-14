@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Entity, Column, ManyToOne,OneToMany, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne,OneToMany, PrimaryGeneratedColumn, JoinColumn, CreateDateColumn } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Getcr } from '../getcr/getcr.entity';
 import { CRPrototype } from '../cr-prototype/cr-prototype.entity';
@@ -10,24 +10,26 @@ export class CR {
   crId: number;
 
 
-  @Column()
+  @Column({nullable: true})
   name: string;
 
-  @Column()
+  @Column({nullable: true})
   department: string;
 
-  @Column()
+  @Column({nullable: true})
   topic: string;
 
-  @Column()
+  @Column({nullable: true})
   description: string;
 
-  @Column()
+  @Column({nullable: true})
   priority: string;
 
+  @CreateDateColumn()
+  createdAt: Date;
 
 
-  @Column()
+  @Column({nullable: true})
   status: string;
 
   // @Column({ type: 'longblob', nullable: true }) // Change the data type to LONGBLOB

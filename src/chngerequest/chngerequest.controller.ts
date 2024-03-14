@@ -1,6 +1,7 @@
+/* eslint-disable prettier/prettier */
 // src/cat.controller.ts
 
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards,Res, UploadedFile, UseInterceptors} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, UploadedFile, UseInterceptors} from '@nestjs/common';
 import { CR } from './chngerequest.entity';
 import { CrService } from './chngerequest.service';
 import { JwtService } from '@nestjs/jwt';
@@ -8,7 +9,7 @@ import { JwtAuthGuard } from '../authantication/jwtAuthGuard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { Multer } from 'multer';
+
 
 @Controller('crs')
 @UseGuards(JwtService)
@@ -44,8 +45,13 @@ export class CrController {
   }
 
 
+  // @Put('update-priorities')
+  // async updatePriorities(@Body() crs: CR[]): Promise<void> {
+  //   await this.crService.updatePriorities(crs);
+  // }
+
   @Put(':crId/priority')
-  async updateCrPriority(@Param('crId') crId: number, @Body('priority') priority: string) {
+  async updatePriority(@Param('crId') crId: number, @Body('priority') priority: number) {
     return await this.crService.updatePriority(crId, priority);
   }
 
@@ -54,14 +60,18 @@ export class CrController {
     return this.crService.delete(+crId);
   }
 
+ 
   @Put(':id/start-development')
-  async startDevelopment(@Param('id') crId: number): Promise<CR> {
-      return this.crService.startDevelopment(crId); 
+  async startDevelopment(@Param('id') crId: number, @Body('userId') userId: number): Promise<CR> {
+      return this.crService.startDevelopment(crId, userId); 
   }
+
   
   @Get('start-development')
   async getCRsInStartDevelopment(): Promise<CR[]> {
     return this.crService.findByStatus('Starting Development');
   }
+
+  
   
 }

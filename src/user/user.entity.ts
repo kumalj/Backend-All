@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 // src/user/user.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, CreateDateColumn } from 'typeorm';
 import { CR } from '../chngerequest/chngerequest.entity'
+import { Getcr } from 'src/getcr/getcr.entity';
 
 @Entity()
 export class User {
@@ -18,6 +19,9 @@ export class User {
   username: string;
 
   @Column()
+  department: string;
+
+  @Column()
   password: string;
 
   @Column()
@@ -26,11 +30,17 @@ export class User {
   @Column()
   status: string;
 
+  @CreateDateColumn()
+  createdAt: Date;
+
   @OneToMany(() => CR, cr => cr.userId)
   @JoinColumn({ name: 'userId' }) 
   changeRequests: CR[]; 
-
   
+
+  @OneToMany(() => Getcr, getcr => getcr.user)
+  @JoinColumn({ name: 'userId' }) 
+  getcrs: Getcr[];
 
   
 
