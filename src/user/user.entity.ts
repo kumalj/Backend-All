@@ -8,9 +8,6 @@ export class User {
   @PrimaryGeneratedColumn()
   userId: number;
 
-  @Column() 
-  uniqueKey: string;
-
   @Column()
   firstname: string;
 
