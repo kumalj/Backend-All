@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { CR } from './chngerequest.entity';
 import { Getcr } from '../getcr/getcr.entity';
 import { User } from 'src/user/user.entity';
-import {MoreThan , LessThan} from "typeorm";
+import {MoreThanOrEqual , Not} from "typeorm";
 
 
 @Injectable()
@@ -127,18 +127,53 @@ export class CrService {
   // }
 
 
+
   async updatePriority(crId: number, priority: number) {
     const cr = await this.CrRepository.findOne({ where: { crId } });
     if (!cr) {
-      throw new Error(`CR with ID ${crId} not found`);
+        throw new Error(`CR with ID ${crId} not found`);
     }
 
-    cr.priority = String(priority);
+    const oldPriority = Number(cr.priority);
 
+    // Only proceed with update if the new priority is different from the old one
+    if (priority !== oldPriority) {
+        // Get all CRs sorted by their current priority
+        const allCRs = await this.CrRepository.find({
+            order: {
+                priority: 'ASC'
+            }
+        });
 
-    return await this.CrRepository.save(cr);
-  }
+        // Update the current CR's priority
+        cr.priority = String(priority);
 
+        // Shift priorities of other CRs accordingly
+        for (const otherCR of allCRs) {
+            if (otherCR.crId !== crId) {
+                let otherPriority = Number(otherCR.priority);
+                if (priority < oldPriority) {
+                    if (otherPriority >= priority && otherPriority < oldPriority) {
+                        otherCR.priority = String(otherPriority + 1);
+                    }
+                } else {
+                    if (otherPriority <= priority && otherPriority > oldPriority) {
+                        otherCR.priority = String(otherPriority - 1);
+                    }
+                }
+                await this.CrRepository.save(otherCR);
+            }
+        }
+
+        // Save the updated priority for the current CR
+        await this.CrRepository.save(cr);
+    }
+
+    return cr;
 }
+}
+
+
+
 
 
