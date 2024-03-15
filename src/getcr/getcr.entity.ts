@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import { Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn,CreateDateColumn } from 'typeorm';
 import { CR } from '../chngerequest/chngerequest.entity';
 import { User } from '../user/user.entity';
 
@@ -17,4 +17,7 @@ export class Getcr {
   @ManyToOne(() => CR, cr => cr.getCr)
   @JoinColumn({ name: 'crId' }) 
   cr: CR; 
+
+  @CreateDateColumn()
+  createdAt: Date;
 }
