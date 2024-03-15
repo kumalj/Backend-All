@@ -19,10 +19,12 @@ export class CR {
   topic: string;
 
   @Column({nullable: true})
-  description: string;
+  filePath: string;
 
   @Column({nullable: true})
-  file: string;
+  description: string;
+
+
 
   @Column({nullable: true})
   priority: string;
