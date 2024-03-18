@@ -9,14 +9,14 @@ export class CrPrototypeController {
   constructor(private readonly crPrototypeService: CRPrototypeService) {}
 
 
-  @Post()
-  async createCRPrototype(
-    @Body('file') file: string,
-    @Body('description') description: string,
-    @Body('crId') crId: number,
-  ): Promise<CRPrototype> {
-    return await this.crPrototypeService.createCRPrototype(file, description, crId);
-  }
+  // @Post()
+  // async createCRPrototype(
+  //   @Body('file') file: string,
+  //   @Body('description') description: string,
+  //   @Body('crId') crId: number,
+  // ): Promise<CRPrototype> {
+  //   return await this.crPrototypeService.createCRPrototype(file, description, crId);
+  // }
   
 
   
