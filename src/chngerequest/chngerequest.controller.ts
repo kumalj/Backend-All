@@ -77,6 +77,10 @@ export class CrController {
     return this.crService.findByStatus('Starting Development');
   }
 
-  
+  @Get(':crId')
+async findById(@Param('crId') crId: number): Promise<CR> {
+  console.log(`Fetching CR with ID: ${crId}`);
+  return this.crService.findOne(crId);
+}
   
 }

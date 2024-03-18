@@ -125,7 +125,9 @@ export class CrService {
   //     return await this.CrRepository.save(cr);
   // }
 
-
+  async findOne(crId: number): Promise<CR> {
+    return await this.CrRepository.findOne({ where: { crId } });
+  }
 
   async updatePriority(crId: number, priority: number) {
     const cr = await this.CrRepository.findOne({ where: { crId } });

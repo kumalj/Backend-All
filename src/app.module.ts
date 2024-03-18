@@ -11,7 +11,7 @@ import { CR } from './chngerequest/chngerequest.entity';
 
 import { Getcr } from './getcr/getcr.entity';
 import { CRPrototype } from './cr-prototype/cr-prototype.entity';
-import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
+// import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
 import { GetCrModule } from './getcr/getcr.module';
 
 
@@ -36,7 +36,7 @@ import { GetCrModule } from './getcr/getcr.module';
       }),
       UserModule,
       ChngerequestModule,
-      CrPrototypeModule,
+      // CrPrototypeModule,
       GetCrModule,
       
       
