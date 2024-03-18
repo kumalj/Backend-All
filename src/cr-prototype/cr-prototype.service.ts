@@ -9,23 +9,26 @@ import { CR } from '../chngerequest/chngerequest.entity'
 
 @Injectable()
 export class CRPrototypeService {
-  constructor(
-    @InjectRepository(CRPrototype)
-    private readonly crPrototypeRepository: Repository<CRPrototype>,
-    @InjectRepository(CR)
-    private readonly CrRepository: Repository<CR>,
-  ) {}
+//   constructor(
+//     @InjectRepository(CRPrototype)
+//     private readonly crPrototypeRepository: Repository<CRPrototype>,
+//     @InjectRepository(CR)
+//     private readonly CrRepository: Repository<CR>,
+//   ) {}
 
-  async createCRPrototype(file: string, description: string, crId: number): Promise<CRPrototype> {
-    const crPrototype = new CRPrototype();
-    crPrototype.file = file;
-    crPrototype.discription = description;
+//   async createCRPrototype(file: string, description: string, crId: number): Promise<CRPrototype> {
+//     const crPrototype = new CRPrototype();
+//     crPrototype.file = file;
+//     crPrototype.discription = description;
     
-    // Find the CR by its ID and assign it to the cr property
-    crPrototype.cr = await this.CrRepository.findOneOrFail({ where: { crId } });
+//     // Find the CR by its ID and assign it to the cr property
+//     crPrototype.cr = await this.CrRepository.findOneOrFail({ where: { crId } });
 
-    return await this.crPrototypeRepository.save(crPrototype);
-  }
+//     return await this.crPrototypeRepository.save(crPrototype);
+//   }
+
+
+  
 }
 
 

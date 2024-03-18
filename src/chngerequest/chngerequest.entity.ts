@@ -25,7 +25,6 @@ export class CR {
   description: string;
 
 
-
   @Column({nullable: true})
   priority: string;
 

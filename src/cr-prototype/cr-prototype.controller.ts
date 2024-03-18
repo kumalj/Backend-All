@@ -1,22 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,UseInterceptors, } from '@nestjs/common';
 import { CreateCrPrototypeDto } from './dto/create-cr-prototype.dto';
 import { UpdateCrPrototypeDto } from './dto/update-cr-prototype.dto';
 import { CRPrototypeService } from './cr-prototype.service'
 import { CRPrototype } from './cr-prototype.entity';
+import { CrService } from 'src/chngerequest/chngerequest.service';
 
 @Controller('cr-prototype')
 export class CrPrototypeController {
   constructor(private readonly crPrototypeService: CRPrototypeService) {}
 
 
-  @Post()
-  async createCRPrototype(
-    @Body('file') file: string,
-    @Body('description') description: string,
-    @Body('crId') crId: number,
-  ): Promise<CRPrototype> {
-    return await this.crPrototypeService.createCRPrototype(file, description, crId);
-  }
+  // @Post()
+  // async createCRPrototype(
+  //   @Body('file') file: string,
+  //   @Body('description') description: string,
+  //   @Body('crId') crId: number,
+  // ): Promise<CRPrototype> {
+  //   return await this.crPrototypeService.createCRPrototype(file, description, crId);
+  // }
+
+
+
+  
+}
+
+
+  
   
 
   
@@ -47,4 +56,4 @@ export class CrPrototypeController {
   // remove(@Param('id') id: string) {
   //   return this.crPrototypeService.remove(+id);
   // }
-}
+
