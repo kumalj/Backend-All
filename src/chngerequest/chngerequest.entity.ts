@@ -30,6 +30,9 @@ export class CR {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column({nullable: true})
+  filePath: string;
+
 
   @Column({nullable: true})
   status: string;

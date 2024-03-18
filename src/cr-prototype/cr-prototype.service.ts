@@ -1,4 +1,4 @@
-// import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 // import { CreateCrPrototypeDto } from './dto/create-cr-prototype.dto';
 // import { UpdateCrPrototypeDto } from './dto/update-cr-prototype.dto';
 // import { CRPrototype } from './cr-prototype.entity';
@@ -9,12 +9,12 @@
 
 @Injectable()
 export class CRPrototypeService {
-  constructor(
-    @InjectRepository(CRPrototype)
-    private readonly crPrototypeRepository: Repository<CRPrototype>,
-    @InjectRepository(CR)
-    private readonly CrRepository: Repository<CR>,
-  ) {}
+  // constructor(
+  //   @InjectRepository(CRPrototype)
+  //   private readonly crPrototypeRepository: Repository<CRPrototype>,
+  //   @InjectRepository(CR)
+  //   private readonly CrRepository: Repository<CR>,
+  // ) {}
 
 //   async createCRPrototype(file: string, description: string, crId: number): Promise<CRPrototype> {
 //     const crPrototype = new CRPrototype();
@@ -24,9 +24,9 @@ export class CRPrototypeService {
 //     // Find the CR by its ID and assign it to the cr property
 //     crPrototype.cr = await this.CrRepository.findOneOrFail({ where: { crId } });
 
-    return await this.crPrototypeRepository.save(crPrototype);
-  }
-}
+//     return await this.crPrototypeRepository.save(crPrototype);
+//   }
+// }
 
 
 
@@ -45,4 +45,4 @@ export class CRPrototypeService {
 //   // remove(id: number) {
 //   //   return `This action removes a #${id} crPrototype`;
 //   // }
-// // }
+}

@@ -182,10 +182,10 @@ async uploadFile(file: Express.Multer.File): Promise<string> {
   return filePath;
 }
 
-async getAllFiles(): Promise<string[]> {
-  const crEntries = await this.CrRepository.find();
-  return crEntries.map(entry => entry.filePath);
-}
+// async getAllFiles(): Promise<string[]> {
+//   const crEntries = await this.CrRepository.find();
+//   return crEntries.map(entry => entry.filePath);
+// }
 
 
 }

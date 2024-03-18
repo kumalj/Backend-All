@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CrPrototypeService } from './cr-prototype.service';
+import { CRPrototypeService } from './cr-prototype.service';
 import { CrPrototypeController } from './cr-prototype.controller';
 
 @Module({
   controllers: [CrPrototypeController],
-  providers: [CrPrototypeService],
+  providers: [CRPrototypeService],
 })
 export class CrPrototypeModule {}
