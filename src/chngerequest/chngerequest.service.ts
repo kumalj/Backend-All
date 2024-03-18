@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 // src/cat.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CR } from './chngerequest.entity';
@@ -75,6 +75,10 @@ export class CrService {
         cr.priority = (parseInt(cr.priority) - 1).toString(); // Decrease priority by one
         await this.CrRepository.save(cr);
     }
+}
+
+async getCrById(crId: number): Promise<CR | undefined> {
+  return await this.CrRepository.findOne({ where: { crId } });
 }
 
 

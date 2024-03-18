@@ -23,6 +23,9 @@ export class CR {
   description: string;
 
   @Column({nullable: true})
+  image: string;
+
+  @Column({nullable: true})
   priority: string;
 
   @CreateDateColumn()

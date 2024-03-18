@@ -1,20 +1,21 @@
 /* eslint-disable prettier/prettier */
 // src/cat.controller.ts
 
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, UploadedFile, UseInterceptors} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, UploadedFile, UseInterceptors, BadRequestException, NotFoundException, Res} from '@nestjs/common';
 import { CR } from './chngerequest.entity';
 import { CrService } from './chngerequest.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from '../authantication/jwtAuthGuard';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
+import multer, { diskStorage } from 'multer';
+import path, { extname } from 'path';
 
 
 @Controller('crs')
 @UseGuards(JwtService)
 export class CrController {
   constructor(private readonly crService: CrService) {}
+  
 
   @Get()
   @UseGuards(JwtAuthGuard)
@@ -27,23 +28,22 @@ export class CrController {
     const createdCR = await this.crService.create(cr);
     return createdCR;
   }
+  
+
+
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file', {
-    storage: diskStorage({
-      destination: './uploads',
-      filename: (req, file, cb) => {
-        const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-        return cb(null, `${randomName}${extname(file.originalname)}`);
-      },
-    }),
-  }))
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    // Handle file processing or database storage here
-    console.log(file);
-    return { message: 'File uploaded successfully', filename: file.filename };
+  @UseInterceptors(FileInterceptor('image'))
+  async uploadFile(@UploadedFile() file) {
+    try {
+      const image = file.filename;
+      const cr = await this.crService.getCrById
+      //await this.crService.updateImageInCR({cr},image); // Assuming you have the logic to update the image in the CR service
+      return { message: 'Success' };
+    } catch (error) {
+      return { message: 'Error', error: error.message };
+    }
   }
-
 
   // @Put('update-priorities')
   // async updatePriorities(@Body() crs: CR[]): Promise<void> {
