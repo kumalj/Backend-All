@@ -22,9 +22,16 @@ export class CrController {
     return this.crService.findAll();
   }
 
-
   @Post('create')
-  @UseInterceptors(FileInterceptor('file')) // This interceptor will handle file upload
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: './uploads/',
+      filename: (req, file, cb) => {
+        const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+        cb(null, `${randomName}${extname(file.originalname)}`);
+      },
+    }),
+  }))
   async create(@Body() cr: CR, @UploadedFile() file: Express.Multer.File): Promise<CR> {
     let filePath = '';
     if (file) {
@@ -41,8 +48,6 @@ export class CrController {
     const filePath = '/uploads/' + file.originalname; // Example path
     return filePath;
   }
-
-
 
 
 
