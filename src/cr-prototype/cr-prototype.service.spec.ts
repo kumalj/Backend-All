@@ -12,7 +12,7 @@ describe('CrPrototypeService', () => {
     service = module.get<CrPrototypeService>(CrPrototypeService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-});
+//   it('should be defined', () => {
+//     expect(service).toBeDefined();
+//   });
+// });

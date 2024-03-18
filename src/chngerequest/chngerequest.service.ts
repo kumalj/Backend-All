@@ -129,7 +129,9 @@ async getCrById(crId: number): Promise<CR | undefined> {
   //     return await this.CrRepository.save(cr);
   // }
 
-
+  async findOne(crId: number): Promise<CR> {
+    return await this.CrRepository.findOne({ where: { crId } });
+  }
 
   async updatePriority(crId: number, priority: number) {
     const cr = await this.CrRepository.findOne({ where: { crId } });
@@ -174,9 +176,20 @@ async getCrById(crId: number): Promise<CR | undefined> {
 
     return cr;
 }
+
+
+async uploadFile(file: Express.Multer.File): Promise<string> {
+  const filePath = '/uploads/' + file.originalname; // Example path
+  // Save filePath to the CR table
+  const cr = this.CrRepository.create({ filePath });
+  await this.CrRepository.save(cr);
+  return filePath;
+}
+
+async getAllFiles(): Promise<string[]> {
+  const crEntries = await this.CrRepository.find();
+  return crEntries.map(entry => entry.filePath);
 }
 
 
-
-
-
+}

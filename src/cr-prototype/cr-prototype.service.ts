@@ -1,14 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCrPrototypeDto } from './dto/create-cr-prototype.dto';
-import { UpdateCrPrototypeDto } from './dto/update-cr-prototype.dto';
-import { CRPrototype } from './cr-prototype.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CR } from '../chngerequest/chngerequest.entity'
+// import { Injectable } from '@nestjs/common';
+// import { CreateCrPrototypeDto } from './dto/create-cr-prototype.dto';
+// import { UpdateCrPrototypeDto } from './dto/update-cr-prototype.dto';
+// import { CRPrototype } from './cr-prototype.entity';
+// import { InjectRepository } from '@nestjs/typeorm';
+// import { Repository } from 'typeorm';
+// import { CR } from '../chngerequest/chngerequest.entity'
 
 
-@Injectable()
-export class CRPrototypeService {
+//@Injectable()
+//export class CRPrototypeService {
   // constructor(
   //   @InjectRepository(CRPrototype)
   //   private readonly crPrototypeRepository: Repository<CRPrototype>,
@@ -30,20 +30,19 @@ export class CRPrototypeService {
 
 
 
-  // findAll() {
-  //   return `This action returns all crPrototype`;
-  // }
+//   // findAll() {
+//   //   return `This action returns all crPrototype`;
+//   // }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} crPrototype`;
-  // }
+//   // findOne(id: number) {
+//   //   return `This action returns a #${id} crPrototype`;
+//   // }
 
-  // update(id: number, updateCrPrototypeDto: UpdateCrPrototypeDto) {
-  //   return `This action updates a #${id} crPrototype`;
-  // }
+//   // update(id: number, updateCrPrototypeDto: UpdateCrPrototypeDto) {
+//   //   return `This action updates a #${id} crPrototype`;
+//   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} crPrototype`;
-  // }
-// }
-  }
+//   // remove(id: number) {
+//   //   return `This action removes a #${id} crPrototype`;
+//   // }
+// // }

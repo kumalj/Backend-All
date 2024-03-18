@@ -9,6 +9,7 @@ export class CR {
   @PrimaryGeneratedColumn()
   crId: number;
 
+
   @Column({nullable: true})
   name: string;
 
@@ -17,9 +18,6 @@ export class CR {
 
   @Column({nullable: true})
   topic: string;
-
-  @Column({nullable: true})
-  filePath: string;
 
   @Column({nullable: true})
   description: string;
@@ -55,7 +53,6 @@ export class CR {
   @OneToMany(() => CRPrototype, crPrototype => crPrototype.cr) // Specify ManyToOne relationship
   @JoinColumn({ name: 'crId' })
   prototype: CRPrototype; 
-
 
 
 

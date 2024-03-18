@@ -1,0 +1,181 @@
+const Gallery = require('../models/galleryModel');
+const sharp = require('sharp');
+const { resolve, relative} = require('path');
+const path = require('path');
+const fsPromises = require('fs').promises;
+const uuid = require('uuid');
+
+const saveImages = async (files, coverId, galleryTitle, CoverGallery, galleryId) => {
+    const savedImages = [];
+
+    // Ensure files is an array before using map
+    if (!Array.isArray(files)) {
+        console.error('Invalid files format. Expected an array.');
+        return savedImages;
+    }
+
+    const galleryDirectory = path.join(__dirname, '../uploads/gallery', galleryId);
+
+    // Create a new directory for the gallery if it doesn't exist
+    await fsPromises.mkdir(galleryDirectory, { recursive: true });
+
+    // Process the cover image separately
+    const coverImage = CoverGallery;
+    const coverFilename = 'cover.webp';
+    const coverWebpFilePath = path.join(galleryDirectory, coverFilename);
+
+    try {
+        // Resize and convert to webp
+        await sharp(coverImage.buffer).resize({ width: 800, height: 600 }).toFile(coverWebpFilePath);
+
+        // Save image data to the database
+        const coverImageSaved = await Gallery.createGalleryItem({
+            filename: null, // No need to save the original filename
+            webpFilename: coverFilename,
+        });
+
+        savedImages.push(coverImageSaved);
+    } catch (error) {
+        console.error(`Error processing cover image ${coverImage.originalname}:`, error);
+    }
+
+    // Process additional images sequentially
+    for (let index = 0; index < files.length; index++) {
+        const file = files[index];
+        const filename = `${index}.webp`;
+        const webpFilePath = path.join(galleryDirectory, filename);
+
+        try {
+            // Resize and convert to webp
+            await sharp(file.buffer).resize({ width: 300, height: 300 }).toFile(webpFilePath);
+
+            // Save image data to the database
+
+            const savedImage = await Gallery.createGalleryItem({
+                filename: null, // No need to save the original filename
+                webpFilename: filename,
+            });
+
+            savedImages.push(savedImage);
+        } catch (error) {
+            // Handle errors for each image operation
+            console.error(`Error processing image ${file.originalname}:`, error);
+        }
+    }
+
+    return savedImages;
+};
+
+
+const galleryController = {
+    newPartnerImages: async (req, res) => {
+        const { title, description } = req.body;
+        const images = req.files && req.files.images ? req.files.images : [];
+        const coverImageGallery = req.files && req.files.coverImage ? req.files.coverImage[0] : null;
+
+        try {
+            const coverImage = req.files && req.files.coverImage ? req.files.coverImage[0] : null;
+
+            if (!coverImage) {
+                throw new Error('Cover image is missing.');
+            }
+
+            const galleryId = uuid.v4();
+            const coverImageDirectory = path.join(__dirname, '../uploads/gallery', galleryId);
+
+            await fsPromises.mkdir(coverImageDirectory, { recursive: true });
+
+            const coverImageWebpPath = path.join(coverImageDirectory, 'cover.webp');
+            await sharp(coverImage.buffer).resize({ width: 800, height: 600 }).toFile(coverImageWebpPath);
+
+            const rootDirectory = resolve(__dirname, '../');
+            const directory = relative(rootDirectory, coverImageDirectory);
+
+            // Correct field names in galleryItemData object
+            const galleryItemData = {
+                title,
+                description,
+                coverImageWebp: 'cover.webp',  // Use the correct field name
+                directoryPath: directory,  // Use the correct field name
+            };
+
+
+            const coverImageSaved = await Gallery.createGalleryItem(galleryItemData);
+
+            console.log('Cover Image Saved:', coverImageSaved);  // Log the coverImageSaved object
+
+            const savedImages = await saveImages(images, coverImageSaved.id, title, coverImageGallery, galleryId);
+
+            res.status(200).json({ coverImage: coverImageSaved, additionalImages: savedImages });
+        } catch (error) {
+            console.error('Error during image upload:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    },
+
+    getAllGalleryItems: async (req, res) => {
+        try {
+            const allGalleryItems = await Gallery.getAllGalleryItems();
+
+            // Send the response
+            return allGalleryItems; // Change this line to return the data
+        } catch (error) {
+            // Log the error
+            console.error('Error fetching all gallery items:', error);
+
+            // Express will handle sending an error response automatically
+            throw error; // Change this line to throw the error
+        }
+    },
+
+
+
+
+
+    getGalleryItemById: async function(req, res) {
+        const galleryItemId = req.params.galleryItemId;
+
+        try {
+            const galleryItem = await Gallery.getGalleryItemById(galleryItemId);
+
+            if (galleryItem) {
+                res.status(200).json(galleryItem);
+            } else {
+                res.status(404).json({ error: 'Gallery item not found' });
+            }
+        } catch (error) {
+            console.error('Error fetching gallery item by ID:', error);
+            res.status(500).json({ error: 'Internal Server Error: Controller' });
+        }
+    },
+
+
+    deleteGalleryItem: async (req, res) => {
+        const galleryItemId = req.params.galleryItemId;
+        try {
+            // Fetch the gallery item from the database
+            const galleryItem = await Gallery.getGalleryItemById(galleryItemId);
+
+            // If the gallery item doesn't exist, return a 404 response
+            if (!galleryItem) {
+                return res.status(404).json({ message: 'Gallery item not found' });
+            }
+
+            // Delete the associated files from the file system
+            const directoryPath = galleryItem.directoryPath;
+            await fsPromises.rm(directoryPath, { recursive: true });
+
+            // Delete the gallery item from the database
+            await Gallery.deleteGalleryItem(galleryItemId);
+
+            // Return a success response
+            res.status(200).json({ message: 'Gallery item deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting gallery item:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+};
+
+module.exports = galleryController;
