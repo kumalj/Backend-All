@@ -23,12 +23,15 @@ export class CrController {
     return this.crService.findAll();
   }
 
+
   @Post()
   async create(@Body() cr: CR): Promise<CR> {
     const createdCR = await this.crService.create(cr);
     return createdCR;
   }
   
+
+
 
 
 
@@ -50,10 +53,12 @@ export class CrController {
   //   await this.crService.updatePriorities(crs);
   // }
 
+
   @Put(':crId/priority')
   async updatePriority(@Param('crId') crId: number, @Body('priority') priority: number) {
     return await this.crService.updatePriority(crId, priority);
   }
+  
 
   @Delete(':crId')
   delete(@Param('crId') crId: string): Promise<void> {

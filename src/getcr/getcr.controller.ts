@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CreateGetCrDto } from './dto/create-getcr.dto';
 import { UpdateGetCrDto } from './dto/update-getcr.dto';

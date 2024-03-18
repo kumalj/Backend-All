@@ -1,19 +1,20 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn,CreateDateColumn } from 'typeorm';
 import { CR } from '../chngerequest/chngerequest.entity';
 
 @Entity()
 export class CRPrototype {
   @PrimaryGeneratedColumn()
-  crpId: number;
+  prId: number;
 
-  @Column()
-  Priyority: string;
 
-  @Column()
-  description: string;
+  @Column({nullable: true})
+  file: string;
 
-  @Column()
-  comment: string;
+  @Column({nullable: true})
+  discription: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   
   @ManyToOne(() => CR, cr => cr.prototype) // Specify ManyToOne relationship
