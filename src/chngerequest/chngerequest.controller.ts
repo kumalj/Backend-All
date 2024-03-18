@@ -77,19 +77,6 @@ export class CrController {
     return this.crService.findByStatus('Starting Development');
   }
 
-
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<string> {
-    return this.crService.uploadFile(file);
-  }
-
-  @Get()
-  async getAllFiles(): Promise<string[]> {
-    return this.crService.getAllFiles();
-  }
-
-  
   
   
 }
