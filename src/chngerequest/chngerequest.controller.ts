@@ -23,11 +23,26 @@ export class CrController {
   }
 
 
-  @Post()
-  async create(@Body() cr: CR): Promise<CR> {
+  @Post('create')
+  @UseInterceptors(FileInterceptor('file')) // This interceptor will handle file upload
+  async create(@Body() cr: CR, @UploadedFile() file: Express.Multer.File): Promise<CR> {
+    let filePath = '';
+    if (file) {
+      filePath = await this.uploadFile(file);
+      cr.filePath = filePath; // Assign the file path to the CR object
+    }
+
+    // Create the CR
     const createdCR = await this.crService.create(cr);
     return createdCR;
   }
+
+  async uploadFile(file: Express.Multer.File): Promise<string> {
+    const filePath = '/uploads/' + file.originalname; // Example path
+    return filePath;
+  }
+
+
 
 
 
@@ -82,4 +97,7 @@ export class CrController {
     console.log(`Fetching CR with ID:${crIid}`)
     return this.crService.findOne(crIid)
   }  
+
+  
+
 }

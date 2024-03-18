@@ -110,6 +110,15 @@ export class CrService {
   }
 
 
+  async uploadFile(file: Express.Multer.File): Promise<string> {
+    const filePath = '/uploads/' + file.originalname; // Example path
+    // Save filePath to the CR table
+    const cr = this.CrRepository.create({ filePath });
+    await this.CrRepository.save(cr);
+    return filePath;
+  }
+
+
   async update(crId: number, cr: CR): Promise<CR> {
     await this.CrRepository.update(crId, cr);
     return await this.CrRepository.findOne({ where: { crId } });
@@ -174,13 +183,7 @@ export class CrService {
 }
 
 
-async uploadFile(file: Express.Multer.File): Promise<string> {
-  const filePath = '/uploads/' + file.originalname; // Example path
-  // Save filePath to the CR table
-  const cr = this.CrRepository.create({ filePath });
-  await this.CrRepository.save(cr);
-  return filePath;
-}
+
 
 // async getAllFiles(): Promise<string[]> {
 //   const crEntries = await this.CrRepository.find();
