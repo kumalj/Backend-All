@@ -104,7 +104,10 @@ export class CrController {
     console.log(`Fetching CR with ID:${crId}`)
     return this.crService.findOne(crId)
   }  
-
+  @Put('/:id/status')
+  async updateCRStatus(@Param('id') id: number, @Body('status') status: string) {
+    return await this.crService.updateCRStatus(id, status);
+  }
   
 
 

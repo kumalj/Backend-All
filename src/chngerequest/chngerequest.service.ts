@@ -180,7 +180,14 @@ async uploadFile(cr: CR, randomName: string): Promise<CR> {
     return cr;
 }
 
-
+async updateCRStatus(crId: number, status: string): Promise<CR> {
+  const cr = await this.CrRepository.findOne({where:{crId}});
+  if (!cr) {
+    throw new Error('CR not found');
+  }
+  cr.status = status; // Assuming you have a status field in CR entity
+  return await this.CrRepository.save(cr);
+}
 
 
 
