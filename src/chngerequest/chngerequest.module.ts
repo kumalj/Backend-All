@@ -1,16 +1,15 @@
 /* eslint-disable prettier/prettier */
-
-
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
+import { MulterModule } from '@nestjs/platform-express';
+import { ServeStaticModule } from '@nestjs/serve-static'; // Import ServeStaticModule
+import { join } from 'path';
 import { CR } from './chngerequest.entity';
 import { CrController } from './chngerequest.controller';
 import { CrService } from './chngerequest.service';
-import { JwtModule } from '@nestjs/jwt';
-import { MulterModule } from '@nestjs/platform-express';
-import { Getcr } from 'src/getcr/getcr.entity'; 
-import { User } from 'src/user/user.entity';
-
+import { Getcr } from '../getcr/getcr.entity'; 
+import { User } from '../user/user.entity';
 
 @Module({
   imports: [
@@ -20,7 +19,11 @@ import { User } from 'src/user/user.entity';
       signOptions: { expiresIn: '1h' },
     }),
     MulterModule.register({
-      dest: './uploads',
+      dest: './uploads', // Specify the destination directory for file uploads
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join( 'uploads'), // Specify the directory path to serve static files from
+      serveRoot: '/uploads', // Specify the root URL path for serving static files
     }),
   ],
   controllers: [CrController],

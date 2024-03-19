@@ -37,8 +37,7 @@ export class CR {
   @Column({nullable: true})
   status: string;
 
-  // @Column({ type: 'longblob', nullable: true }) // Change the data type to LONGBLOB
-  // file: Buffer; // Use Buffer type for binary data
+
 
   @ManyToOne(() => User, user => user.changeRequests)
   @JoinColumn({ name: 'userId' })

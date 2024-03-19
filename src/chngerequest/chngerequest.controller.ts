@@ -25,25 +25,27 @@ export class CrController {
   @Post('create')
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
-      destination: './uploads/',
+      destination: './uploads/', // Destination directory to store files
       filename: (req, file, cb) => {
+        // Generate a unique filename
         const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-        cb(null, `${randomName}${extname(file.originalname)}`);
+        cb(null, `${randomName}${extname(file.originalname)}`); // Concatenate the random name with the original extension
       },
     }),
   }))
   async create(@Body() cr: CR, @UploadedFile() file: Express.Multer.File): Promise<CR> {
     let filePath = '';
     if (file) {
-      filePath = await this.uploadFile(file);
+      // If file is uploaded, get the file path
+      filePath = file.filename; // Just use the filename, as it's already saved in the ./uploads/ directory
       cr.filePath = filePath; // Assign the file path to the CR object
     }
-
+  
     // Create the CR
     const createdCR = await this.crService.create(cr);
     return createdCR;
   }
-
+  
   async uploadFile(file: Express.Multer.File): Promise<string> {
     const filePath = '/uploads/' + file.originalname; // Example path
     return filePath;
@@ -98,10 +100,13 @@ export class CrController {
   }
 
   @Get(':crId')
-  async findById(@Param('crId') crIid: number): Promise<CR>{
-    console.log(`Fetching CR with ID:${crIid}`)
-    return this.crService.findOne(crIid)
+  async findById(@Param('crId') crId: number): Promise<CR>{
+    console.log(`Fetching CR with ID:${crId}`)
+    return this.crService.findOne(crId)
   }  
+
+  
+
 
   
 
