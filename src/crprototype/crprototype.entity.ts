@@ -6,7 +6,7 @@ import { CR } from '../chngerequest/chngerequest.entity';
 @Entity()
 export class CRPrototype {
   @PrimaryGeneratedColumn()
-  prid: number;
+  prId: number;
 
   @Column({nullable: true})
   topic: string;
