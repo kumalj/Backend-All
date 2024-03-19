@@ -2,12 +2,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CRPrototype } from './crprototype.entity';
-import { CRPrototypeService } from './crprototype.service';
-import { CRPrototypeController } from './crprototype.controller';
+import { CrPrototypeService } from './crprototype.service';
+import { CrPrototypeController } from './crprototype.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([CRPrototype])],
-  providers: [CRPrototypeService],
-  controllers: [CRPrototypeController],
+  providers: [CrPrototypeService],
+  controllers: [CrPrototypeController],
 })
 export class CRPrototypeModule {}
