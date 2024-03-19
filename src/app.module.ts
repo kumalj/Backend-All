@@ -10,9 +10,10 @@ import { CR } from './chngerequest/chngerequest.entity';
 
 
 import { Getcr } from './getcr/getcr.entity';
-import { CRPrototype } from './cr-prototype/cr-prototype.entity';
+import { CRPrototype } from './crprototype/crprototype.entity';
 // import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
 import { GetCrModule } from './getcr/getcr.module';
+import { CRPrototypeModule } from './crprototype/crprototype.module';
 
 
 
@@ -24,7 +25,7 @@ import { GetCrModule } from './getcr/getcr.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'root',
+      password: '',
       database: 'crms',
       entities: [User, CR, Getcr,CRPrototype],
       synchronize: true,
@@ -38,6 +39,7 @@ import { GetCrModule } from './getcr/getcr.module';
       ChngerequestModule,
       // CrPrototypeModule,
       GetCrModule,
+      CRPrototypeModule,
       
       
       

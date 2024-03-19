@@ -2,13 +2,12 @@
 import { Entity, Column, ManyToOne,OneToMany, PrimaryGeneratedColumn, JoinColumn, CreateDateColumn } from 'typeorm';
 import { User } from '../user/user.entity';
 import { Getcr } from '../getcr/getcr.entity';
-import { CRPrototype } from '../cr-prototype/cr-prototype.entity';
+import { CRPrototype } from '../crprototype/crprototype.entity';
 
 @Entity()
 export class CR {
   @PrimaryGeneratedColumn()
   crId: number;
-
 
   @Column({nullable: true})
   name: string;
@@ -21,7 +20,6 @@ export class CR {
 
   @Column({nullable: true})
   description: string;
-
 
 
   @Column({nullable: true})
@@ -52,13 +50,6 @@ export class CR {
   @OneToMany(() => CRPrototype, crPrototype => crPrototype.cr) // Specify ManyToOne relationship
   @JoinColumn({ name: 'crId' })
   prototype: CRPrototype; 
-
-
-
-
-
-
-
 
 
 }
