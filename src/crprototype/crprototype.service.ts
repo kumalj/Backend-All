@@ -16,6 +16,15 @@ export class CrPrototypeService {
     return this.crPrototypeRepository.save(crPrototypeData);
   }
 
+  async uploadFile(crPrototypeData: CRPrototype, randomName: string): Promise<CRPrototype> {
+    const filePath = '/uploads/' + randomName; // Use the provided randomName in the file path
+    crPrototypeData.filePath = filePath; // Assign the file path to the CR object
+  
+    // Save the CR
+    const createdCR = await this.crPrototypeRepository.save(crPrototypeData);
+    return createdCR;
+  }
+
   
   async findAll(): Promise<CRPrototype[]> {
     return await this.crPrototypeRepository.find();

@@ -18,6 +18,9 @@ export class CRPrototype {
   createdAt: Date;
 
   @Column({nullable: true})
+  filePath: string;
+
+  @Column({nullable: true})
   crId: number; // Add crId column
 
   @ManyToOne(() => CR, cr => cr.prototype)

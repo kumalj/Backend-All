@@ -18,9 +18,9 @@ export class CR {
   @Column({nullable: true})
   topic: string;
 
-  @Column({nullable: true})
+  @Column({ length: 2000, nullable: true }) 
   description: string;
-
+  
 
   @Column({nullable: true})
   priority: string;
