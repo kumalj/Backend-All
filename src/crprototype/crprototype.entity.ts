@@ -18,7 +18,14 @@ export class CRPrototype {
   createdAt: Date;
 
   @Column({nullable: true})
-  crId: number; // Add crId column
+  popupstatus: string;
+
+  @Column({nullable: true})
+  rejectionReason: string;
+
+
+  @Column({nullable: true})
+  crId: number; 
 
   @ManyToOne(() => CR, cr => cr.prototype)
   @JoinColumn({ name: 'crId' })
