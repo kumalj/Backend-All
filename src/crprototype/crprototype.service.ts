@@ -37,4 +37,28 @@ export class CrPrototypeService {
     }
     return crPrototype;
   }
+
+
+  async approve(prId: number): Promise<CRPrototype> {
+    const crPrototype = await this.crPrototypeRepository.findOne({where:{ prId}});
+    if (!crPrototype) {
+      throw new NotFoundException('CR prototype not found');
+    }
+    crPrototype.popupstatus = 'Approved';
+    return await this.crPrototypeRepository.save(crPrototype);
+  }
+
+  async reject(prId: number, reason: string): Promise<CRPrototype> {
+    const crPrototype = await this.crPrototypeRepository.findOne({where: {prId}}) ;
+    if (!crPrototype) {
+      throw new NotFoundException('CR prototype not found');
+    }
+    crPrototype.popupstatus = 'Rejected';
+    crPrototype.rejectionReason = reason;
+    return await this.crPrototypeRepository.save(crPrototype);
+  }
+
+  async updateCRPrototype(prId: number, updateData: Partial<CRPrototype>): Promise<void> {
+    await this.crPrototypeRepository.update({ prId }, updateData);
+  }
 }
