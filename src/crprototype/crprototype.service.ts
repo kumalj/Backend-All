@@ -26,9 +26,15 @@ export class CrPrototypeService {
   }
 
   
-  async findAll(): Promise<CRPrototype[]> {
-    return await this.crPrototypeRepository.find();
-  }
+  // async findAll(): Promise<CRPrototype[]> {
+  //   return await this.crPrototypeRepository.find({ relations: ['cr','cr.userId'] });
+
+    async findAll(): Promise<CRPrototype[]> {
+      return await this.crPrototypeRepository.find({ 
+        relations: ['cr', 'cr.userId'] 
+      });
+    }
+  
 
   async findOne(prId: number): Promise<CRPrototype> {
     const crPrototype = await this.crPrototypeRepository.findOne({ where: {prId } });

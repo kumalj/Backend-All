@@ -36,7 +36,6 @@ export class CR {
   status: string;
 
 
-
   @ManyToOne(() => User, user => user.changeRequests)
   @JoinColumn({ name: 'userId' })
   userId: User;

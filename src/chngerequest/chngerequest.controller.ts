@@ -34,6 +34,7 @@ export class CrController {
     }),
   }))
   async create(@Body() cr: CR, @UploadedFile() file: Express.Multer.File): Promise<CR> {
+    
     let filePath = '';
     if (file) {
       // If file is uploaded, get the file path
@@ -43,6 +44,7 @@ export class CrController {
   
     // Create the CR
     const createdCR = await this.crService.create(cr);
+    
     return createdCR;
   }
   

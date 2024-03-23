@@ -24,7 +24,7 @@ export class CrService {
   ) { }
 
   async findAll(): Promise<CR[]> {
-    return await this.CrRepository.find();
+    return await this.CrRepository.find({ relations: ['userId'] });
   }
 
   async startDevelopment(crId: number, userId: number): Promise<CR> {
@@ -89,25 +89,27 @@ export class CrService {
   }
 
 
-  async create(cr: CR): Promise<CR> {
-    // Find the maximum priority in the database
-    const maxPriorityCR = await this.CrRepository
-      .createQueryBuilder("cr")
-      .select("MAX(cr.priority)", "maxPriority")
-      .getRawOne();
+ // Inside CrService
 
-    let maxPriority = 0;
-    if (maxPriorityCR && maxPriorityCR.maxPriority) {
-      maxPriority = parseInt(maxPriorityCR.maxPriority);
-    }
+ async create(cr: CR ): Promise<CR> {
+  // Find the maximum priority in the database
+  const maxPriorityCR = await this.CrRepository
+    .createQueryBuilder("cr")
+    .select("MAX(cr.priority)", "maxPriority")
+    .getRawOne();
 
-    // Assign the new priority
-    cr.priority = (maxPriority + 1).toString();
-
-    // Save the CR
-    const createdCR = await this.CrRepository.save(cr);
-    return createdCR;
+  let maxPriority = 0;
+  if (maxPriorityCR && maxPriorityCR.maxPriority) {
+    maxPriority = parseInt(maxPriorityCR.maxPriority);
   }
+  // cr.userId = userId;
+  // Assign the new priority
+  cr.priority = (maxPriority + 1).toString();
+
+  // Save the CR
+  const createdCR = await this.CrRepository.save(cr);
+  return createdCR;
+}
 
 
 // cr.service.ts

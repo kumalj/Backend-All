@@ -35,7 +35,7 @@ export class User {
 
   @OneToMany(() => CR, cr => cr.userId)
   @JoinColumn({ name: 'userId' }) 
-  changeRequests: CR[]; 
+  changeRequests: CR[];
   
 
   @OneToMany(() => Getcr, getcr => getcr.user)
