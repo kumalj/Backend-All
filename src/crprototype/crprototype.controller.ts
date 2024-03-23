@@ -60,4 +60,19 @@ export class CrPrototypeController {
   ): Promise<void> {
     await this.crPrototypeService.updateCRPrototype(prId, updateData);
   }
+
+
+  // @Put(':prId')
+  // async updateCRPrototype(
+  //   @Param('prId') prId: number,
+  //   @Body() updateData: Partial<CRPrototype>, // Assuming you only need to update status
+  // ): Promise<void> {
+  //   await this.crPrototypeService.updateCRPrototype(prId, updateData);
+  // }
+
+  @Put(':prId/completeTask')
+  async completeTask(@Param('prId') prId: number): Promise<void> {
+    await this.crPrototypeService.completeTask(prId);
+  }
+  
 }

@@ -110,6 +110,8 @@ export class CrController {
   async updateCRStatus(@Param('id') id: number, @Body('status') status: string) {
     return await this.crService.updateCRStatus(id, status);
   }
+
+  
   
 
 

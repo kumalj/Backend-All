@@ -4,12 +4,15 @@ import { Injectable,NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CRPrototype } from './crprototype.entity';
+import { CR } from 'src/chngerequest/chngerequest.entity';
 
 @Injectable()
 export class CrPrototypeService {
   constructor(
     @InjectRepository(CRPrototype)
     private readonly crPrototypeRepository: Repository<CRPrototype>,
+    @InjectRepository(CR)
+    private readonly crRepository: Repository<CR>,
   ) {}
 
   async create(crPrototypeData: CRPrototype): Promise<CRPrototype> {
@@ -67,4 +70,19 @@ export class CrPrototypeService {
   async updateCRPrototype(prId: number, updateData: Partial<CRPrototype>): Promise<void> {
     await this.crPrototypeRepository.update({ prId }, updateData);
   }
+
+  async completeTask(prId: number): Promise<void> {
+    // Update the status of CRPrototype
+    await this.crPrototypeRepository.update(prId, { popupstatus: 'Completed' });
+
+    // Retrieve the CR associated with this CRPrototype
+    const crPrototype = await this.crPrototypeRepository.findOne({where:{prId}});
+    const crId = crPrototype.crId;
+
+    // Update the status of the corresponding CR
+    await this.crRepository.update(crId, { status: 'Completed' });
+  }
+
+
+  
 }
