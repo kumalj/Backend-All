@@ -24,8 +24,10 @@ export class CrService {
   ) { }
 
   async findAll(): Promise<CR[]> {
-    return await this.CrRepository.find({ relations: ['userId'] });
+    return await this.CrRepository.find({ relations: ['userId','getCr', 'getCr.user'] });
   }
+
+  // ,'getCr.cr'
 
   async startDevelopment(crId: number, userId: number): Promise<CR> {
     try {
