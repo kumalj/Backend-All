@@ -23,10 +23,10 @@ export class UserController {
   }
 
   @Post('login')
-async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number; userType: string; firstname:string }> {
+async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number; userType: string; firstname:string; lastname:string;}> {
   try {
-    const { user, accessToken, userId, userType,firstname } = await this.userService.login(credentials.username, credentials.password);
-    return { user, accessToken, userId, userType,firstname};
+    const { user, accessToken, userId, userType,firstname,lastname } = await this.userService.login(credentials.username, credentials.password);
+    return { user, accessToken, userId, userType,firstname,lastname};
   } catch (error) {
     if (error instanceof NotFoundException || error instanceof ForbiddenException) {
       throw error;
