@@ -84,6 +84,13 @@ export class CrPrototypeService {
     await this.crRepository.update(crId, { status: 'Completed' });
   }
 
-
+  async updatePopupStatus(crId: number, popupstatus: string): Promise<void> {
+    const crPrototype = await this.crPrototypeRepository.findOne({ where: { crId } });
+    if (!crPrototype) {
+      throw new NotFoundException('CR prototype not found');
+    }
+    crPrototype.popupstatus = popupstatus;
+    await this.crPrototypeRepository.save(crPrototype);
+  }
   
 }
