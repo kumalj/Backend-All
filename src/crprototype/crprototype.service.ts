@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // crprototype.service.ts
 
 import { Injectable,NotFoundException } from '@nestjs/common';
@@ -20,7 +21,7 @@ export class CrPrototypeService {
   }
 
   async uploadFile(crPrototypeData: CRPrototype, randomName: string): Promise<CRPrototype> {
-    const filePath = '/uploads/' + randomName; // Use the provided randomName in the file path
+    const filePath = '/uploads/prototype/' + randomName; // Use the provided randomName in the file path
     crPrototypeData.filePath = filePath; // Assign the file path to the CR object
   
     // Save the CR

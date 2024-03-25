@@ -25,7 +25,7 @@ export class CrController {
   @Post('create')
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
-      destination: './uploads/', // Destination directory to store files
+      destination: './uploads/cr/', // Destination directory to store files
       filename: (req, file, cb) => {
         // Generate a unique filename
         const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
@@ -49,33 +49,13 @@ export class CrController {
   }
   
   async uploadFile(file: Express.Multer.File): Promise<string> {
-    const filePath = '/uploads/' + file.originalname; // Example path
+    const filePath = '/uploads/cr/' + file.originalname; // Example path
     return filePath;
   }
 
 
 
-  // @Post('upload')
-  // @UseInterceptors(FileInterceptor('file', {
-  //   storage: diskStorage({
-  //     destination: './uploads',
-  //     filename: (req, file, cb) => {
-  //       const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-  //       return cb(null, `${randomName}${extname(file.originalname)}`);
-  //     },
-  //   }),
-  // }))
-  // async uploadFile(@UploadedFile() file: Express.Multer.File) {
-  //   // Handle file processing or database storage here
-  //   console.log(file);
-  //   return { message: 'File uploaded successfully', filename: file.filename };
-  // }
 
-
-  // @Put('update-priorities')
-  // async updatePriorities(@Body() crs: CR[]): Promise<void> {
-  //   await this.crService.updatePriorities(crs);
-  // }
 
 
   @Put(':crId/priority')

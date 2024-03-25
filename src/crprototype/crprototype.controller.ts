@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // crprototype.controller.ts
 
 import { Controller, Post, Body,Param,Get, UploadedFile, UseInterceptors,Put } from '@nestjs/common';
@@ -14,7 +15,7 @@ export class CrPrototypeController {
   @Post()
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
-      destination: './uploads/', // Destination directory to store files
+      destination: './uploads/prototype/', // Destination directory to store files
       filename: (req, file, cb) => {
         // Generate a unique filename
         const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
@@ -30,6 +31,11 @@ export class CrPrototypeController {
       crPrototypeData.filePath = filePath; // Assign the file path to the CR object
     }
     return this.crPrototypeService.create(crPrototypeData);
+  }
+
+  async uploadFile(file: Express.Multer.File): Promise<string> {
+    const filePath = '/uploads/prototype/' + file.originalname; // Example path
+    return filePath;
   }
 
 
@@ -62,13 +68,7 @@ export class CrPrototypeController {
   }
 
 
-  // @Put(':prId')
-  // async updateCRPrototype(
-  //   @Param('prId') prId: number,
-  //   @Body() updateData: Partial<CRPrototype>, // Assuming you only need to update status
-  // ): Promise<void> {
-  //   await this.crPrototypeService.updateCRPrototype(prId, updateData);
-  // }
+
 
   @Put(':prId/completeTask')
   async completeTask(@Param('prId') prId: number): Promise<void> {

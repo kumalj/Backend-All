@@ -115,7 +115,7 @@ export class CrService {
 // cr.service.ts
 
 async uploadFile(cr: CR, randomName: string): Promise<CR> {
-  const filePath = '/uploads/' + randomName; // Use the provided randomName in the file path
+  const filePath = '/uploads/cr/' + randomName; // Use the provided randomName in the file path
   cr.filePath = filePath; // Assign the file path to the CR object
 
   // Save the CR
