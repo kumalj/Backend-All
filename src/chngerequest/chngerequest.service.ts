@@ -24,7 +24,7 @@ export class CrService {
   ) { }
 
   async findAll(): Promise<CR[]> {
-    return await this.CrRepository.find({ relations: ['userId','getCr', 'getCr.user'] });
+    return await this.CrRepository.find({ relations: ['userId','getCr', 'getCr.user', 'getCr.cr'] });
   }
 
   // ,'getCr.cr'
@@ -192,7 +192,6 @@ async updateCRStatus(crId: number, status: string): Promise<CR> {
   cr.status = status; // Assuming you have a status field in CR entity
   return await this.CrRepository.save(cr);
 }
-
 
 
 }
