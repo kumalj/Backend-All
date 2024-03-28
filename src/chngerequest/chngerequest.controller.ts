@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 // src/cat.controller.ts
 
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, UploadedFile, UseInterceptors} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, UploadedFile, UseInterceptors,NotFoundException} from '@nestjs/common';
 import { CR } from './chngerequest.entity';
 import { CrService } from './chngerequest.service';
 import { JwtService } from '@nestjs/jwt';
@@ -92,9 +92,13 @@ export class CrController {
   }
 
   
-  
+  @Put(':id/update-hod-approval')
+  async updateHODApproval(
+    @Param('id') crId: number,
+    @Body('hodApprovel') hodApproval: string,
+  ) {
+    return this.crService.updateHODApproval(crId, hodApproval);
+  }
 
-
-  
 
 }

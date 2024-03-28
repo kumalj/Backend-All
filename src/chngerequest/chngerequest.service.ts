@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 // src/cat.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { Injectable ,NotFoundException,} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CR } from './chngerequest.entity';
@@ -188,6 +188,14 @@ async updateCRStatus(crId: number, status: string): Promise<CR> {
   }
   cr.status = status; // Assuming you have a status field in CR entity
   return await this.CrRepository.save(cr);
+}
+
+
+
+async updateHODApproval(crId: number, hodApproval: string): Promise<CR> {
+  const cr = await this.CrRepository.findOneOrFail({where:{crId}});
+  cr.hodApprovel = hodApproval;
+  return this.CrRepository.save(cr);
 }
 
 

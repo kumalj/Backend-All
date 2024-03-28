@@ -35,6 +35,9 @@ export class CR {
   @Column({nullable: true})
   status: string;
 
+  @Column({nullable: true})
+  hodApprovel: string;
+
 
   @ManyToOne(() => User, user => user.changeRequests)
   @JoinColumn({ name: 'userId' })
