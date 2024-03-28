@@ -95,18 +95,18 @@ export class CrService {
 
  async create(cr: CR ): Promise<CR> {
   // Find the maximum priority in the database
-  const maxPriorityCR = await this.CrRepository
-    .createQueryBuilder("cr")
-    .select("MAX(cr.priority)", "maxPriority")
-    .getRawOne();
+  // const maxPriorityCR = await this.CrRepository
+  //   .createQueryBuilder("cr")
+  //   .select("MAX(cr.priority)", "maxPriority")
+  //   .getRawOne();
 
-  let maxPriority = 0;
-  if (maxPriorityCR && maxPriorityCR.maxPriority) {
-    maxPriority = parseInt(maxPriorityCR.maxPriority);
-  }
+  // let maxPriority = 0;
+  // if (maxPriorityCR && maxPriorityCR.maxPriority) {
+  //   maxPriority = parseInt(maxPriorityCR.maxPriority);
+  // }
   // cr.userId = userId;
   // Assign the new priority
-  cr.priority = (maxPriority + 1).toString();
+  // cr.priority = (maxPriority + 1).toString();
 
   // Save the CR
   const createdCR = await this.CrRepository.save(cr);
@@ -196,9 +196,35 @@ async updateCRStatus(crId: number, status: string): Promise<CR> {
 
 
 async updateHODApproval(crId: number, hodApproval: string): Promise<CR> {
-  const cr = await this.CrRepository.findOneOrFail({where:{crId}});
-  cr.hodApprovel = hodApproval;
-  return this.CrRepository.save(cr);
+  try {
+    const cr = await this.CrRepository.findOneOrFail({ where: { crId } });
+
+    // Update hodApprovel
+    cr.hodApprovel = hodApproval;
+
+    if (hodApproval === 'approved') {
+      // Find the maximum priority in the database
+      const maxPriorityCR = await this.CrRepository
+        .createQueryBuilder("cr")
+        .select("MAX(cr.priority)", "maxPriority")
+        .getRawOne();
+
+      let maxPriority = 0;
+      if (maxPriorityCR && maxPriorityCR.maxPriority) {
+        maxPriority = parseInt(maxPriorityCR.maxPriority);
+      }
+
+      // Assign the new priority
+      const newPriority = maxPriority + 1;
+      cr.priority = newPriority.toString();
+    }
+
+    // Save the updated CR
+    return await this.CrRepository.save(cr);
+  } catch (error) {
+    console.error("Error updating HOD approval:", error);
+    throw error; // Rethrow the error to be handled by the caller
+  }
 }
 
 
