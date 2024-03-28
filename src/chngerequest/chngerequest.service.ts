@@ -104,11 +104,8 @@ export class CrService {
   if (maxPriorityCR && maxPriorityCR.maxPriority) {
     maxPriority = parseInt(maxPriorityCR.maxPriority);
   }
-  // cr.userId = userId;
-  // Assign the new priority
   cr.priority = (maxPriority + 1).toString();
 
-  // Save the CR
   const createdCR = await this.CrRepository.save(cr);
   return createdCR;
 }
