@@ -108,7 +108,6 @@ export class CrService {
   // Assign the new priority
   // cr.priority = (maxPriority + 1).toString();
 
-  // Save the CR
   const createdCR = await this.CrRepository.save(cr);
   return createdCR;
 }
