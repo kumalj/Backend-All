@@ -18,10 +18,12 @@ export class CR {
   @Column({nullable: true})
   topic: string;
 
-  @Column({ length: 2000, nullable: true }) 
+  @Column({nullable: true})
+  crtype: string;
+
+  @Column({ length: 10000, nullable: true }) 
   description: string;
   
-
   @Column({nullable: true})
   priority: string;
 
