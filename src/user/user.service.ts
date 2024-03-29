@@ -31,15 +31,15 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(user.password, saltRounds);
     user.password = hashedPassword;
 
-    // Extract the user's email
-    const userEmail = user.username;
+    // // Extract the user's email
+    // const userEmail = user.username;
 
-    // Send a welcome email to the user
-    await this.emailService.sendEmail(
-      userEmail,
-      'Welcome to Our Application',
-      'Thank you for registering!',
-    );
+    // // Send a welcome email to the user
+    // await this.emailService.sendEmail(
+    //   userEmail,
+    //   'Welcome to Our Application',
+    //   'Thank you for registering!',
+    // );
 
     // Save the user in the database
     return await this.userRepository.save(user);
