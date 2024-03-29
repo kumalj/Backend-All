@@ -19,6 +19,9 @@ export class User {
   username: string;
 
   @Column()
+  extension: number;
+
+  @Column()
   department: string;
 
   @Column()
