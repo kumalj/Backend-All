@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
+import { MailModule } from 'src/mail/mail.module';
 
 // Other imports and declarations...
 
@@ -15,7 +16,7 @@ import { UserController } from './user.controller';
     JwtModule.register({
       secret: 'pass@123',
       signOptions: { expiresIn: '1h' },
-    }),
+    }),MailModule
     // Other modules...
   ],
   controllers: [UserController],

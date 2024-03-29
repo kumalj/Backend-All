@@ -14,6 +14,7 @@ import { CRPrototype } from './crprototype/crprototype.entity';
 // import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
 import { GetCrModule } from './getcr/getcr.module';
 import { CRPrototypeModule } from './crprototype/crprototype.module';
+import { MailModule } from './mail/mail.module';
 
 
 
@@ -25,7 +26,7 @@ import { CRPrototypeModule } from './crprototype/crprototype.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '',
+      password: 'root',
       database: 'crms',
       entities: [User, CR, Getcr,CRPrototype],
       synchronize: true,
@@ -40,6 +41,7 @@ import { CRPrototypeModule } from './crprototype/crprototype.module';
       // CrPrototypeModule,
       GetCrModule,
       CRPrototypeModule,
+      MailModule,
       
       
       

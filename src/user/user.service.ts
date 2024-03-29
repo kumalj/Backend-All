@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';//make sure install this  package by npm i --save bcrypt
 import { JwtService } from '@nestjs/jwt';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UserService {
@@ -14,21 +15,36 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
+    private emailService: MailService
   ) { }
 
   //Register part of the system
   async create(user: User): Promise<User> {
+    // Check if the username is already taken
     const existingUser = await this.findByUsername(user.username);
     if (existingUser) {
         throw new BadRequestException('Username is already taken');
     }
 
+    // Hash the user's password
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(user.password, saltRounds);
     user.password = hashedPassword;
 
+    // Extract the user's email
+    const userEmail = user.username;
+
+    // Send a welcome email to the user
+    await this.emailService.sendEmail(
+      userEmail,
+      'Welcome to Our Application',
+      'Thank you for registering!',
+    );
+
+    // Save the user in the database
     return await this.userRepository.save(user);
 }
+
 async findAll(accessToken: string): Promise<User[]> {
     return await this.userRepository.find();
   }
