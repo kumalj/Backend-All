@@ -38,7 +38,7 @@ export class CrService {
       }
 
       // Update CR status
-      cr.status = 'Starting Development';
+      cr.status = 'Taken For Development';
 
       // Save the updated CR
       await this.CrRepository.save(cr);
@@ -201,6 +201,7 @@ async updateHODApproval(crId: number, hodApproval: string): Promise<CR> {
     // Update hodApprovel
     cr.hodApprovel = hodApproval;
 
+
     if (hodApproval === 'approved') {
       // Find the maximum priority in the database
       const maxPriorityCR = await this.CrRepository
@@ -216,6 +217,7 @@ async updateHODApproval(crId: number, hodApproval: string): Promise<CR> {
       // Assign the new priority
       const newPriority = maxPriority + 1;
       cr.priority = newPriority.toString();
+      cr.status = 'Pending to get development'
     }
 
     // Save the updated CR
