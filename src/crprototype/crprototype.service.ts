@@ -58,6 +58,15 @@ export class CrPrototypeService {
     return await this.crPrototypeRepository.save(crPrototype);
   }
 
+  async secondpr(prId: number): Promise<CRPrototype> {
+    const crPrototype = await this.crPrototypeRepository.findOne({where:{ prId}});
+    if (!crPrototype) {
+      throw new NotFoundException('CR prototype not found');
+    }
+    crPrototype.popupstatus = 'Second PR';
+    return await this.crPrototypeRepository.save(crPrototype);
+  }
+
   async reject(prId: number, reason: string): Promise<CRPrototype> {
     const crPrototype = await this.crPrototypeRepository.findOne({where: {prId}}) ;
     if (!crPrototype) {

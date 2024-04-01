@@ -54,6 +54,11 @@ export class CrPrototypeController {
     return this.crPrototypeService.approve(prId);
   }
 
+  @Put(':prId/secondpr')
+  secondpr(@Param('prId') prId: number): Promise<CRPrototype> {
+    return this.crPrototypeService.secondpr(prId);
+  }
+
   @Put(':prId/reject')
   reject(@Param('prId') prId: number, @Body('reason') reason: string): Promise<CRPrototype> {
     return this.crPrototypeService.reject(prId, reason);
