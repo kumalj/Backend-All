@@ -60,7 +60,7 @@ async findAll(accessToken: string): Promise<User[]> {
   // }
 
 //Login part of the  database
-  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; firstname:string; lastname:string; }> {
+  async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; firstname:string; lastname:string; extension:number; }> {
     const user = await this.findByUsername(username);
     if (!user) {
         throw new NotFoundException('User not found');
@@ -75,9 +75,9 @@ async findAll(accessToken: string): Promise<User[]> {
     if (user.status !== 'approved') {
         throw new ForbiddenException('Your account is pending approval.');
     }
-    const payload = { username: user.username, sub: user.userId, userType: user.userType, firstname:user.firstname, department: user.department, lastname:user.lastname };
+    const payload = { username: user.username, sub: user.userId, userType: user.userType, firstname:user.firstname, department: user.department, lastname:user.lastname, extension:user.extension };
     const accessToken = this.jwtService.sign(payload);
-    return { user, accessToken, userId: user.userId, userType: user.userType,firstname:user.firstname,  lastname:user.lastname };
+    return { user, accessToken, userId: user.userId, userType: user.userType,firstname:user.firstname,  lastname:user.lastname, extension:user.extension };
 }
 
 
