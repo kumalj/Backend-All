@@ -74,6 +74,17 @@ export class CrPrototypeController {
   async completeTask(@Param('prId') prId: number): Promise<void> {
     await this.crPrototypeService.completeTask(prId);
   }
+
+  @Put(':prId/uatapprovel')
+  async uatapprovel(@Param('prId') prId: number): Promise<void> {
+    await this.crPrototypeService.uatapprovel(prId);
+  }
+
+  @Put(':prId/afteruatapprovel')
+  async afteruatapprovel(@Param('prId') prId: number): Promise<void> {
+    await this.crPrototypeService.afteruatapprovel(prId);
+  }
+  
   
 
   @Put('updatePopupStatus/:crId')

@@ -9,9 +9,11 @@ import { CR } from 'src/chngerequest/chngerequest.entity';
 import { MulterModule } from '@nestjs/platform-express';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { Getcr } from 'src/getcr/getcr.entity';
+import { User } from 'src/user/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CRPrototype, CR]),
+  imports: [TypeOrmModule.forFeature([CR, Getcr, User,CRPrototype]),
   MulterModule.register({
     dest: './uploads', // Specify the destination directory for file uploads
   }),

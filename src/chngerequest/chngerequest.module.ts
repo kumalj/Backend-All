@@ -10,10 +10,11 @@ import { CrController } from './chngerequest.controller';
 import { CrService } from './chngerequest.service';
 import { Getcr } from '../getcr/getcr.entity'; 
 import { User } from '../user/user.entity';
+import { CRPrototype } from 'src/crprototype/crprototype.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([CR, Getcr, User]),
+    TypeOrmModule.forFeature([CR, Getcr, User,CRPrototype]),
     JwtModule.register({
       secret: 'pass@123',
       signOptions: { expiresIn: '1h' },

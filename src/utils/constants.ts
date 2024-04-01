@@ -4,6 +4,7 @@ export const Constants = {
         Admin: 'Admin',
         Developer: 'Developer',
         SFA_User: 'SFA_User',
+        HOD: 'HOD',
 
     },
 }

@@ -7,12 +7,15 @@ import { User } from './user.entity';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { MailModule } from 'src/mail/mail.module';
+import { CR } from 'src/chngerequest/chngerequest.entity';
+import { Getcr } from 'src/getcr/getcr.entity';
+import { CRPrototype } from 'src/crprototype/crprototype.entity';
 
 // Other imports and declarations...
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([CR, Getcr, User,CRPrototype]),
     JwtModule.register({
       secret: 'pass@123',
       signOptions: { expiresIn: '1h' },
