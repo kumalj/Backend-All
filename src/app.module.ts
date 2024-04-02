@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
@@ -6,18 +5,13 @@ import { User } from './user/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ChngerequestModule } from './chngerequest/chngerequest.module';
 import { CR } from './chngerequest/chngerequest.entity';
-
-
-
 import { Getcr } from './getcr/getcr.entity';
 import { CRPrototype } from './crprototype/crprototype.entity';
-// import { CrPrototypeModule } from './cr-prototype/cr-prototype.module';
 import { GetCrModule } from './getcr/getcr.module';
 import { CRPrototypeModule } from './crprototype/crprototype.module';
+import { ConfigModule } from '@nestjs/config';
+import mailConfig from './mail/mail.config'; // Assuming this file exports your mail configuration
 import { MailModule } from './mail/mail.module';
-
-
-
 
 @Module({
   imports: [
@@ -28,25 +22,21 @@ import { MailModule } from './mail/mail.module';
       username: 'root',
       password: 'root',
       database: 'crms',
-      entities: [User, CR, Getcr,CRPrototype],
+      entities: [User, CR, Getcr, CRPrototype],
       synchronize: true,
-      }),
-      UserModule,
-      JwtModule.register({
-        secret: 'pass@123', 
-        signOptions: { expiresIn: '1h' },
-      }),
-      UserModule,
-      ChngerequestModule,
-      // CrPrototypeModule,
-      GetCrModule,
-      CRPrototypeModule,
-      MailModule,
-      
-      
-      
+    }),
+    ConfigModule.forRoot({
+      load: [mailConfig], // Load your mail configuration
+    }),
+    UserModule,
+    JwtModule.register({
+      secret: 'pass@123',
+      signOptions: { expiresIn: '1h' },
+    }),
+    ChngerequestModule,
+    GetCrModule,
+    CRPrototypeModule,
+    MailModule,
   ],
-  providers: [],
-  controllers: [],
 })
 export class AppModule {}
