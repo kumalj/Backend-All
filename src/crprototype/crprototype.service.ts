@@ -51,67 +51,66 @@ export class CrPrototypeService {
 
   async approve(prId: number): Promise<CRPrototype> {
     const crPrototype = await this.crPrototypeRepository.findOne({where:{ prId}});
+    const crId = crPrototype.crId;
     if (!crPrototype) {
       throw new NotFoundException('CR prototype not found');
     }
     crPrototype.popupstatus = 'Approved';
+    await this.crRepository.update(crId, { status: 'Prototype Approved' });
     return await this.crPrototypeRepository.save(crPrototype);
   }
 
   async secondpr(prId: number): Promise<CRPrototype> {
     const crPrototype = await this.crPrototypeRepository.findOne({where:{ prId}});
+    const crId = crPrototype.crId;
     if (!crPrototype) {
       throw new NotFoundException('CR prototype not found');
     }
-    crPrototype.popupstatus = 'Second PR';
+    await this.crRepository.update(crId, { status: 'Send Another Prototype' });
     return await this.crPrototypeRepository.save(crPrototype);
   }
 
   async reject(prId: number, reason: string): Promise<CRPrototype> {
-    const crPrototype = await this.crPrototypeRepository.findOne({where: {prId}}) ;
+    const crPrototype = await this.crPrototypeRepository.findOne({where: {prId}});
+    const cr = await this.crRepository.findOne({where: {crId: crPrototype.crId}}); 
     if (!crPrototype) {
       throw new NotFoundException('CR prototype not found');
     }
+    cr.status = 'Prototype Rejected';
     crPrototype.popupstatus = 'Rejected';
     crPrototype.rejectionReason = reason;
-    return await this.crPrototypeRepository.save(crPrototype);
+    
+  return await this.crPrototypeRepository.save(crPrototype);
   }
 
   async updateCRPrototype(prId: number, updateData: Partial<CRPrototype>): Promise<void> {
     await this.crPrototypeRepository.update({ prId }, updateData);
   }
 
-  async completeTask(prId: number): Promise<void> {
-    // Update the status of CRPrototype
-    await this.crPrototypeRepository.update(prId, { popupstatus: 'Completed' });
+  // async completeTask(prId: number): Promise<void> {
+  //   // Update the status of CRPrototype
+  //   //await this.crPrototypeRepository.update(prId, { popupstatus: 'Completed' });
 
   
 
-    // Retrieve the CR associated with this CRPrototype
-    const crPrototype = await this.crPrototypeRepository.findOne({where:{prId}});
-    const crId = crPrototype.crId;
+  //   // Retrieve the CR associated with this CRPrototype
+  //   const crPrototype = await this.crPrototypeRepository.findOne({where:{prId}});
+  //   const crId = crPrototype.crId;
 
-    // Update the status of the corresponding CR
-    await this.crRepository.update(crId, { status: 'Completed' });
-  }
+  //   // Update the status of the corresponding CR
+  //   await this.crRepository.update(crId, { status: 'Completed' });
+  // }
 
   async uatapprovel(prId: number): Promise<void> {
-    // Update the status of CRPrototype
-    await this.crPrototypeRepository.update(prId, { popupstatus: 'Need UAT Approvel' });
 
-  
-
-    // Retrieve the CR associated with this CRPrototype
     const crPrototype = await this.crPrototypeRepository.findOne({where:{prId}});
     const crId = crPrototype.crId;
-
-    // Update the status of the corresponding CR
     await this.crRepository.update(crId, { status: 'Need UAT Approvel' });
   }
 
   async afteruatapprovel(prId: number): Promise<void> {
     // Update the status of CRPrototype
-    await this.crPrototypeRepository.update(prId, { popupstatus: 'Development Completed' });
+    //await this.crPrototypeRepository.update(prId, { popupstatus: 'Development Completed' });
 
   
 

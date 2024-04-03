@@ -1,15 +1,14 @@
 /* eslint-disable prettier/prettier */
 // src/cat.service.ts
 
-import { Injectable, NotFoundException, } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CR } from './chngerequest.entity';
 import { Getcr } from '../getcr/getcr.entity';
 import { User } from 'src/user/user.entity';
-import { MoreThanOrEqual, Not } from "typeorm";
+import { MoreThanOrEqual, Not } from 'typeorm';
 import { MailService } from 'src/mail/mail.service';
-
 
 @Injectable()
 export class CrService {
@@ -20,13 +19,13 @@ export class CrService {
     @InjectRepository(Getcr)
     private readonly GetCrRepository: Repository<Getcr>,
     @InjectRepository(User)
-    private readonly UserRepository: Repository<User>
-
-
-  ) { }
+    private readonly UserRepository: Repository<User>,
+  ) {}
 
   async findAll(): Promise<CR[]> {
-    return await this.CrRepository.find({ relations: ['userId', 'getCr', 'getCr.user', 'getCr.cr'] });
+    return await this.CrRepository.find({
+      relations: ['userId', 'getCr', 'getCr.user', 'getCr.cr'],
+    });
   }
 
   // ,'getCr.cr'
@@ -64,7 +63,7 @@ export class CrService {
 
       return cr;
     } catch (error) {
-      console.error("Error in startDevelopment:", error);
+      console.error('Error in startDevelopment:', error);
       throw error; // Rethrow the error to be handled by the caller
     }
   }
@@ -81,17 +80,9 @@ export class CrService {
     }
   }
 
-
-
-
-
-
-
-
   async findByStatus(status: string): Promise<CR[]> {
     return this.CrRepository.find({ where: { status } });
   }
-
 
   // Inside CrService
 
@@ -110,37 +101,32 @@ export class CrService {
     // Assign the new priority
     // cr.priority = (maxPriority + 1).toString();
 
-    const title = cr.topic;
-    const name = cr.name;
+    //const title = cr.topic;
+    //const name = cr.name;
 
+    // await this.emailService.sendEmail(
+    //   'trainingitasst.cbl@cbllk.com',
+    //   'Need CR Approval',
+    //   `
+    //   <h1>Change Request Approval Needed</h1>
+    //   <p>Dear HOD,</p>
+    //   <p>You have received a new change request that requires your attention and approval.</p>
+    //   <p><strong>Change Request Details:</strong></p>
+    //   <ul>
 
-
-
-    await this.emailService.sendEmail(
-      'trainingitasst.cbl@cbllk.com',
-      'Need CR Approval',
-      `
-      <h1>Change Request Approval Needed</h1>
-      <p>Dear HOD,</p>
-      <p>You have received a new change request that requires your attention and approval.</p>
-      <p><strong>Change Request Details:</strong></p>
-      <ul>
-
-        <li><strong>Title:</strong> ${title}</li>
-        <li><strong>Submitted by:</strong> ${name}</li>
-      </ul>
-      <p>Please review the attached documentation and provide your feedback or approval at your earliest convenience.</p>
-      <p>You can approve this by logging into the CR management system.</p>
-      <p>Thank you for your prompt attention to this matter.</p>
-      <p>Best Regards,<br>IT Team</p>
-    `
-    );
-
+    //     <li><strong>Title:</strong> ${title}</li>
+    //     <li><strong>Submitted by:</strong> ${name}</li>
+    //   </ul>
+    //   <p>Please review the attached documentation and provide your feedback or approval at your earliest convenience.</p>
+    //   <p>You can approve this by logging into the CR management system.</p>
+    //   <p>Thank you for your prompt attention to this matter.</p>
+    //   <p>Best Regards,<br>IT Team</p>
+    // `,
+    // );
 
     const createdCR = await this.CrRepository.save(cr);
     return createdCR;
   }
-
 
   // cr.service.ts
 
@@ -148,11 +134,9 @@ export class CrService {
     const filePath = '/uploads/cr/' + randomName; // Use the provided randomName in the file path
     cr.filePath = filePath; // Assign the file path to the CR object
 
-
     const createdCR = await this.CrRepository.save(cr);
     return createdCR;
   }
-
 
   async update(crId: number, cr: CR): Promise<CR> {
     await this.CrRepository.update(crId, cr);
@@ -163,7 +147,6 @@ export class CrService {
     await this.CrRepository.delete(crId);
   }
 
-
   async findOne(crId: number): Promise<CR> {
     return await this.CrRepository.findOne({ where: { crId } });
   }
@@ -171,49 +154,49 @@ export class CrService {
   async updatePriority(crId: number, priority: number) {
     const cr = await this.CrRepository.findOne({ where: { crId } });
     if (!cr) {
-        throw new Error(`CR with ID ${crId} not found`);
+      throw new Error(`CR with ID ${crId} not found`);
     }
 
     const oldPriority = Number(cr.priority);
 
     // Only proceed with update if the new priority is different from the old one
     if (priority !== oldPriority) {
-        // Get all CRs sorted by their current priority
-        const allCRs = await this.CrRepository.find({
-            order: {
-                priority: 'ASC'
-            }
-        });
+      // Get all CRs sorted by their current priority
+      const allCRs = await this.CrRepository.find({
+        order: {
+          priority: 'ASC',
+        },
+      });
 
-        // Update the current CR's priority
-        cr.priority = String(priority);
+      // Update the current CR's priority
+      cr.priority = String(priority);
 
-        // Shift priorities of other CRs accordingly
-        for (const otherCR of allCRs) {
-            if (otherCR.crId !== crId) {
-                let otherPriority = Number(otherCR.priority);
-                if (priority < oldPriority) {
-                    if (otherPriority >= priority && otherPriority < oldPriority) {
-                        otherCR.priority = String(otherPriority + 1);
-                    }
-                } else {
-                    if (otherPriority <= priority && otherPriority > oldPriority) {
-                        otherCR.priority = String(otherPriority - 1);
-                    }
-                }
-                await this.CrRepository.save(otherCR);
+      // Shift priorities of other CRs accordingly
+      for (const otherCR of allCRs) {
+        if (otherCR.crId !== crId) {
+          let otherPriority = Number(otherCR.priority);
+          if (priority < oldPriority) {
+            if (otherPriority >= priority && otherPriority < oldPriority) {
+              otherCR.priority = String(otherPriority + 1);
             }
+          } else {
+            if (otherPriority <= priority && otherPriority > oldPriority) {
+              otherCR.priority = String(otherPriority - 1);
+            }
+          }
+          await this.CrRepository.save(otherCR);
         }
+      }
 
-        // Save the updated priority for the current CR
-        await this.CrRepository.save(cr);
+      // Save the updated priority for the current CR
+      await this.CrRepository.save(cr);
     }
 
     // Fetch the updated list of all CRs after the priority update
     const updatedCRs = await this.CrRepository.find({
-        order: {
-            priority: 'ASC'
-        }
+      order: {
+        priority: 'ASC',
+      },
     });
 
     let emailContent = `
@@ -254,8 +237,10 @@ export class CrService {
                 <th>Priority</th>
             </tr>
     `;
-    
-    updatedCRs.filter(updatedCR => Number(updatedCR.priority) > 0).forEach(updatedCR => {
+
+    updatedCRs
+      .filter((updatedCR) => Number(updatedCR.priority) > 0)
+      .forEach((updatedCR) => {
         emailContent += `
         <tr>
             <td>${updatedCR.crId}</td>
@@ -263,13 +248,12 @@ export class CrService {
             <td>${updatedCR.name}</td>
             <td>${updatedCR.priority}</td>
         </tr>`;
-    });
-    
+      });
+
     emailContent += `
       </table>
     </body>
     </html>`;
-    
 
     emailContent += `
       </table>
@@ -278,17 +262,13 @@ export class CrService {
 
     // Send email to notify the user
     await this.emailService.sendEmail(
-        'trainingitasst.cbl@cbllk.com', // Replace with recipient email address
-        'Change Request Priority Updated',
-        emailContent,
+      'trainingitasst.cbl@cbllk.com', // Replace with recipient email address
+      'Change Request Priority Updated',
+      emailContent,
     );
 
     return cr;
-}
-
-
-
-
+  }
 
   async updateCRStatus(crId: number, status: string): Promise<CR> {
     const cr = await this.CrRepository.findOne({ where: { crId } });
@@ -299,70 +279,77 @@ export class CrService {
     return await this.CrRepository.save(cr);
   }
 
-
   async updateHODApproval(crId: number, hodApproval: string): Promise<CR> {
     try {
-        const cr = await this.CrRepository.findOneOrFail({ where: { crId }, relations: ['userId'] });
+      const cr = await this.CrRepository.findOneOrFail({
+        where: { crId },
+        relations: ['userId'],
+      });
 
-        // Update hodApproval
-        cr.hodApprovel = hodApproval;
+      // Update hodApproval
+      cr.hodApprovel = hodApproval;
 
-        if (hodApproval === 'approved') {
-            // Find the maximum priority in the database
-            const maxPriorityCR = await this.CrRepository
-                .createQueryBuilder("cr")
-                .select("MAX(cr.priority)", "maxPriority")
-                .getRawOne();
+      if (hodApproval === 'approved') {
+        // Find the maximum priority in the database
+        const maxPriorityCR = await this.CrRepository.createQueryBuilder('cr')
+          .select('MAX(cr.priority)', 'maxPriority')
+          .getRawOne();
 
-            let maxPriority = 0;
-            if (maxPriorityCR && maxPriorityCR.maxPriority) {
-                maxPriority = parseInt(maxPriorityCR.maxPriority);
-            }
-
-            // Assign the new priority
-            const newPriority = maxPriority + 1;
-            cr.priority = newPriority.toString();
-            cr.status = 'Pending to get development';
+        let maxPriority = 0;
+        if (maxPriorityCR && maxPriorityCR.maxPriority) {
+          maxPriority = parseInt(maxPriorityCR.maxPriority);
         }
 
-        const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
-        await this.emailService.sendEmail(
-            userEmail,
-            `Your CR Request has been ${hodApproval}!`,
-            `Dear ${cr.userId.firstname} ${cr.userId.lastname},
+        // Assign the new priority
+        const newPriority = maxPriority + 1;
+        cr.priority = newPriority.toString();
+        cr.status = 'Pending to get development';
+      }
 
-We're excited to inform you that your Change Request (CR) has been ${hodApproval} by the Head of Department (HOD).
+//       const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
+//       await this.emailService.sendEmail(
+//         userEmail,
+//         `Your CR Request has been ${hodApproval}!`,
+//         `Dear ${cr.userId.firstname} ${cr.userId.lastname},
 
-Change Request Details:
-- CR ID: ${crId}
-- Title: ${cr.topic}
-- CR Priority: ${cr.priority}
-- Status: ${hodApproval}
+// We're excited to inform you that your Change Request (CR) has been ${hodApproval} by the Head of Department (HOD).
 
-Your requested changes are now approved and will be implemented accordingly. 
+// Change Request Details:
+// - CR ID: ${crId}
+// - Title: ${cr.topic}
+// - CR Priority: ${cr.priority}
+// - Status: ${hodApproval}
 
-If you have any further questions or need assistance, feel free to contact us.
+// Your requested changes are now approved and will be implemented accordingly. 
 
-Best regards,
-IT Team`,
-        );
+// If you have any further questions or need assistance, feel free to contact us.
 
-        // Save the updated CR
-        return await this.CrRepository.save(cr);
+// Best regards,
+// IT Team`,
+//       );
+
+      if (hodApproval === 'rejected') {
+        cr.status = 'CR Rejected';
+      }
+
+      // Save the updated CR
+      return await this.CrRepository.save(cr);
     } catch (error) {
-        console.error("Error updating HOD approval:", error);
-        throw error;
+      console.error('Error updating HOD approval:', error);
+      throw error;
     }
-}
+  }
 
-async getUserUsernameForCR(crId: number): Promise<string> {
-    const cr = await this.CrRepository.findOneOrFail({ where: { crId }, relations: ['userId'] });
+  async getUserUsernameForCR(crId: number): Promise<string> {
+    const cr = await this.CrRepository.findOneOrFail({
+      where: { crId },
+      relations: ['userId'],
+    });
     if (!cr || !cr.userId || !cr.userId.username) {
-        throw new Error(`CR with ID ${crId} not found or associated user not found`);
+      throw new Error(
+        `CR with ID ${crId} not found or associated user not found`,
+      );
     }
     return cr.userId.username;
-}
-
-
-
+  }
 }
