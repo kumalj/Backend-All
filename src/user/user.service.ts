@@ -119,8 +119,8 @@ async findAll(accessToken: string): Promise<User[]> {
     // Send a welcome email to the user with the updated status
     await this.emailService.sendEmail(
         userEmail,
-        'Welcome to Our Application',
-        `Your account has been ${status} by the administrator!`,
+        'Your account status in Change Request Management System',
+        `The account you created in Change Request Management System has been ${status} by the administrator!`,
     );
 
     return await this.userRepository.save(user);
