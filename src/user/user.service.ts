@@ -37,8 +37,8 @@ export class UserService {
     // Send a welcome email to the user
     await this.emailService.sendEmail(
       userEmail,
-      'Welcome to Our Application',
-      'Thank you for registering!',
+      'Welcome to Change Request Management System',
+      'You have successfully registered for the Change Request Management System! Your account is pending approval from the Admin. Please wait for the admin to approve your account to log in. Thank you!',
     );
 
     // Save the user in the database
