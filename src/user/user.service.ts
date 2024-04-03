@@ -89,16 +89,6 @@ async findAll(accessToken: string): Promise<User[]> {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
     User.status = 'approved';
-
-    const userEmail = User.username;
-
-    // Send a welcome email to the user
-    await this.emailService.sendEmail(
-      userEmail,
-      'Welcome to Our Application',
-      'Your account has been approved by the administrator!',
-    );
-
     await this.userRepository.save(User);
   }
 
@@ -117,13 +107,23 @@ async findAll(accessToken: string): Promise<User[]> {
   async updateUser(userId: number, updatedUser: User): Promise<User> {
     const user = await this.findUserById(userId);
     if (!user) {
-      throw new NotFoundException(`User with ID ${userId} not found`);
+        throw new NotFoundException(`User with ID ${userId} not found`);
     }
 
     const { userType, status } = updatedUser;
     user.userType = userType;
     user.status = status;
 
+    const userEmail = user.username;
+
+    // Send a welcome email to the user with the updated status
+    await this.emailService.sendEmail(
+        userEmail,
+        'Welcome to Our Application',
+        `Your account has been ${status} by the administrator!`,
+    );
+
     return await this.userRepository.save(user);
-  }
+}
+
 }
