@@ -171,46 +171,124 @@ export class CrService {
   async updatePriority(crId: number, priority: number) {
     const cr = await this.CrRepository.findOne({ where: { crId } });
     if (!cr) {
-      throw new Error(`CR with ID ${crId} not found`);
+        throw new Error(`CR with ID ${crId} not found`);
     }
 
     const oldPriority = Number(cr.priority);
 
     // Only proceed with update if the new priority is different from the old one
     if (priority !== oldPriority) {
-      // Get all CRs sorted by their current priority
-      const allCRs = await this.CrRepository.find({
-        order: {
-          priority: 'ASC'
-        }
-      });
-
-      // Update the current CR's priority
-      cr.priority = String(priority);
-
-      // Shift priorities of other CRs accordingly
-      for (const otherCR of allCRs) {
-        if (otherCR.crId !== crId) {
-          let otherPriority = Number(otherCR.priority);
-          if (priority < oldPriority) {
-            if (otherPriority >= priority && otherPriority < oldPriority) {
-              otherCR.priority = String(otherPriority + 1);
+        // Get all CRs sorted by their current priority
+        const allCRs = await this.CrRepository.find({
+            order: {
+                priority: 'ASC'
             }
-          } else {
-            if (otherPriority <= priority && otherPriority > oldPriority) {
-              otherCR.priority = String(otherPriority - 1);
-            }
-          }
-          await this.CrRepository.save(otherCR);
-        }
-      }
+        });
 
-      // Save the updated priority for the current CR
-      await this.CrRepository.save(cr);
+        // Update the current CR's priority
+        cr.priority = String(priority);
+
+        // Shift priorities of other CRs accordingly
+        for (const otherCR of allCRs) {
+            if (otherCR.crId !== crId) {
+                let otherPriority = Number(otherCR.priority);
+                if (priority < oldPriority) {
+                    if (otherPriority >= priority && otherPriority < oldPriority) {
+                        otherCR.priority = String(otherPriority + 1);
+                    }
+                } else {
+                    if (otherPriority <= priority && otherPriority > oldPriority) {
+                        otherCR.priority = String(otherPriority - 1);
+                    }
+                }
+                await this.CrRepository.save(otherCR);
+            }
+        }
+
+        // Save the updated priority for the current CR
+        await this.CrRepository.save(cr);
     }
 
+    // Fetch the updated list of all CRs after the priority update
+    const updatedCRs = await this.CrRepository.find({
+        order: {
+            priority: 'ASC'
+        }
+    });
+
+    let emailContent = `
+    <html>
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            th, td {
+                padding: 12px;
+                border: 1px solid #ddd;
+                text-align: left;
+            }
+            th {
+                background-color: #4CAF50;
+                color: white;
+            }
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Change Request Priority Update Notification</h2>
+        <p>The priorities of the following change requests have been updated:</p>
+        <table>
+            <tr>
+                <th>CR ID</th>
+                <th>Topic</th>
+                <th>Submitted By</th>
+                <th>Priority</th>
+            </tr>
+    `;
+    
+    updatedCRs.filter(updatedCR => Number(updatedCR.priority) > 0).forEach(updatedCR => {
+        emailContent += `
+        <tr>
+            <td>${updatedCR.crId}</td>
+            <td>${updatedCR.topic}</td>
+            <td>${updatedCR.name}</td>
+            <td>${updatedCR.priority}</td>
+        </tr>`;
+    });
+    
+    emailContent += `
+      </table>
+    </body>
+    </html>`;
+    
+
+    emailContent += `
+      </table>
+    </body>
+    </html>`;
+
+    // Send email to notify the user
+    await this.emailService.sendEmail(
+        'trainingitasst.cbl@cbllk.com', // Replace with recipient email address
+        'Change Request Priority Updated',
+        emailContent,
+    );
+
     return cr;
-  }
+}
+
+
+
+
 
   async updateCRStatus(crId: number, status: string): Promise<CR> {
     const cr = await this.CrRepository.findOne({ where: { crId } });
