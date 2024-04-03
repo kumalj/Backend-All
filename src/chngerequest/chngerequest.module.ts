@@ -11,6 +11,7 @@ import { CrService } from './chngerequest.service';
 import { Getcr } from '../getcr/getcr.entity'; 
 import { User } from '../user/user.entity';
 import { CRPrototype } from 'src/crprototype/crprototype.entity';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { CRPrototype } from 'src/crprototype/crprototype.entity';
     ServeStaticModule.forRoot({
       rootPath: join( 'uploads'), // Specify the directory path to serve static files from
       serveRoot: '/uploads', // Specify the root URL path for serving static files
-    }),
+    }),MailModule
   ],
   controllers: [CrController],
   providers: [CrService],

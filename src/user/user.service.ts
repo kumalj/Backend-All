@@ -31,17 +31,23 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(user.password, saltRounds);
     user.password = hashedPassword;
 
-    // Extract the user's email
-    const userEmail = user.username;
-
     // Send a welcome email to the user
+    const userEmail = user.username;
     await this.emailService.sendEmail(
       userEmail,
       'Welcome to Change Request Management System',
       'You have successfully registered for the Change Request Management System! Your account is pending approval from the Admin. Please wait for the admin to approve your account to log in. Thank you!',
     );
 
-    // Save the user in the database
+    //const name = user.firstname + " " + user.lastname;
+    // await this.emailService.sendEmail(
+    //   'trainingitasst.cbl@cbllk.com',
+    //   'Account Registration',
+    //   'A new user with the name ' + name + ' has registered for the Change Request Management System: '
+
+    // );
+
+
     return await this.userRepository.save(user);
 }
 
