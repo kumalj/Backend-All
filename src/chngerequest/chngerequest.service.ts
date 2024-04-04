@@ -206,7 +206,7 @@ const uniqueEmails = new Set(updatedCRs.map(cr => cr.userId?.username));
 // Iterate over unique email addresses
 for (const email of uniqueEmails) {
   // Filter CRs specific to the current user
-  const userSpecificCRs = updatedCRs.filter(cr => cr.userId?.username !== email);
+  const userSpecificCRs = updatedCRs.filter(cr => cr.userId?.username === email);
 
   // Construct email content for the current user
   let emailContent = `
