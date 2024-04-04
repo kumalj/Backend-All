@@ -64,9 +64,10 @@ export class CrService {
       const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
       await this.emailService.sendEmail(
         userEmail,
-        `Your CR Request Get To Development!`,
+        `Your Change Request has been get to Development!`,
         `Dear ${cr.name} ,
-          Your CR Request Get To Development!
+          The Change Request You get now has been get to Development by the Developer.
+          Please LogIn to the Change Request Management System to see further details.
 
          Best regards,
          IT Team`,

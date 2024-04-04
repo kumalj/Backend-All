@@ -43,7 +43,7 @@ export class UserService {
     // await this.emailService.sendEmail(
     //   'trainingitasst.cbl@cbllk.com',
     //   'Account Registration',
-    //   'A new user with the name ' + name + ' has registered for the Change Request Management System: '
+    //   'A new user with the name ' + name + ' has registered for the Change Request Management System. Please log in to the Change Request System to get the decession for the new account. '
 
     // );
 
