@@ -75,10 +75,10 @@ export class CrPrototypeController {
 
 
 
-  @Put(':prId/completeTask')
-  async completeTask(@Param('prId') prId: number): Promise<void> {
-    await this.crPrototypeService.completeTask(prId);
-  }
+  // @Put(':prId/completeTask')
+  // async completeTask(@Param('prId') prId: number): Promise<void> {
+  //   await this.crPrototypeService.completeTask(prId);
+  // }
 
   @Put(':prId/uatapprovel')
   async uatapprovel(@Param('prId') prId: number): Promise<void> {
