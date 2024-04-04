@@ -20,7 +20,7 @@ export class CrService {
     private readonly GetCrRepository: Repository<Getcr>,
     @InjectRepository(User)
     private readonly UserRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async findAll(): Promise<CR[]> {
     return await this.CrRepository.find({
@@ -61,7 +61,19 @@ export class CrService {
       // Update priorities
       await this.updatePriorities();
 
+      const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
+      await this.emailService.sendEmail(
+        userEmail,
+        `Your CR Request Get To Development!`,
+        `Dear ${cr.name} ,
+          Your CR Request Get To Development!
+
+         Best regards,
+         IT Team`,
+      );
+
       return cr;
+
     } catch (error) {
       console.error('Error in startDevelopment:', error);
       throw error; // Rethrow the error to be handled by the caller
@@ -193,23 +205,23 @@ export class CrService {
     }
 
 
-const updatedCRs = await this.CrRepository.find({
-  relations: ['userId'], // Ensure the correct relation name is used
-  order: {
-      priority: 'ASC'
-  }
-});
+    const updatedCRs = await this.CrRepository.find({
+      relations: ['userId'], // Ensure the correct relation name is used
+      order: {
+        priority: 'ASC'
+      }
+    });
 
-// Extract unique email addresses from the fetched CRs
-const uniqueEmails = new Set(updatedCRs.map(cr => cr.userId?.username));
+    // Extract unique email addresses from the fetched CRs
+    const uniqueEmails = new Set(updatedCRs.map(cr => cr.userId?.username));
 
-// Iterate over unique email addresses
-for (const email of uniqueEmails) {
-  // Filter CRs specific to the current user
-  const userSpecificCRs = updatedCRs.filter(cr => cr.userId?.username === email);
+    // Iterate over unique email addresses
+    for (const email of uniqueEmails) {
+      // Filter CRs specific to the current user
+      const userSpecificCRs = updatedCRs.filter(cr => cr.userId?.username === email);
 
-  // Construct email content for the current user
-  let emailContent = `
+      // Construct email content for the current user
+      let emailContent = `
       <html>
       <head>
           <title>Change Request Priority Update Notification</title>
@@ -247,34 +259,34 @@ for (const email of uniqueEmails) {
                   <th>Priority</th>
               </tr>`;
 
-              userSpecificCRs.forEach(cr => {
-                // Convert priority from string to number and check if it's greater than 0
-                if (Number(cr.priority) > 0) {
-                    emailContent += `
+      userSpecificCRs.forEach(cr => {
+        // Convert priority from string to number and check if it's greater than 0
+        if (Number(cr.priority) > 0) {
+          emailContent += `
                         <tr>
                             <td>${cr.crId}</td>
                             <td>${cr.topic}</td>
                             <td>${cr.priority}</td>
                         </tr>`;
-                }
-            });
+        }
+      });
 
-  emailContent += `
+      emailContent += `
           </table>
       </body>
       </html>`;
 
-  // Send email to the current user
-  await this.emailService.sendEmail(
-      email,
-      'Change Request Priority Updated',
-      emailContent,
-  );
-}
+      // Send email to the current user
+      await this.emailService.sendEmail(
+        email,
+        'Change Request Priority Updated',
+        emailContent,
+      );
+    }
 
-// Return the result if needed
-return cr;
-}
+    // Return the result if needed
+    return cr;
+  }
 
 
 
@@ -315,27 +327,27 @@ return cr;
         cr.status = 'Pending to get development';
       }
 
-//       const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
-//       await this.emailService.sendEmail(
-//         userEmail,
-//         `Your CR Request has been ${hodApproval}!`,
-//         `Dear ${cr.userId.firstname} ${cr.userId.lastname},
+      //       const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
+      //       await this.emailService.sendEmail(
+      //         userEmail,
+      //         `Your CR Request has been ${hodApproval}!`,
+      //         `Dear ${cr.userId.firstname} ${cr.userId.lastname},
 
-// We're excited to inform you that your Change Request (CR) has been ${hodApproval} by the Head of Department (HOD).
+      // We're excited to inform you that your Change Request (CR) has been ${hodApproval} by the Head of Department (HOD).
 
-// Change Request Details:
-// - CR ID: ${crId}
-// - Title: ${cr.topic}
-// - CR Priority: ${cr.priority}
-// - Status: ${hodApproval}
+      // Change Request Details:
+      // - CR ID: ${crId}
+      // - Title: ${cr.topic}
+      // - CR Priority: ${cr.priority}
+      // - Status: ${hodApproval}
 
-// Your requested changes are now approved and will be implemented accordingly. 
+      // Your requested changes are now approved and will be implemented accordingly. 
 
-// If you have any further questions or need assistance, feel free to contact us.
+      // If you have any further questions or need assistance, feel free to contact us.
 
-// Best regards,
-// IT Team`,
-//       );
+      // Best regards,
+      // IT Team`,
+      //       );
 
       if (hodApproval === 'rejected') {
         cr.status = 'CR Rejected';
