@@ -209,83 +209,89 @@ export class CrService {
         await this.CrRepository.save(cr);
     }
 
-    // Fetch the updated list of all CRs after the priority update
-    const updatedCRs = await this.CrRepository.find({
-        order: {
-            priority: 'ASC'
-        }
-    });
 
-    let emailContent = `
-    <html>
-    <head>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 20px;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
-            }
-            th, td {
-                padding: 12px;
-                border: 1px solid #ddd;
-                text-align: left;
-            }
-            th {
-                background-color: #4CAF50;
-                color: white;
-            }
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-        </style>
-    </head>
-    <body>
-        <h2>Change Request Priority Update Notification</h2>
-        <p>The priorities of the following change requests have been updated:</p>
-        <table>
-            <tr>
-                <th>CR ID</th>
-                <th>Topic</th>
-                <th>Submitted By</th>
-                <th>Priority</th>
-            </tr>
-    `;
-    
-    updatedCRs.filter(updatedCR => Number(updatedCR.priority) > 0).forEach(updatedCR => {
-        emailContent += `
-        <tr>
-            <td>${updatedCR.crId}</td>
-            <td>${updatedCR.topic}</td>
-            <td>${updatedCR.name}</td>
-            <td>${updatedCR.priority}</td>
-        </tr>`;
-    });
-    
-    emailContent += `
-      </table>
-    </body>
-    </html>`;
-    
+const updatedCRs = await this.CrRepository.find({
+  relations: ['userId'], // Ensure the correct relation name is used
+  order: {
+      priority: 'ASC'
+  }
+});
 
-    emailContent += `
-      </table>
-    </body>
-    </html>`;
+// Extract unique email addresses from the fetched CRs
+const uniqueEmails = new Set(updatedCRs.map(cr => cr.userId?.username));
 
-    // Send email to notify the user
-    await this.emailService.sendEmail(
-        'trainingitasst.cbl@cbllk.com', // Replace with recipient email address
-        'Change Request Priority Updated',
-        emailContent,
-    );
+// Iterate over unique email addresses
+for (const email of uniqueEmails) {
+  // Filter CRs specific to the current user
+  const userSpecificCRs = updatedCRs.filter(cr => cr.userId?.username !== email);
 
-    return cr;
+  // Construct email content for the current user
+  let emailContent = `
+      <html>
+      <head>
+          <title>Change Request Priority Update Notification</title>
+          <style>
+          body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+          }
+          table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 20px;
+          }
+          th, td {
+              padding: 12px;
+              border: 1px solid #ddd;
+              text-align: left;
+          }
+          th {
+              background-color: #4CAF50;
+              color: white;
+          }
+          tr:nth-child(even) {
+              background-color: #f2f2f2;
+          }
+          </style>
+      </head>
+      <body>
+          <h2>Change Request Priority Update Notification</h2>
+          <p>Your change requests with the following details have had their priorities updated:</p>
+          <table>
+              <tr>
+                  <th>CR ID</th>
+                  <th>Topic</th>
+                  <th>Priority</th>
+              </tr>`;
+
+              userSpecificCRs.forEach(cr => {
+                // Convert priority from string to number and check if it's greater than 0
+                if (Number(cr.priority) > 0) {
+                    emailContent += `
+                        <tr>
+                            <td>${cr.crId}</td>
+                            <td>${cr.topic}</td>
+                            <td>${cr.priority}</td>
+                        </tr>`;
+                }
+            });
+
+  emailContent += `
+          </table>
+      </body>
+      </html>`;
+
+  // Send email to the current user
+  await this.emailService.sendEmail(
+      email,
+      'Change Request Priority Updated',
+      emailContent,
+  );
 }
 
+// Return the result if needed
+return cr;
+}
 
 
 
