@@ -88,6 +88,10 @@ export class CrService {
     for (let i = 0; i < crs.length; i++) {
       const cr = crs[i];
       cr.priority = (parseInt(cr.priority) - 1).toString(); // Decrease priority by one
+      if (cr.priority === 'NaN') {
+        cr.priority = '0'; // Setting it as a string '0' if you are keeping priority in string format
+      }
+      //cr.priority = cr.priority === 'NaN' ? 0 : parseInt(cr.priority, 10);
       await this.CrRepository.save(cr);
     }
   }
@@ -300,8 +304,8 @@ export class CrService {
     //}
 
     // Return the result if needed
-    if (isNaN(priority)) {
-      priority = null;
+    if (cr.priority === 'NaN') {
+      cr.priority = '0'; // Setting it as a string '0' if you are keeping priority in string format
     }
     return cr;
   }
@@ -374,7 +378,9 @@ export class CrService {
       if (hodApproval === 'rejected') {
         cr.status = 'CR Rejected';
       }
-
+      if (cr.priority === 'NaN') {
+        cr.priority = '0'; 
+      }
       // Save the updated CR
       return await this.CrRepository.save(cr);
     } catch (error) {
