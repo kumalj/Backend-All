@@ -38,6 +38,10 @@ export class CR {
   status: string;
 
   @Column({nullable: true})
+  requiredDate: Date;
+  
+  @Column({})
+  @Column({nullable: true})
   hodApprovel: string;
 
 
