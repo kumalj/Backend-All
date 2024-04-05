@@ -61,16 +61,16 @@ export class CrService {
       // Update priorities
       await this.updatePriorities();
 
-      const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
-      await this.emailService.sendEmail(
-        userEmail,
-        `Your CR Request Get To Development!`,
-        `Dear ${cr.name} ,
-          Your CR Request Get To Development!
+      // const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
+      // await this.emailService.sendEmail(
+      //   userEmail,
+      //   `Your CR Request Get To Development!`,
+      //   `Dear ${cr.name} ,
+      //     Your CR Request Get To Development!
 
-         Best regards,
-         IT Team`,
-      );
+      //    Best regards,
+      //    IT Team`,
+      // );
 
       return cr;
 

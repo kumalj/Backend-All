@@ -55,8 +55,30 @@ export class CrPrototypeService {
     if (!crPrototype) {
       throw new NotFoundException('CR prototype not found');
     }
+    const cr = await this.crRepository.findOne({ where: { crId: crPrototype.crId }, relations: ['userId'] });
     crPrototype.popupstatus = 'Approved';
     await this.crRepository.update(crId, { status: 'Prototype Approved' });
+//     const userEmail = await this.cr(crId); // Fetch user's email
+//     await this.emailService.sendEmail(
+//       userEmail,
+//      `Your CR Request has been ${hodApproval}!`,
+//       `Dear ${cr.userId.firstname} ${cr.userId.lastname},
+
+// We're excited to inform you that your Change Request (CR) has been ${hodApproval} by the Head of Department (HOD).
+
+// Change Request Details:
+// - CR ID: ${crId}
+// - Title: ${cr.topic}
+// - CR Priority: ${cr.priority}
+// - Status: ${hodApproval}
+
+// Your requested changes are now approved and will be implemented accordingly. 
+
+// If you have any further questions or need assistance, feel free to contact us.
+
+// Best regards,
+// IT Team`,
+//    );
     return await this.crPrototypeRepository.save(crPrototype);
   }
 
