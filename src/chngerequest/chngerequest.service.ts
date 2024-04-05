@@ -61,17 +61,17 @@ export class CrService {
       // Update priorities
       await this.updatePriorities();
 
-      const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
-      await this.emailService.sendEmail(
-        userEmail,
-        `Your Change Request has been get to Development!`,
-        `Dear ${cr.name} ,
-          The Change Request You get now has been get to Development by the Developer.
-          Please LogIn to the Change Request Management System to see further details.
+      // const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
+      // await this.emailService.sendEmail(
+      //   userEmail,
+      //   `Your Change Request has been get to Development!`,
+      //   `Dear ${cr.name} ,
+      //     The Change Request You get now has been get to Development by the Developer.
+      //     Please LogIn to the Change Request Management System to see further details.
 
-         Best regards,
-         IT Team`,
-      );
+      //    Best regards,
+      //    IT Team`,
+      // );
 
       return cr;
 
