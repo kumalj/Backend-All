@@ -37,15 +37,17 @@ export class UserService {
       userEmail,
       'Welcome to Change Request Management System',
       'You have successfully registered for the Change Request Management System! Your account is pending approval from the Admin. Please wait for the admin to approve your account to log in. Thank you!',
+      true,
     );
 
-    //const name = user.firstname + " " + user.lastname;
-    // await this.emailService.sendEmail(
-    //   'trainingitasst.cbl@cbllk.com',
-    //   'Account Registration',
-    //   'A new user with the name ' + name + ' has registered for the Change Request Management System: '
+    const name = user.firstname + " " + user.lastname;
+    await this.emailService.sendEmail(
+      'trainingitasst.cbl@cbllk.com',
+      'Account Registration',
+      'A new user with the name ' + name + ' has registered for the Change Request Management System: ',
+      true,
 
-    // );
+    );
 
 
     return await this.userRepository.save(user);
@@ -127,6 +129,7 @@ async findAll(accessToken: string): Promise<User[]> {
         userEmail,
         'Your account status in Change Request Management System',
         `The account you created in Change Request Management System has been ${status} by the administrator!`,
+        true
     );
 
     return await this.userRepository.save(user);

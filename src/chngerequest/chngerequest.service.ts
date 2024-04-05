@@ -113,6 +113,7 @@ export class CrService {
     // Assign the new priority
     // cr.priority = (maxPriority + 1).toString();
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //const title = cr.topic;
     //const name = cr.name;
 
@@ -180,6 +181,9 @@ export class CrService {
         },
       });
 
+
+      
+
       // Update the current CR's priority
       cr.priority = String(priority);
 
@@ -196,12 +200,23 @@ export class CrService {
               otherCR.priority = String(otherPriority - 1);
             }
           }
+          if (isNaN(priority)) {
+            priority = null;
+          }
+          
           await this.CrRepository.save(otherCR);
         }
+        
+      }
+      if (isNaN(priority)) {
+        priority = null;
       }
 
       // Save the updated priority for the current CR
       await this.CrRepository.save(cr);
+    }
+    if (isNaN(priority)) {
+      priority = null;
     }
 
 
@@ -213,78 +228,81 @@ export class CrService {
     });
 
     // Extract unique email addresses from the fetched CRs
-    const uniqueEmails = new Set(updatedCRs.map(cr => cr.userId?.username));
+    // const uniqueEmails = new Set(updatedCRs.map(cr => cr.userId?.username));
 
-    // Iterate over unique email addresses
-    for (const email of uniqueEmails) {
-      // Filter CRs specific to the current user
-      const userSpecificCRs = updatedCRs.filter(cr => cr.userId?.username === email);
+    // // Iterate over unique email addresses
+    // for (const email of uniqueEmails) {
+    //   // Filter CRs specific to the current user
+    //   const userSpecificCRs = updatedCRs.filter(cr => cr.userId?.username === email);
 
-      // Construct email content for the current user
-      let emailContent = `
-      <html>
-      <head>
-          <title>Change Request Priority Update Notification</title>
-          <style>
-          body {
-              font-family: Arial, sans-serif;
-              margin: 20px;
-          }
-          table {
-              width: 100%;
-              border-collapse: collapse;
-              margin-top: 20px;
-          }
-          th, td {
-              padding: 12px;
-              border: 1px solid #ddd;
-              text-align: left;
-          }
-          th {
-              background-color: #4CAF50;
-              color: white;
-          }
-          tr:nth-child(even) {
-              background-color: #f2f2f2;
-          }
-          </style>
-      </head>
-      <body>
-          <h2>Change Request Priority Update Notification</h2>
-          <p>Your change requests with the following details have had their priorities updated:</p>
-          <table>
-              <tr>
-                  <th>CR ID</th>
-                  <th>Topic</th>
-                  <th>Priority</th>
-              </tr>`;
+    //   // Construct email content for the current user
+    //   let emailContent = `
+    //   <html>
+    //   <head>
+    //       <title>Change Request Priority Update Notification</title>
+    //       <style>
+    //       body {
+    //           font-family: Arial, sans-serif;
+    //           margin: 20px;
+    //       }
+    //       table {
+    //           width: 100%;
+    //           border-collapse: collapse;
+    //           margin-top: 20px;
+    //       }
+    //       th, td {
+    //           padding: 12px;
+    //           border: 1px solid #ddd;
+    //           text-align: left;
+    //       }
+    //       th {
+    //           background-color: #4CAF50;
+    //           color: white;
+    //       }
+    //       tr:nth-child(even) {
+    //           background-color: #f2f2f2;
+    //       }
+    //       </style>
+    //   </head>
+    //   <body>
+    //       <h2>Change Request Priority Update Notification</h2>
+    //       <p>Your change requests with the following details have had their priorities updated:</p>
+    //       <table>
+    //           <tr>
+    //               <th>CR ID</th>
+    //               <th>Topic</th>
+    //               <th>Priority</th>
+    //           </tr>`;
 
-      userSpecificCRs.forEach(cr => {
-        // Convert priority from string to number and check if it's greater than 0
-        if (Number(cr.priority) > 0) {
-          emailContent += `
-                        <tr>
-                            <td>${cr.crId}</td>
-                            <td>${cr.topic}</td>
-                            <td>${cr.priority}</td>
-                        </tr>`;
-        }
-      });
+    //   userSpecificCRs.forEach(cr => {
+    //     // Convert priority from string to number and check if it's greater than 0
+    //     if (Number(cr.priority) > 0) {
+    //       emailContent += `
+    //                     <tr>
+    //                         <td>${cr.crId}</td>
+    //                         <td>${cr.topic}</td>
+    //                         <td>${cr.priority}</td>
+    //                     </tr>`;
+    //     }
+    //   });
 
-      emailContent += `
-          </table>
-      </body>
-      </html>`;
+    //   emailContent += `
+    //       </table>
+    //   </body>
+    //   </html>`;
 
-      // Send email to the current user
-      await this.emailService.sendEmail(
-        email,
-        'Change Request Priority Updated',
-        emailContent,
-      );
-    }
+    //   // Send email to the current user
+    //   await this.emailService.sendEmail(
+    //     email,
+    //     'Change Request Priority Updated',
+    //     emailContent,
+    //   );
+    //}
 
     // Return the result if needed
+    if (isNaN(priority)) {
+      priority = null;
+    }
     return cr;
   }
 
@@ -307,7 +325,6 @@ export class CrService {
         relations: ['userId'],
       });
 
-      // Update hodApproval
       cr.hodApprovel = hodApproval;
 
       if (hodApproval === 'approved') {
@@ -323,8 +340,13 @@ export class CrService {
 
         // Assign the new priority
         const newPriority = maxPriority + 1;
-        cr.priority = newPriority.toString();
+        if (isNaN(newPriority)) {
+          cr.priority = null;
+        } else {
+          cr.priority = newPriority.toString();
+        }
         cr.status = 'Pending to get development';
+        
       }
 
       //       const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email

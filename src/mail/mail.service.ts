@@ -19,19 +19,29 @@ export class MailService {
     });
   }
 
-  async sendEmail(to: string, subject: string, body: string) {
-    const mailOptions = {
-      from: 'focus.cblgroup@cbllk.com',
-      to,
-      subject,
-      html: body,
-    };
+// Inside MailService class
 
+async sendEmail(to: string, subject: string, body: string, fireEventAndForget: boolean = false) {
+  const mailOptions = {
+    from: 'focus.cblgroup@cbllk.com',
+    to,
+    subject,
+    html: body,
+  };
+
+  if (fireEventAndForget) {
+    this.transporter.sendMail(mailOptions).catch(error => {
+      console.error('Error sending email:', error);
+      // Implement additional error logging mechanism here if necessary
+    });
+  } else {
     try {
       return await this.transporter.sendMail(mailOptions);
     } catch (error) {
       console.error('Error sending email:', error);
-      throw error; // Rethrow the error to be handled by the caller
+      throw error;
     }
   }
+}
+
 }

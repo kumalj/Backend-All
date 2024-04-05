@@ -2,7 +2,7 @@
 // src/config/email.config.ts
 
 // smtpConfig.js
-import nodemailer from 'nodemailer';
+
 
 export default () => ({
   email: {
