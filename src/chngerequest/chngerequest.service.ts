@@ -54,6 +54,8 @@ export class CrService {
       const getcr = new Getcr();
       getcr.cr = cr;
       getcr.user = user;
+      
+
 
       // Ensure getcr is correctly passed and of the correct type
       await this.GetCrRepository.save(getcr);
@@ -71,6 +73,8 @@ export class CrService {
       //    Best regards,
       //    IT Team`,
       // );
+      const name = getcr.user.firstname;
+      cr.developer = name;
 
       return cr;
 

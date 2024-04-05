@@ -38,6 +38,9 @@ export class CR {
   status: string;
 
   @Column({nullable: true})
+  developer: string;
+
+  @Column({nullable: true})
   requiredDate: Date;
   
   @Column({})
