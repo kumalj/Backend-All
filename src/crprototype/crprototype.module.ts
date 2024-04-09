@@ -11,6 +11,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { Getcr } from 'src/getcr/getcr.entity';
 import { User } from 'src/user/user.entity';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([CR, Getcr, User,CRPrototype]),
@@ -20,7 +21,7 @@ import { User } from 'src/user/user.entity';
   ServeStaticModule.forRoot({
     rootPath: join( 'uploads'), // Specify the directory path to serve static files from
     serveRoot: '/uploads', // Specify the root URL path for serving static files
-  }),
+  }),MailModule
 ],
   providers: [CrPrototypeService],
   controllers: [CrPrototypeController],

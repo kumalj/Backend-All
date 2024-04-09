@@ -7,6 +7,7 @@ import { CrPrototypeService } from './crprototype.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { Getcr } from 'src/getcr/getcr.entity';
 
 @Controller('crprototype')
 export class CrPrototypeController {
@@ -50,9 +51,10 @@ export class CrPrototypeController {
   }
 
   @Put(':prId/approve')
-  approve(@Param('prId') prId: number): Promise<CRPrototype> {
-    return this.crPrototypeService.approve(prId);
+  async approve(@Param('prId') prId: number, @Body() getCrData: Getcr): Promise<CRPrototype> {
+    return this.crPrototypeService.approve(prId, getCrData);
   }
+  
 
   @Put(':prId/secondpr')
   secondpr(@Param('prId') prId: number): Promise<CRPrototype> {
@@ -60,8 +62,8 @@ export class CrPrototypeController {
   }
 
   @Put(':prId/reject')
-  reject(@Param('prId') prId: number, @Body('reason') reason: string): Promise<CRPrototype> {
-    return this.crPrototypeService.reject(prId, reason);
+  reject(@Param('prId') prId: number, @Body('reason') reason: string, @Body() getCrData: Getcr): Promise<CRPrototype> {
+    return this.crPrototypeService.reject(prId, reason,getCrData);
   }
 
   @Put(':prId')
@@ -74,11 +76,6 @@ export class CrPrototypeController {
 
 
 
-
-  // @Put(':prId/completeTask')
-  // async completeTask(@Param('prId') prId: number): Promise<void> {
-  //   await this.crPrototypeService.completeTask(prId);
-  // }
 
   @Put(':prId/uatapprovel')
   async uatapprovel(@Param('prId') prId: number): Promise<void> {
