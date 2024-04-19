@@ -1,13 +1,12 @@
 /* eslint-disable prettier/prettier */
 // src/cat.service.ts
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CR } from './chngerequest.entity';
 import { Getcr } from '../getcr/getcr.entity';
 import { User } from 'src/user/user.entity';
-import { MoreThanOrEqual, Not } from 'typeorm';
 import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
@@ -25,6 +24,7 @@ export class CrService {
   async findAll(): Promise<CR[]> {
     return await this.CrRepository.find({
       relations: ['userId', 'getCr', 'getCr.user', 'getCr.cr'],
+      
     });
   }
 
@@ -37,52 +37,51 @@ export class CrService {
       if (!cr) {
         throw new Error(`CR with ID ${crId} not found`);
       }
-
+  
       // Update CR status
       cr.status = 'Taken For Development';
-
-      // Save the updated CR
-      await this.CrRepository.save(cr);
-
-      // Retrieve the user by ID
+  
+      // Set developer name
       const user = await this.UserRepository.findOne({ where: { userId } });
       if (!user) {
         throw new Error(`User with ID ${userId} not found`);
       }
-
-      // Log the crId and userId in Getcr table
+      cr.developer = user.firstname + ' ' + user.lastname;
+  
+      // Save the updated CR
+      await this.CrRepository.save(cr);
+  
+      // Log the crId and userId in Getcr table, and now also the developer's name
       const getcr = new Getcr();
       getcr.cr = cr;
       getcr.user = user;
-      
-
-
+  
       // Ensure getcr is correctly passed and of the correct type
       await this.GetCrRepository.save(getcr);
-
+  
       // Update priorities
       await this.updatePriorities();
-
-      const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
+  
+      // Send emails
+      const userEmail = await this.getUserUsernameForCR(crId);
       await this.emailService.sendEmail(
         userEmail,
         `Your CR Request Get To Development!`,
         `Dear ${cr.name} ,
           Your CR Request Get To Development!
-
+  
          Best regards,
          IT Team`,
          true,
       );
-
-
+  
       return cr;
-
     } catch (error) {
       console.error('Error in startDevelopment:', error);
       throw error; // Rethrow the error to be handled by the caller
     }
   }
+  
 
   async updatePriorities(): Promise<void> {
     // Get all CRs ordered by priority
