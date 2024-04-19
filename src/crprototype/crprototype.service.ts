@@ -28,9 +28,10 @@ export class CrPrototypeService {
     const userEmail = await this.getUserUsernameForCR(crPrototypeData.crId); // Fetch user's email
     await this.emailService.sendEmail(
       userEmail,
-      `Your CR Request Get To Development!`,
+      `Your Change Request now has a Prototype !`,
       `Dear ${userEmail}, 
-       <p> Your CR Request has a prototype. Please check it.
+       <p> Your Change Request now has a prototype.
+       Please login to the Change Request Management System to view more details.
 
        Best regards,
        IT Team`,
@@ -97,9 +98,9 @@ export class CrPrototypeService {
   
     await this.emailService.sendEmail(
       userEmail,
-      `Your CR Request Gets to Development!`,
+      `Your Prototype has been Approved!`,
       `Dear ${userName}, 
-       <p>Your prototype has been approved.</p>
+       <p>The prototype you made now has been approved.</p>
   
        Best regards,
        IT Team`,
@@ -137,9 +138,9 @@ export class CrPrototypeService {
   
     await this.emailService.sendEmail(
       userEmail,
-      `Your CR Request Gets to Development!`,
+      `Your Prototype has been rejected!`,
       `Dear ${userName}, 
-       <p>Your prototype has been rejected.</p>
+       <p>The prototype you made has been rejected.</p>
        <p>Reason: ${reason}</p>
   
        Best regards,
@@ -162,9 +163,9 @@ export class CrPrototypeService {
     const userEmail = await this.getUserUsernameForCR(crId) && 'trainingitasst.cbl@cbllk.com'; 
     await this.emailService.sendEmail(
       userEmail,                   // user email and hod email
-      `Your CR Request Get To Development!`,
+      `Change Request Need UAT Approvel!`,
       `Dear User, 
-        <p>CR Request Need UAT Approvel.</p>
+        <p>Change Request Need UAT Approvel. Plese make sure to view it from CR Management system </p>
 
        Best regards,
        IT Team`,
@@ -182,9 +183,9 @@ export class CrPrototypeService {
         const userEmail = await this.getUserUsernameForCR(crId) && 'trainingitasst.cbl@cbllk.com'; // User email and HOD email
     await this.emailService.sendEmail(
       userEmail,                   
-      `Your CR Request Get To Development!`,
+      `Your Change Request has been!`,
       `Dear User, 
-        <p>Development Completed.</p>
+        <p>The Change Requset is now Completed.</p>
 
        Best regards,
        IT Team`,

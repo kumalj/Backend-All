@@ -66,7 +66,7 @@ export class CrService {
       const userEmail = await this.getUserUsernameForCR(crId);
       await this.emailService.sendEmail(
         userEmail,
-        `Your CR Request Get To Development!`,
+        `Your Change Request Get To Development!`,
         `Dear ${cr.name} ,
           Your CR Request Get To Development!
   
