@@ -32,7 +32,7 @@ import { MailModule } from './mail/mail.module';
     UserModule,
     JwtModule.register({
       secret: 'pass@123',
-      signOptions: { expiresIn: '3h' },
+      signOptions: { expiresIn: '5h' },
     }),
     ChngerequestModule,
     GetCrModule,

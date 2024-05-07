@@ -18,7 +18,7 @@ import { MailModule } from 'src/mail/mail.module';
     TypeOrmModule.forFeature([CR, Getcr, User,CRPrototype]),
     JwtModule.register({
       secret: 'pass@123',
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '5h' },
     }),
     MulterModule.register({
       dest: './uploads', // Specify the destination directory for file uploads

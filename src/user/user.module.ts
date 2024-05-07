@@ -18,7 +18,7 @@ import { CRPrototype } from 'src/crprototype/crprototype.entity';
     TypeOrmModule.forFeature([CR, Getcr, User,CRPrototype]),
     JwtModule.register({
       secret: 'pass@123',
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '5h' },
     }),MailModule
     // Other modules...
   ],

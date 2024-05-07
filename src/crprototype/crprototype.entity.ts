@@ -15,6 +15,9 @@ export class CRPrototype {
   @Column({nullable: true})
   description: string;
 
+  @Column({nullable: true})
+  estimatedDate: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

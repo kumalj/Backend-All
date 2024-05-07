@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-// jwt.module.ts
+
 
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
@@ -10,7 +10,7 @@ import { JwtAuthGuard } from './jwtAuthGuard';
   imports: [
     JwtModule.register({  
       secret: 'pass@123', 
-      signOptions: { expiresIn: '1h' }, 
+      signOptions: { expiresIn: '5h' }, 
     }),
   ],
   providers: [
