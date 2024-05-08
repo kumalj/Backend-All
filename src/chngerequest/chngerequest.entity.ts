@@ -47,6 +47,9 @@ export class CR {
   @Column({nullable: true})
   hodApprovel: string;
 
+  @Column({nullable: true})
+  hodApprovelAt: Date;
+
 
   @ManyToOne(() => User, user => user.changeRequests)
   @JoinColumn({ name: 'userId' })

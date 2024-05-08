@@ -331,8 +331,9 @@ export class CrService {
         where: { crId },
         relations: ['userId'],
       });
-
+      
       cr.hodApprovel = hodApproval;
+      cr.hodApprovelAt = new Date();
 
       if (hodApproval === 'approved') {
         // Find the maximum priority in the database
