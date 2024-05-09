@@ -30,7 +30,6 @@ export class CRPrototype {
   @Column({nullable: true})
   rejectionReason: string;
 
-
   @Column({nullable: true})
   crId: number; 
 

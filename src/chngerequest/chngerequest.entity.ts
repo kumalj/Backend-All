@@ -50,6 +50,26 @@ export class CR {
   @Column({nullable: true})
   hodApprovelAt: Date;
 
+  @Column({nullable: true})
+  getToDevelopmentAt: Date;
+
+  @Column({nullable: true})
+  ProtoCreatedAt: Date;
+
+  @Column({nullable: true})
+  secondProtoCreatedAt: Date;
+
+  @Column({nullable: true})
+  prototypeApproveAt: Date;
+
+  @Column({nullable: true})
+  needUatApprovelAt: Date;
+
+  @Column({nullable: true})
+  devCompletedAt: Date;
+
+
+
 
   @ManyToOne(() => User, user => user.changeRequests)
   @JoinColumn({ name: 'userId' })
