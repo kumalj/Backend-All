@@ -20,22 +20,22 @@ export class CrPrototypeController {
       filename: (req, file, cb) => {
         // Generate a unique filename
         const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-        cb(null, `${randomName}${extname(file.originalname)}`); // Concatenate the random name with the original extension
+        cb(null, `${randomName}${extname(file.originalname)}`); 
       },
     }),
   }))
   async create(@Body() crPrototypeData: CRPrototype, @UploadedFile() file: Express.Multer.File): Promise<CRPrototype> {
     let filePath = '';
     if (file) {
-      // If file is uploaded, get the file path
-      filePath = file.filename; // Just use the filename, as it's already saved in the ./uploads/ directory
+
+      filePath = file.filename;
       crPrototypeData.filePath = filePath; // Assign the file path to the CR object
     }
     return this.crPrototypeService.create(crPrototypeData);
   }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
-    const filePath = '/uploads/prototype/' + file.originalname; // Example path
+    const filePath = '/uploads/prototype/' + file.originalname;
     return filePath;
   }
 

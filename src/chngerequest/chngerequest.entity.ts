@@ -65,5 +65,5 @@ export class CR {
   @JoinColumn({ name: 'crId' })
   prototype: CRPrototype; 
 
-
+  
 }

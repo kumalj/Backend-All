@@ -19,5 +19,5 @@ export class Getcr {
   cr: CR; 
 
   @CreateDateColumn()
-  createdAt: Date;
+  developerGetAt: Date;
 }
