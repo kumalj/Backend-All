@@ -66,6 +66,9 @@ export class CR {
   needUatApprovelAt: Date;
 
   @Column({nullable: true})
+  UatApprovedBy: String;
+
+  @Column({nullable: true})
   devCompletedAt: Date;
 
 
