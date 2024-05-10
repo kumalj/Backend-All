@@ -25,27 +25,36 @@ export class CrPrototypeService {
 
   async create(crPrototypeData: CRPrototype): Promise<CRPrototype> {
 
-    const userEmail = await this.getUserUsernameForCR(crPrototypeData.crId); // Fetch user's email
-    await this.emailService.sendEmail(
-      userEmail,
-      `Your Change Request now has a Prototype !`,
-      `Dear ${userEmail}, 
-       <p> Your Change Request now has a prototype.
-       Please login to the Change Request Management System to view more details.
+        // const userEmail = await this.getUserUsernameForCR(crPrototypeData.crId); // Fetch user's email
+    // await this.emailService.sendEmail(
+    //   userEmail,
+    //   `Your Change Request now has a Prototype !`,
+    //   `Dear ${userEmail}, 
+    //    <p> Your Change Request now has a prototype.
+    //    Please login to the Change Request Management System to view more details.
 
-       Best regards,
-       IT Team`,
-       true,
-    );
-
+    //    Best regards,
+    //    IT Team`,
+    //    true,
+    // );
+    
+    // Assuming crId is accessible from crPrototypeData
+    const { crId } = crPrototypeData;
+  
+    // Update the CR repository with ProtoCreatedAt
+    await this.crRepository.update(crId, { ProtoCreatedAt: new Date() });
+  
+    // Save the CRPrototype
     return this.crPrototypeRepository.save(crPrototypeData);
   }
+  
 
   async uploadFile(crPrototypeData: CRPrototype, randomName: string): Promise<CRPrototype> {
     const filePath = '/uploads/prototype/' + randomName; // Use the provided randomName in the file path
     crPrototypeData.filePath = filePath; // Assign the file path to the CR object
   
     // Save the CR
+
     const createdCR = await this.crPrototypeRepository.save(crPrototypeData);
     return createdCR;
   }
@@ -72,6 +81,7 @@ export class CrPrototypeService {
 
   async approve(prId: number, getCrData: Getcr): Promise<CRPrototype> {
     const crPrototype = await this.crPrototypeRepository.findOne({where: {prId}});
+
     if (!crPrototype) {
       throw new NotFoundException('CR prototype not found');
     }
@@ -85,27 +95,28 @@ export class CrPrototypeService {
   
     // Update CR prototype status
     crPrototype.popupstatus = 'Approved';
+    await this.crRepository.update(crId, { prototypeApproveAt : new Date() });
     await this.crPrototypeRepository.save(crPrototype);
   
     // Update related CR status
     await this.crRepository.update(crId, { status: 'Prototype Approved' });
   
     // Assuming getUserUsernameForCR returns an email, consider fetching the user's name for a personalized email
-    const userEmail = await this.getDevUserUsernameForCR(getCrData.getid);
+    // const userEmail = await this.getDevUserUsernameForCR(getCrData.getid);
     
-    // If you have the user's name, use it. Otherwise, fall back to the email.
-    const userName =  userEmail; // Adjust according to your actual user entity
+    // // If you have the user's name, use it. Otherwise, fall back to the email.
+    // const userName =  userEmail; // Adjust according to your actual user entity
   
-    await this.emailService.sendEmail(
-      userEmail,
-      `Your Prototype has been Approved!`,
-      `Dear ${userName}, 
-       <p>The prototype you made now has been approved.</p>
+    // await this.emailService.sendEmail(
+    //   userEmail,
+    //   `Your Prototype has been Approved!`,
+    //   `Dear ${userName}, 
+    //    <p>The prototype you made now has been approved.</p>
   
-       Best regards,
-       IT Team`,
-       true,
-    );
+    //    Best regards,
+    //    IT Team`,
+    //    true,
+    // );
   
     return crPrototype;
   }
@@ -117,6 +128,7 @@ export class CrPrototypeService {
     if (!crPrototype) {
       throw new NotFoundException('CR prototype not found');
     }
+    await this.crRepository.update(crId, { secondProtoCreatedAt : new Date() });
     await this.crRepository.update(crId, { status: 'Send Another Prototype' });
     return await this.crPrototypeRepository.save(crPrototype);
   }
@@ -131,22 +143,22 @@ export class CrPrototypeService {
     crPrototype.popupstatus = 'Rejected';
     crPrototype.rejectionReason = reason;
 
-    const userEmail = await this.getDevUserUsernameForCR(getCrData.getid);
+    // const userEmail = await this.getDevUserUsernameForCR(getCrData.getid);
     
-    // If you have the user's name, use it. Otherwise, fall back to the email.
-    const userName =  userEmail; // Adjust according to your actual user entity
+    // // If you have the user's name, use it. Otherwise, fall back to the email.
+    // const userName =  userEmail; // Adjust according to your actual user entity
   
-    await this.emailService.sendEmail(
-      userEmail,
-      `Your Prototype has been rejected!`,
-      `Dear ${userName}, 
-       <p>The prototype you made has been rejected.</p>
-       <p>Reason: ${reason}</p>
+    // await this.emailService.sendEmail(
+    //   userEmail,
+    //   `Your Prototype has been rejected!`,
+    //   `Dear ${userName}, 
+    //    <p>The prototype you made has been rejected.</p>
+    //    <p>Reason: ${reason}</p>
   
-       Best regards,
-       IT Team`,
-       true,
-    );
+    //    Best regards,
+    //    IT Team`,
+    //    true,
+    // );
     
   return await this.crPrototypeRepository.save(crPrototype);
   }
@@ -160,17 +172,18 @@ export class CrPrototypeService {
 
     const crPrototype = await this.crPrototypeRepository.findOne({where:{prId}});
     const crId = crPrototype.crId;
-    const userEmail = await this.getUserUsernameForCR(crId) && 'trainingitasst.cbl@cbllk.com'; 
-    await this.emailService.sendEmail(
-      userEmail,                   // user email and hod email
-      `Change Request Need UAT Approvel!`,
-      `Dear User, 
-        <p>Change Request Need UAT Approvel. Plese make sure to view it from CR Management system </p>
+    // const userEmail = await this.getUserUsernameForCR(crId) && 'trainingitasst.cbl@cbllk.com'; 
+    // await this.emailService.sendEmail(
+    //   userEmail,                   // user email and hod email
+    //   `Change Request Need UAT Approvel!`,
+    //   `Dear User, 
+    //     <p>Change Request Need UAT Approvel. Plese make sure to view it from CR Management system </p>
 
-       Best regards,
-       IT Team`,
-       true,
-    );
+    //    Best regards,
+    //    IT Team`,
+    //    true,
+    // );
+    await this.crRepository.update(crId, { needUatApprovelAt : new Date() });
     await this.crRepository.update(crId, { status: 'Need UAT Approvel' });
   }
 
@@ -191,8 +204,8 @@ export class CrPrototypeService {
        IT Team`,
        true,
     );
-
-    // Update the status of the corresponding CR
+    
+    await this.crRepository.update(crId, { devCompletedAt : new Date() });
     await this.crRepository.update(crId, { status: 'Development Completed' });
   }
 

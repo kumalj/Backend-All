@@ -47,6 +47,7 @@ export class CrService {
         throw new Error(`User with ID ${userId} not found`);
       }
       cr.developer = user.firstname + ' ' + user.lastname;
+      cr.getToDevelopmentAt = new Date();
   
       // Save the updated CR
       await this.CrRepository.save(cr);
