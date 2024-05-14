@@ -1,6 +1,3 @@
-/* eslint-disable prettier/prettier */
-// src/cat.service.ts
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -337,7 +334,6 @@ export class CrService {
       cr.hodApprovelAt = new Date();
 
       if (hodApproval === 'approved') {
-        // Find the maximum priority in the database
         const maxPriorityCR = await this.CrRepository.createQueryBuilder('cr')
           .select('MAX(cr.priority)', 'maxPriority')
           .getRawOne();
