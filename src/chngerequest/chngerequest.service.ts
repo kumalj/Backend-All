@@ -66,7 +66,7 @@ export class CrService {
         userEmail,
         `Your Change Request Get To Development!`,
         `Dear ${cr.name} ,
-          Your CR Request Get To Development!
+          Your CR Request Has been taken to Development by the team!
   
          Best regards,
          IT Team`,
@@ -119,16 +119,15 @@ export class CrService {
     // cr.priority = (maxPriority + 1).toString();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //const title = cr.topic;
-    //const name = cr.name;
+    // const title = cr.topic;
+    // const name = cr.name;
 
     // await this.emailService.sendEmail(
     //   'trainingitasst.cbl@cbllk.com',
-    //   'Need CR Approval',
+    //   'Need Approval For Change Request',
     //   `
-    //   <h1>Change Request Approval Needed</h1>
-    //   <p>Dear HOD,</p>
-    //   <p>You have received a new change request that requires your attention and approval.</p>
+    //   Dear HOD,
+    //   You have received a new change request that requires your attention and approval.
     //   <p><strong>Change Request Details:</strong></p>
     //   <ul>
 

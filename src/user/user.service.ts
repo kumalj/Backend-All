@@ -41,10 +41,17 @@ export class UserService {
     );
 
     const name = user.firstname + " " + user.lastname;
+    const time = user.createdAt;
     await this.emailService.sendEmail(
       'trainingitasst.cbl@cbllk.com',
-      'Account Registration',
-      'A new user with the name ' + name + ' has registered for the Change Request Management System: ',
+      'New Account Registration',
+
+      `Dear Adimin ,
+       A new account has been registered by ${name} on ${time}.
+       Please make a decession regarding the account . 
+       Thank you!
+       Best regards,
+       IT Team`,
       true,
 
     );
