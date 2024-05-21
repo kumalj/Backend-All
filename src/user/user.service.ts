@@ -42,7 +42,7 @@ export class UserService {
 
     const name = user.firstname + " " + user.lastname;
     await this.emailService.sendEmail(
-      'trainingitasst.cbl@cbllk.com',
+      'trainingitasst.cbl@cbllk.com',     
       'Account Registration',
       'A new user with the name ' + name + ' has registered for the Change Request Management System: ',
       true,

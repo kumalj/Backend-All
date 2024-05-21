@@ -24,9 +24,9 @@ export class CR {
   @Column({ length: 10000, nullable: true }) 
   description: string;
   
-  @Column({nullable: true})
-  priority: string;
-
+  @Column({ type: 'int' })
+  priority: number;
+  
   @CreateDateColumn()
   createdAt: Date;
 

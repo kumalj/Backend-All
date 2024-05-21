@@ -88,10 +88,8 @@ export class CrService {
     // Update priorities based on their order, starting from the first CR
     for (let i = 0; i < crs.length; i++) {
       const cr = crs[i];
-      cr.priority = (parseInt(cr.priority) - 1).toString(); // Decrease priority by one
-      if (cr.priority === 'NaN') {
-        cr.priority = '0'; // Setting it as a string '0' if you are keeping priority in string format
-      }
+      cr.priority = (Number(cr.priority) - 1); // Decrease priority by one
+
       //cr.priority = cr.priority === 'NaN' ? 0 : parseInt(cr.priority, 10);
       await this.CrRepository.save(cr);
     }
@@ -190,7 +188,7 @@ export class CrService {
       
 
       // Update the current CR's priority
-      cr.priority = String(priority);
+      cr.priority = priority;
 
       // Shift priorities of other CRs accordingly
       for (const otherCR of allCRs) {
@@ -198,11 +196,11 @@ export class CrService {
           let otherPriority = Number(otherCR.priority);
           if (priority < oldPriority) {
             if (otherPriority >= priority && otherPriority < oldPriority) {
-              otherCR.priority = String(otherPriority + 1);
+              otherCR.priority = (otherPriority + 1);
             }
           } else {
             if (otherPriority <= priority && otherPriority > oldPriority) {
-              otherCR.priority = String(otherPriority - 1);
+              otherCR.priority = (otherPriority - 1);
             }
           }
           if (isNaN(priority)) {
@@ -305,9 +303,7 @@ export class CrService {
     //}
 
     // Return the result if needed
-    if (cr.priority === 'NaN') {
-      cr.priority = '0'; // Setting it as a string '0' if you are keeping priority in string format
-    }
+
     return cr;
   }
 
@@ -348,7 +344,7 @@ export class CrService {
         if (isNaN(newPriority)) {
           cr.priority = null;
         } else {
-          cr.priority = newPriority.toString();
+          cr.priority = newPriority;
         }
         cr.status = 'Pending to get development';
         
@@ -379,9 +375,7 @@ export class CrService {
       if (hodApproval === 'rejected') {
         cr.status = 'CR Rejected';
       }
-      if (cr.priority === 'NaN') {
-        cr.priority = '0'; 
-      }
+
       // Save the updated CR
       return await this.CrRepository.save(cr);
     } catch (error) {
