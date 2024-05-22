@@ -4,7 +4,7 @@ import { Injectable, NotFoundException, UnauthorizedException, BadRequestExcepti
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import * as bcrypt from 'bcrypt';//make sure install this  package by npm i --save bcrypt
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/mail/mail.service';
 
@@ -20,7 +20,7 @@ export class UserService {
 
   //Register part of the system
   async create(user: User): Promise<User> {
-    // Check if the username is already taken
+
     const existingUser = await this.findByUsername(user.username);
     if (existingUser) {
         throw new BadRequestException('Username is already taken');
@@ -33,25 +33,27 @@ export class UserService {
 
     // Send a welcome email to the user
     const userEmail = user.username;
+    const name1 = user.firstname
     await this.emailService.sendEmail(
       userEmail,
-      'Welcome to Change Request Management System',
-      'You have successfully registered for the Change Request Management System! Your account is pending approval from the Admin. Please wait for the admin to approve your account to log in. Thank you!',
+      'Welcome to the Change Request Management System - Account Pending Approval',
+      '<p>Dear User,</p><p>We are pleased to confirm that you have successfully registered for the Change Request Management System. Your account is currently pending approval from our administrator.<br>Please allow some time for this process to be completed. We will notify you via email once your account has been activated and you can log in to start using the system.<br>Thank you!</p><p>Best regards,<br>IT Team.</p>',
       true,
     );
 
     const name = user.firstname + " " + user.lastname;
     const time = user.createdAt;
+    const adminEmail = 'trainingitasst.cbl@cbllk.com'   // admin's email
     await this.emailService.sendEmail(
-      'trainingitasst.cbl@cbllk.com',
-      'New Account Registration',
+      adminEmail,       
+      'New Account Registration - Action Required',
 
-      `Dear Adimin ,
-       A new account has been registered by ${name} on ${time}.
-       Please make a decession regarding the account . 
-       Thank you!
-       Best regards,
-       IT Team`,
+      `<p>Dear Admin,</p>
+       <p>A new account has been registered by ${name} on ${time}.<br>
+       Please review and make a decision regarding the approval of this account.<br>
+       Thank you!</p>
+       <p>Best regards,<br>
+        IT Team.</p>`,
       true,
 
     );
@@ -69,10 +71,6 @@ async findAll(accessToken: string): Promise<User[]> {
   async findByUsername(username: string): Promise<User | undefined> {
     return await this.userRepository.findOne({ where: { username } });
   }
-
-  // async findByUsername(username: string): Promise<User> {
-  //   return await this.userRepository.findOne({ username });
-  // }
 
 //Login part of the  database
   async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; firstname:string; lastname:string; extension:number; }> {
@@ -97,7 +95,7 @@ async findAll(accessToken: string): Promise<User[]> {
 
 
 
-//Account approve part of the 
+//Account approve or reject part 
   async approveUser(userId: number,): Promise<void> {
     const User = await this.findUserById(userId);
     if (!User) {
@@ -117,7 +115,7 @@ async findAll(accessToken: string): Promise<User[]> {
   }
 
 
-  //satatus update part
+  //status update part
 
   async updateUser(userId: number, updatedUser: User): Promise<User> {
     const user = await this.findUserById(userId);
@@ -126,6 +124,7 @@ async findAll(accessToken: string): Promise<User[]> {
     }
 
     const { userType, status } = updatedUser;
+    const name = user.firstname
     user.userType = userType;
     user.status = status;
 
@@ -134,8 +133,8 @@ async findAll(accessToken: string): Promise<User[]> {
     // Send a welcome email to the user with the updated status
     await this.emailService.sendEmail(
         userEmail,
-        'Your account status in Change Request Management System',
-        `The account you created in Change Request Management System has been ${status} by the administrator!`,
+        'Account Status Update - Change Request Management System',
+        `<p>Dear ${name},</p><p>We are writing to inform you that the account you created in the Change Request Management System has been ${status} by the administrator.<br>Thank you for your attention.</p><p>Best regards,<br>IT Team.</p>`,
         true
     );
 

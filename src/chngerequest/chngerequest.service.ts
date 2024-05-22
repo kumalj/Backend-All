@@ -102,29 +102,16 @@ export class CrService {
   // Inside CrService
 
   async create(cr: CR): Promise<CR> {
-    // Find the maximum priority in the database
-    // const maxPriorityCR = await this.CrRepository
-    //   .createQueryBuilder("cr")
-    //   .select("MAX(cr.priority)", "maxPriority")
-    //   .getRawOne();
 
-    // let maxPriority = 0;
-    // if (maxPriorityCR && maxPriorityCR.maxPriority) {
-    //   maxPriority = parseInt(maxPriorityCR.maxPriority);
-    // }
-    // cr.userId = userId;
-    // Assign the new priority
-    // cr.priority = (maxPriority + 1).toString();
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // const title = cr.topic;
-    // const name = cr.name;
+    const title = cr.topic;
+    const name = cr.name;
+    const hodEmail = 'trainingitasst.cbl@cbllk.com';    // HOD's Email
 
     // await this.emailService.sendEmail(
-    //   'trainingitasst.cbl@cbllk.com',
-    //   'Need Approval For Change Request',
+    //   hodEmail,
+    //   'Approval Required for New Change Request',
     //   `
-    //   Dear HOD,
+    //   <p>Dear HOD,</p>
     //   You have received a new change request that requires your attention and approval.
     //   <p><strong>Change Request Details:</strong></p>
     //   <ul>
@@ -132,22 +119,21 @@ export class CrService {
     //     <li><strong>Title:</strong> ${title}</li>
     //     <li><strong>Submitted by:</strong> ${name}</li>
     //   </ul>
-    //   <p>Please review the attached documentation and provide your feedback or approval at your earliest convenience.</p>
-    //   <p>You can approve this by logging into the CR management system.</p>
-    //   <p>Thank you for your prompt attention to this matter.</p>
-    //   <p>Best Regards,<br>IT Team</p>
+    //   <p>Please review the attached documentation and provide your approval at your earliest convenience.
+    //   You can approve this by logging into the CR management system.<br>
+    //   Thank you for your prompt attention to this matter.</p>
+    //   <p>Best Regards,<br>IT Team.</p>
     // `,
+    // true
     // );
 
     const createdCR = await this.CrRepository.save(cr);
     return createdCR;
   }
 
-  // cr.service.ts
-
   async uploadFile(cr: CR, randomName: string): Promise<CR> {
-    const filePath = '/uploads/cr/' + randomName; // Use the provided randomName in the file path
-    cr.filePath = filePath; // Assign the file path to the CR object
+    const filePath = '/uploads/cr/' + randomName; 
+    cr.filePath = filePath; 
 
     const createdCR = await this.CrRepository.save(cr);
     return createdCR;
@@ -230,80 +216,78 @@ export class CrService {
     });
 
     // Extract unique email addresses from the fetched CRs
-    // const uniqueEmails = new Set(updatedCRs.map(cr => cr.userId?.username));
+    const uniqueEmails = new Set(updatedCRs.map(cr => cr.userId?.username));
 
-    // // Iterate over unique email addresses
-    // for (const email of uniqueEmails) {
-    //   // Filter CRs specific to the current user
-    //   const userSpecificCRs = updatedCRs.filter(cr => cr.userId?.username === email);
+    // Iterate over unique email addresses
+    for (const email of uniqueEmails) {
+      // Filter CRs specific to the current user
+      const userSpecificCRs = updatedCRs.filter(cr => cr.userId?.username === email);
 
-    //   // Construct email content for the current user
-    //   let emailContent = `
-    //   <html>
-    //   <head>
-    //       <title>Change Request Priority Update Notification</title>
-    //       <style>
-    //       body {
-    //           font-family: Arial, sans-serif;
-    //           margin: 20px;
-    //       }
-    //       table {
-    //           width: 100%;
-    //           border-collapse: collapse;
-    //           margin-top: 20px;
-    //       }
-    //       th, td {
-    //           padding: 12px;
-    //           border: 1px solid #ddd;
-    //           text-align: left;
-    //       }
-    //       th {
-    //           background-color: #4CAF50;
-    //           color: white;
-    //       }
-    //       tr:nth-child(even) {
-    //           background-color: #f2f2f2;
-    //       }
-    //       </style>
-    //   </head>
-    //   <body>
-    //       <h2>Change Request Priority Update Notification</h2>
-    //       <p>Your change requests with the following details have had their priorities updated:</p>
-    //       <table>
-    //           <tr>
-    //               <th>CR ID</th>
-    //               <th>Topic</th>
-    //               <th>Priority</th>
-    //           </tr>`;
+      // Construct email content for the current user
+      let emailContent = `
+      <html>
+      <head>
+          <title>Change Request Priority Update Notification</title>
+          <style>
+          body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+          }
+          table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 20px;
+          }
+          th, td {
+              padding: 12px;
+              border: 1px solid #ddd;
+              text-align: left;
+          }
+          th {
+              background-color: #4CAF50;
+              color: white;
+          }
+          tr:nth-child(even) {
+              background-color: #f2f2f2;
+          }
+          </style>
+      </head>
+      <body>
+          <h2>Change Request Priority Update Notification</h2>
+          <p>Your change requests with the following details have had their priorities updated:</p>
+          <table>
+              <tr>
+                  <th>CR ID</th>
+                  <th>Topic</th>
+                  <th>Priority</th>
+              </tr>`;
 
-    //   userSpecificCRs.forEach(cr => {
-    //     // Convert priority from string to number and check if it's greater than 0
-    //     if (Number(cr.priority) > 0) {
-    //       emailContent += `
-    //                     <tr>
-    //                         <td>${cr.crId}</td>
-    //                         <td>${cr.topic}</td>
-    //                         <td>${cr.priority}</td>
-    //                     </tr>`;
-    //     }
-    //   });
+      userSpecificCRs.forEach(cr => {
 
-    //   emailContent += `
-    //       </table>
-    //   </body>
-    //   </html>`;
+        if (Number(cr.priority) > 0) {
+          emailContent += `
+                        <tr>
+                            <td>${cr.crId}</td>
+                            <td>${cr.topic}</td>
+                            <td>${cr.priority}</td>
+                        </tr>`;
+        }
+      });
 
-    //   // Send email to the current user
-    //   await this.emailService.sendEmail(
-    //     email,
-    //     'Change Request Priority Updated',
-    //     emailContent,
-    //   );
-    //}
+      emailContent += `
+          </table>
+      </body>
+      </html>`;
 
-    // Return the result if needed
+      // Send email to the current user
+      await this.emailService.sendEmail(
+        email,
+        'Change Request Priority Updated',
+        emailContent,
+      );
+    }
 
-    return cr;
+  return cr;
   }
 
 
@@ -349,27 +333,30 @@ export class CrService {
         
       }
 
-      //       const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
-      //       await this.emailService.sendEmail(
-      //         userEmail,
-      //         `Your CR Request has been ${hodApproval}!`,
-      //         `Dear ${cr.userId.firstname} ${cr.userId.lastname},
-
-      // We're excited to inform you that your Change Request (CR) has been ${hodApproval} by the Head of Department (HOD).
-
-      // Change Request Details:
-      // - CR ID: ${crId}
-      // - Title: ${cr.topic}
-      // - CR Priority: ${cr.priority}
-      // - Status: ${hodApproval}
-
-      // Your requested changes are now approved and will be implemented accordingly. 
-
-      // If you have any further questions or need assistance, feel free to contact us.
-
-      // Best regards,
-      // IT Team`,
-      //       );
+      // const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
+      // await this.emailService.sendEmail(
+      //   userEmail,
+      //   `Your Change Request has been ${hodApproval}!`,
+      //   `<p>Dear ${cr.userId.firstname},</p>
+      
+      //   We are pleased to inform you that your Change Request (CR) has been ${hodApproval} by the Head of Department (HOD).
+      
+      //   <p><strong>Change Request Details:</strong></p>
+      //   <ul>
+      //     <li><strong>CR ID:</strong> ${crId}</li>
+      //     <li><strong>Title:</strong> ${cr.topic}</li>
+      //     ${hodApproval === 'approved' ? `<li><strong>CR Priority:</strong> ${cr.priority}</li>` : ''}
+      //     <li><strong>Status:</strong> ${hodApproval}</li>
+      //   </ul>
+      //   ${hodApproval === 'approved' ?`<p>Your requested changes are now approved and will be implemented accordingly.</p>` : ''}
+      
+      //   If you have any further questions or need assistance, feel free to contact us.
+      
+      //   <p>Best regards,<br>
+      //   IT Team.</p>`,
+      //   true
+      // );
+      
 
       if (hodApproval === 'rejected') {
         cr.status = 'CR Rejected';
