@@ -111,7 +111,7 @@ export class CrService {
     //   hodEmail,
     //   'Approval Required for New Change Request',
     //   `
-    //   <p>Dear HOD,</p>
+    //   <p><h2>Review and Approval Needed for Change Request Submission</h2></p>
     //   You have received a new change request that requires your attention and approval.
     //   <p><strong>Change Request Details:</strong></p>
     //   <ul>
@@ -120,9 +120,9 @@ export class CrService {
     //     <li><strong>Submitted by:</strong> ${name}</li>
     //   </ul>
     //   <p>Please review the attached documentation and provide your approval at your earliest convenience.
-    //   You can approve this by logging into the CR management system.<br>
-    //   Thank you for your prompt attention to this matter.</p>
-    //   <p>Best Regards,<br>IT Team.</p>
+    //   You can approve this by logging into the CR management system.</p>
+    //   <p>Thank you!</p>
+
     // `,
     // true
     // );
@@ -337,7 +337,7 @@ export class CrService {
       // await this.emailService.sendEmail(
       //   userEmail,
       //   `Your Change Request has been ${hodApproval}!`,
-      //   `<p>Dear ${cr.userId.firstname},</p>
+      //   `<p><h2>Change Request Status Update</h2></p>
       
       //   We are pleased to inform you that your Change Request (CR) has been ${hodApproval} by the Head of Department (HOD).
       
@@ -352,8 +352,7 @@ export class CrService {
       
       //   If you have any further questions or need assistance, feel free to contact us.
       
-      //   <p>Best regards,<br>
-      //   IT Team.</p>`,
+      //   <p>Thank You!</p>`,
       //   true
       // );
       
