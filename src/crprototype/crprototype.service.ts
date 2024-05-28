@@ -35,7 +35,7 @@ export class CrPrototypeService {
 
              <li><strong>CrId : </strong> ${crPrototypeData.crId}</li>
              <li><strong>Topic : </strong> ${crPrototypeData.topic}</li>
-             <li><strong>Send by : </strong></li>${crPrototypeData.cr.developer}</li>
+
           </ul>
        <p>Please login to the Change Request Management System to view more details.</p>
 
@@ -114,7 +114,7 @@ export class CrPrototypeService {
 
        <li><strong>CrId : </strong> ${getCrData.cr.crId}</li>
        <li><strong>Topic : </strong> ${getCrData.cr.topic}</li>
-       <li><strong>Approved by : </strong></li>${crPrototype.cr.name}</li>
+
     </ul>
   
        <p>Thank You!</p>`,
