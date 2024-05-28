@@ -34,8 +34,8 @@ export class UserService {
     const name1 = user.firstname
     await this.emailService.sendEmail(
       userEmail,
-      'Welcome to the Change Request Management System - Account Pending Approval',
-      '<p>Dear User,</p><p>We are pleased to confirm that you have successfully registered for the Change Request Management System. Your account is currently pending approval from our administrator.<br>Please allow some time for this process to be completed. We will notify you via email once your account has been activated and you can log in to start using the system.<br>Thank you!</p><p>Best regards,<br>IT Team.</p>',
+      'Welcome to the Change Request Management System',
+      '<p><h2>Welcome to the Change Request Management System - Account Pending Approval</h2></p><p>We are pleased to confirm that you have successfully registered for the Change Request Management System. Your account is currently pending approval from our administrator.<br>Please allow some time for this process to be completed. We will notify you via email once your account has been activated and you can log in to start using the system.<br>Thank you!</p><p>Best regards,<br>IT Team.</p>',
       true,
     );
 
@@ -132,7 +132,7 @@ async findAll(accessToken: string): Promise<User[]> {
     await this.emailService.sendEmail(
         userEmail,
         'Account Status Update - Change Request Management System',
-        `<p>Dear ${name},</p><p>We are writing to inform you that the account you created in the Change Request Management System has been ${status} by the administrator.<br>Thank you for your attention.</p><p>Best regards,<br>IT Team.</p>`,
+        `<p><h2>Account Status Update</h2></p><p>We are writing to inform you that the account you created in the Change Request Management System has been ${status} by the administrator.<br>Thank you for your attention.</p><p>Best regards,<br>IT Team.</p>`,
         true
     );
 
