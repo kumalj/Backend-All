@@ -112,8 +112,8 @@ export class CrPrototypeService {
        <p>The prototype you made now has been approved.</p>
        <ul>
 
-       <li><strong>CrId : </strong> ${getCrData.cr.crId}</li>
-       <li><strong>Topic : </strong> ${getCrData.cr.topic}</li>
+       <li><strong>CrId : </strong> ${crPrototype.crId}</li>
+       <li><strong>Topic : </strong> ${crPrototype.topic}</li>
 
     </ul>
   
@@ -143,7 +143,6 @@ export class CrPrototypeService {
 
           <li><strong>CrId : </strong> ${crPrototype.crId}</li>
           <li><strong>Topic : </strong> ${crPrototype.topic}</li>
-          <li><strong>Send by : </strong></li>${crPrototype.cr.developer}</li>
 
        </ul>
     <p>Please login to the Change Request Management System to view more details.</p>
@@ -172,9 +171,8 @@ export class CrPrototypeService {
        <p>The prototype you made has been rejected.</p>
        <ul>
 
-       <li><strong>CrId : </strong> ${getCrData.cr.crId}</li>
-       <li><strong>Topic : </strong> ${getCrData.cr.topic}</li>
-       <li><strong>Rejected by : </strong></li>${crPrototype.cr.name}</li>
+       <li><strong>CrId : </strong> ${crPrototype.crId}</li>
+       <li><strong>Topic : </strong> ${crPrototype.topic}</li>
        <li><strong>Rejection reason : </strong></li>${reason}</li>
 
     </ul>
