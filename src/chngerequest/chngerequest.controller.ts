@@ -9,6 +9,8 @@ import { JwtAuthGuard } from '../authantication/jwtAuthGuard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { RoleGuard } from 'src/guard/role.guard';
+import { Constants } from 'src/utils/constants';
 
 
 @Controller('crs')
@@ -23,6 +25,9 @@ export class CrController {
   }
 
   @Post('create')
+  
+  @UseGuards(new RoleGuard(Constants.ROLES.SFA_User))
+  @UseGuards(JwtAuthGuard) // Applying JwtAuthGuard
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: './uploads/cr/', // Destination directory to store files

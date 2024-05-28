@@ -62,7 +62,12 @@ export class CrService {
         ` <p><h2>Change Request Moved to Development
 
         </h2></p>
-          <p>Your CR Request Has been taken to Development by the team!</p>
+          <p>Your CR Request Has been taken to development by the team!</p>
+          <ul>
+
+          <li><strong>Title:</strong> ${cr.topic}</li>
+          <li><strong>Get to development by:</strong> ${cr.developer}</li>
+        </ul>
   
         <p>Thank You!</p>`,
          true,

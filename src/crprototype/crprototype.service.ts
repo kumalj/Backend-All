@@ -35,6 +35,7 @@ export class CrPrototypeService {
 
              <li><strong>CrId : </strong> ${crPrototypeData.crId}</li>
              <li><strong>Topic : </strong> ${crPrototypeData.topic}</li>
+             <li><strong>Estimated Delivery Date : </strong> ${crPrototypeData.estimatedDate}</li>
 
           </ul>
        <p>Please login to the Change Request Management System to view more details.</p>
@@ -143,6 +144,7 @@ export class CrPrototypeService {
 
           <li><strong>CrId : </strong> ${crPrototype.crId}</li>
           <li><strong>Topic : </strong> ${crPrototype.topic}</li>
+          <li><strong>Estimated Delivery Date : </strong> ${crPrototype.estimatedDate}</li>
 
        </ul>
     <p>Please login to the Change Request Management System to view more details.</p>
@@ -167,7 +169,7 @@ export class CrPrototypeService {
     await this.emailService.sendEmail(
       userEmail,
       `Your Prototype has been rejected!`,
-      `<p><h2>Prototype Rejection</h2></p>, 
+      `<p><h2>Prototype Rejection</h2></p> 
        <p>The prototype you made has been rejected.</p>
        <ul>
 
