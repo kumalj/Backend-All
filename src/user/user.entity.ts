@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-// src/user/user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, CreateDateColumn } from 'typeorm';
 import { CR } from '../chngerequest/chngerequest.entity'
 import { Getcr } from 'src/getcr/getcr.entity';

@@ -16,11 +16,11 @@ import { MailModule } from 'src/mail/mail.module';
 @Module({
   imports: [TypeOrmModule.forFeature([CR, Getcr, User,CRPrototype]),
   MulterModule.register({
-    dest: './uploads', // Specify the destination directory for file uploads
+    dest: './uploads',
   }),
   ServeStaticModule.forRoot({
-    rootPath: join( 'uploads'), // Specify the directory path to serve static files from
-    serveRoot: '/uploads', // Specify the root URL path for serving static files
+    rootPath: join( 'uploads'), 
+    serveRoot: '/uploads', 
   }),MailModule
 ],
   providers: [CrPrototypeService],

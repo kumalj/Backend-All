@@ -1,6 +1,4 @@
 /* eslint-disable prettier/prettier */
-// crprototype.controller.ts
-
 import { Controller, Post, Body,Param,Get, UploadedFile, UseInterceptors,Put } from '@nestjs/common';
 import { CRPrototype } from './crprototype.entity';
 import { CrPrototypeService } from './crprototype.service';
@@ -29,16 +27,14 @@ export class CrPrototypeController {
     if (file) {
 
       filePath = file.filename;
-      crPrototypeData.filePath = filePath; // Assign the file path to the CR object
+      crPrototypeData.filePath = filePath; 
     }
     return this.crPrototypeService.create(crPrototypeData);
   }
-
   async uploadFile(file: Express.Multer.File): Promise<string> {
     const filePath = '/uploads/prototype/' + file.originalname;
     return filePath;
   }
-
 
   @Get()
   async findAll(): Promise<CRPrototype[]> {
@@ -55,7 +51,6 @@ export class CrPrototypeController {
     return this.crPrototypeService.approve(prId, getCrData);
   }
   
-
   @Put(':prId/secondpr')
   secondpr(@Param('prId') prId: number): Promise<CRPrototype> {
     return this.crPrototypeService.secondpr(prId);
@@ -69,13 +64,10 @@ export class CrPrototypeController {
   @Put(':prId')
   async updateCRPrototype(
     @Param('prId') prId: number,
-    @Body() updateData: Partial<CRPrototype>, // Assuming you only need to update status
+    @Body() updateData: Partial<CRPrototype>,
   ): Promise<void> {
     await this.crPrototypeService.updateCRPrototype(prId, updateData);
   }
-
-
-
 
   @Put(':prId/uatapprovel')
   async uatapprovel(@Param('prId') prId: number): Promise<void> {
@@ -87,8 +79,6 @@ export class CrPrototypeController {
     await this.crPrototypeService.afteruatapprovel(prId);
   }
   
-  
-
   @Put('updatePopupStatus/:crId')
   async updatePopupStatus(@Param('crId') crId: number, @Body('popupstatus') popupstatus: string): Promise<void> {
     await this.crPrototypeService.updatePopupStatus(crId, popupstatus);

@@ -14,12 +14,12 @@ export class MailService {
     this.transporter = nodemailer.createTransport({
       host: mailConfig.host,
       port: mailConfig.port,
-      secure: mailConfig.secure, // true for 465, false for other ports
+      secure: mailConfig.secure, 
       auth: mailConfig.auth,
     });
   }
 
-// Inside MailService class
+
 
 async sendEmail(to: string, subject: string, body: string, fireEventAndForget: boolean = false) {
   const mailOptions = {
@@ -32,7 +32,7 @@ async sendEmail(to: string, subject: string, body: string, fireEventAndForget: b
   if (fireEventAndForget) {
     this.transporter.sendMail(mailOptions).catch(error => {
       console.error('Error sending email:', error);
-      // Implement additional error logging mechanism here if necessary
+
     });
   } else {
     try {

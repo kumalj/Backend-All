@@ -25,20 +25,17 @@ export class CrService {
     });
   }
 
-  // ,'getCr.cr'
+
 
   async startDevelopment(crId: number, userId: number): Promise<CR> {
     try {
-      // Find the CR by ID
       const cr = await this.CrRepository.findOne({ where: { crId } });
       if (!cr) {
         throw new Error(`CR with ID ${crId} not found`);
       }
   
-      // Update CR status
       cr.status = 'Taken For Development';
   
-      // Set developer name
       const user = await this.UserRepository.findOne({ where: { userId } });
       if (!user) {
         throw new Error(`User with ID ${userId} not found`);
@@ -46,15 +43,12 @@ export class CrService {
       cr.developer = user.firstname + ' ' + user.lastname;
       cr.getToDevelopmentAt = new Date();
   
-      // Save the updated CR
       await this.CrRepository.save(cr);
-  
-      // Log the crId and userId in Getcr table, and now also the developer's name
+
       const getcr = new Getcr();
       getcr.cr = cr;
       getcr.user = user;
-  
-      // Ensure getcr is correctly passed and of the correct type
+
       await this.GetCrRepository.save(getcr);
   
       // Update priorities
@@ -65,18 +59,19 @@ export class CrService {
       await this.emailService.sendEmail(
         userEmail,
         `Your Change Request Get To Development!`,
-        `Dear ${cr.name} ,
-          Your CR Request Has been taken to Development by the team!
+        ` <p><h2>Change Request Moved to Development
+
+        </h2></p>
+          <p>Your CR Request Has been taken to Development by the team!</p>
   
-         Best regards,
-         IT Team`,
+        <p>Thank You!</p>`,
          true,
       );
   
       return cr;
     } catch (error) {
       console.error('Error in startDevelopment:', error);
-      throw error; // Rethrow the error to be handled by the caller
+      throw error; 
     }
   }
   
@@ -90,7 +85,7 @@ export class CrService {
       const cr = crs[i];
       cr.priority = (Number(cr.priority) - 1); // Decrease priority by one
 
-      //cr.priority = cr.priority === 'NaN' ? 0 : parseInt(cr.priority, 10);
+
       await this.CrRepository.save(cr);
     }
   }
@@ -99,7 +94,6 @@ export class CrService {
     return this.CrRepository.find({ where: { status } });
   }
 
-  // Inside CrService
 
   async create(cr: CR): Promise<CR> {
 
@@ -107,25 +101,25 @@ export class CrService {
     const name = cr.name;
     const hodEmail = 'trainingitasst.cbl@cbllk.com';    // HOD's Email
 
-    // await this.emailService.sendEmail(
-    //   hodEmail,
-    //   'Approval Required for New Change Request',
-    //   `
-    //   <p><h2>Review and Approval Needed for Change Request Submission</h2></p>
-    //   You have received a new change request that requires your attention and approval.
-    //   <p><strong>Change Request Details:</strong></p>
-    //   <ul>
+    await this.emailService.sendEmail(
+      hodEmail,
+      'Approval Required for New Change Request',
+      `
+      <p><h2>Review and Approval Needed for Change Request Submission</h2></p>
+      You have received a new change request that requires your attention and approval.
+      <p><strong>Change Request Details:</strong></p>
+      <ul>
 
-    //     <li><strong>Title:</strong> ${title}</li>
-    //     <li><strong>Submitted by:</strong> ${name}</li>
-    //   </ul>
-    //   <p>Please review the attached documentation and provide your approval at your earliest convenience.
-    //   You can approve this by logging into the CR management system.</p>
-    //   <p>Thank you!</p>
+        <li><strong>Title:</strong> ${title}</li>
+        <li><strong>Submitted by:</strong> ${name}</li>
+      </ul>
+      <p>Please review the attached documentation and provide your approval at your earliest convenience.
+      You can approve this by logging into the CR management system.</p>
+      <p>Thank you!</p>
 
-    // `,
-    // true
-    // );
+    `,
+    true
+    );
 
     const createdCR = await this.CrRepository.save(cr);
     return createdCR;
@@ -169,9 +163,6 @@ export class CrService {
         },
       });
 
-
-      
-
       // Update the current CR's priority
       cr.priority = priority;
 
@@ -200,7 +191,7 @@ export class CrService {
         priority = null;
       }
 
-      // Save the updated priority for the current CR
+
       await this.CrRepository.save(cr);
     }
     if (isNaN(priority)) {
@@ -209,7 +200,7 @@ export class CrService {
 
 
     const updatedCRs = await this.CrRepository.find({
-      relations: ['userId'], // Ensure the correct relation name is used
+      relations: ['userId'], 
       order: {
         priority: 'ASC'
       }
@@ -279,7 +270,6 @@ export class CrService {
       </body>
       </html>`;
 
-      // Send email to the current user
       await this.emailService.sendEmail(
         email,
         'Change Request Priority Updated',
@@ -298,7 +288,7 @@ export class CrService {
     if (!cr) {
       throw new Error('CR not found');
     }
-    cr.status = status; // Assuming you have a status field in CR entity
+    cr.status = status; 
     return await this.CrRepository.save(cr);
   }
 
@@ -333,35 +323,33 @@ export class CrService {
         
       }
 
-      // const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
-      // await this.emailService.sendEmail(
-      //   userEmail,
-      //   `Your Change Request has been ${hodApproval}!`,
-      //   `<p><h2>Change Request Status Update</h2></p>
+      const userEmail = await this.getUserUsernameForCR(crId); // Fetch user's email
+      await this.emailService.sendEmail(
+        userEmail,
+        `Your Change Request has been ${hodApproval}!`,
+        `<p><h2>Change Request Status Update</h2></p>
       
-      //   We are pleased to inform you that your Change Request (CR) has been ${hodApproval} by the Head of Department (HOD).
+        We are pleased to inform you that your Change Request (CR) has been ${hodApproval} by the Head of Department (HOD).
       
-      //   <p><strong>Change Request Details:</strong></p>
-      //   <ul>
-      //     <li><strong>CR ID:</strong> ${crId}</li>
-      //     <li><strong>Title:</strong> ${cr.topic}</li>
-      //     ${hodApproval === 'approved' ? `<li><strong>CR Priority:</strong> ${cr.priority}</li>` : ''}
-      //     <li><strong>Status:</strong> ${hodApproval}</li>
-      //   </ul>
-      //   ${hodApproval === 'approved' ?`<p>Your requested changes are now approved and will be implemented accordingly.</p>` : ''}
+        <p><strong>Change Request Details:</strong></p>
+        <ul>
+          <li><strong>CR ID:</strong> ${crId}</li>
+          <li><strong>Title:</strong> ${cr.topic}</li>
+          ${hodApproval === 'approved' ? `<li><strong>CR Priority:</strong> ${cr.priority}</li>` : ''}
+          <li><strong>Status:</strong> ${hodApproval}</li>
+        </ul>
+        ${hodApproval === 'approved' ?`<p>Your requested changes are now approved and will be implemented accordingly.</p>` : ''}
       
-      //   If you have any further questions or need assistance, feel free to contact us.
+        If you have any further questions or need assistance, feel free to contact us.
       
-      //   <p>Thank You!</p>`,
-      //   true
-      // );
+        <p>Thank You!</p>`,
+        true
+      );
       
-
-      if (hodApproval === 'rejected') {
+    if (hodApproval === 'rejected') {
         cr.status = 'CR Rejected';
       }
 
-      // Save the updated CR
       return await this.CrRepository.save(cr);
     } catch (error) {
       console.error('Error updating HOD approval:', error);

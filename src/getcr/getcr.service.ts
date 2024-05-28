@@ -11,8 +11,6 @@ export class GetCrService {
   create(createDdDto: CreateGetCrDto) {
     return 'This action adds a new dd';
   }
-    
-
   findAll() {
     return `This action returns all crPrototype`;
   }

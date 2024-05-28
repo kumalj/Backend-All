@@ -11,7 +11,7 @@ import { CRPrototype } from './crprototype/crprototype.entity';
 import { GetCrModule } from './getcr/getcr.module';
 import { CRPrototypeModule } from './crprototype/crprototype.module';
 import { ConfigModule } from '@nestjs/config';
-import mailConfig from './mail/mail.config'; // Assuming this file exports your mail configuration
+import mailConfig from './mail/mail.config'; 
 import { MailModule } from './mail/mail.module';
 
 @Module({
@@ -27,7 +27,7 @@ import { MailModule } from './mail/mail.module';
       synchronize: true,
     }),
     ConfigModule.forRoot({
-      load: [mailConfig], // Load your mail configuration
+      load: [mailConfig], 
     }),
     UserModule,
     JwtModule.register({

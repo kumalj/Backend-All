@@ -14,16 +14,12 @@ import { Constants } from 'src/utils/constants';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-
-  //user login controls
-  @Post('register')
-  
-  async register(@Body() user: User): Promise<User> {
-    return await this.userService.create(user);
+@Post('register')
+async register(@Body() user: User): Promise<User> {
+  return await this.userService.create(user);
   }
 
-  @Post('login')
-async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number; userType: string; firstname:string; lastname:string;}> {
+@Post('login')async login(@Body() credentials: { username: string; password: string }): Promise<{ user: User; accessToken: string; userId: number; userType: string; firstname:string; lastname:string;}> {
   try {
     const { user, accessToken, userId, userType,firstname,lastname } = await this.userService.login(credentials.username, credentials.password);
     return { user, accessToken, userId, userType,firstname,lastname};
@@ -36,7 +32,7 @@ async login(@Body() credentials: { username: string; password: string }): Promis
   }
 }
 
- @UseGuards(new RoleGuard(Constants.ROLES.Admin))
+  @UseGuards(new RoleGuard(Constants.ROLES.Admin))
   @Get()
   @UseGuards(JwtAuthGuard) // Applying JwtAuthGuard
   async getAllUsers(@Req() req: Request): Promise<User[]> {

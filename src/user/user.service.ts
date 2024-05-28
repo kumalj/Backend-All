@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-// src/user/user.service.ts
 import { Injectable, NotFoundException, UnauthorizedException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -20,8 +19,7 @@ export class UserService {
 
   //Register part of the system
   async create(user: User): Promise<User> {
-
-    const existingUser = await this.findByUsername(user.username);
+  const existingUser = await this.findByUsername(user.username);
     if (existingUser) {
         throw new BadRequestException('Username is already taken');
     }
@@ -72,7 +70,7 @@ async findAll(accessToken: string): Promise<User[]> {
     return await this.userRepository.findOne({ where: { username } });
   }
 
-//Login part of the  database
+//Login part of the database
   async login(username: string, password: string): Promise<{ user: User; accessToken: string; userId: number; userType: string; firstname:string; lastname:string; extension:number; }> {
     const user = await this.findByUsername(username);
     if (!user) {

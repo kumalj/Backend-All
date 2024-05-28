@@ -1,12 +1,8 @@
 /* eslint-disable prettier/prettier */
-// src/config/email.config.ts
-
-// smtpConfig.js
-
 
 export default () => ({
   email: {
-    host: 'smtp.googlemail.com', // Note: No need for 'ssl://' prefix
+    host: 'smtp.googlemail.com',
     port: 465,
     secure: true,
     auth: {

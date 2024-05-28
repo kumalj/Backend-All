@@ -72,19 +72,15 @@ export class CR {
   devCompletedAt: Date;
 
 
-
-
   @ManyToOne(() => User, user => user.changeRequests)
   @JoinColumn({ name: 'userId' })
   userId: User;
 
-  
-  @OneToMany(() => Getcr, getCr => getCr.cr) // Specify ManyToOne relationship
+  @OneToMany(() => Getcr, getCr => getCr.cr) 
   @JoinColumn({ name: 'crId' })
   getCr: Getcr; 
 
-
-  @OneToMany(() => CRPrototype, crPrototype => crPrototype.cr) // Specify ManyToOne relationship
+  @OneToMany(() => CRPrototype, crPrototype => crPrototype.cr)
   @JoinColumn({ name: 'crId' })
   prototype: CRPrototype; 
 

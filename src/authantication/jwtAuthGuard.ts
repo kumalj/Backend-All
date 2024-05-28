@@ -10,7 +10,7 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const authorizationHeader = request.headers.authorization;
 
-    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer')) {
       throw new UnauthorizedException('Access token not provided');
     }
 

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-// src/user/user.module.ts
+
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt'; 
@@ -11,8 +11,6 @@ import { CR } from 'src/chngerequest/chngerequest.entity';
 import { Getcr } from 'src/getcr/getcr.entity';
 import { CRPrototype } from 'src/crprototype/crprototype.entity';
 
-// Other imports and declarations...
-
 @Module({
   imports: [
     TypeOrmModule.forFeature([CR, Getcr, User,CRPrototype]),
@@ -20,7 +18,7 @@ import { CRPrototype } from 'src/crprototype/crprototype.entity';
       secret: 'pass@123',
       signOptions: { expiresIn: '5h' },
     }),MailModule
-    // Other modules...
+
   ],
   controllers: [UserController],
   providers: [UserService],

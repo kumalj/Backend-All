@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-// crprototype.entity.ts
+
 
 import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn, CreateDateColumn } from 'typeorm';
 import { CR } from '../chngerequest/chngerequest.entity';

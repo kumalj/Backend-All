@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-// src/cat.controller.ts
+
 
 import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, UploadedFile, UseInterceptors} from '@nestjs/common';
 import { CR } from './chngerequest.entity';
@@ -37,45 +37,36 @@ export class CrController {
     
     let filePath = '';
     if (file) {
-      // If file is uploaded, get the file path
-      filePath = file.filename; // Just use the filename, as it's already saved in the ./uploads/ directory
-      cr.filePath = filePath; // Assign the file path to the CR object
+
+      filePath = file.filename; 
+      cr.filePath = filePath; 
     }
-  
-    // Create the CR
+
     const createdCR = await this.crService.create(cr);
     
     return createdCR;
   }
   
   async uploadFile(file: Express.Multer.File): Promise<string> {
-    const filePath = '/uploads/cr/' + file.originalname; // Example path
+    const filePath = '/uploads/cr/' + file.originalname; 
     return filePath;
   }
 
-
-
-
-
-
-  @Put(':crId/priority')
+ @Put(':crId/priority')
   async updatePriority(@Param('crId') crId: number, @Body('priority') priority: number) {
     return await this.crService.updatePriority(crId, priority);
   }
   
-
-  @Delete(':crId')
+ @Delete(':crId')
   delete(@Param('crId') crId: string): Promise<void> {
     return this.crService.delete(+crId);
   }
 
- 
-  @Put(':id/start-development')
+ @Put(':id/start-development')
   async startDevelopment(@Param('id') crId: number, @Body('userId') userId: number): Promise<CR> {
       return this.crService.startDevelopment(crId, userId); 
   }
 
-  
   @Get('start-development')
   async getCRsInStartDevelopment(): Promise<CR[]> {
     return this.crService.findByStatus('Starting Development');

@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-// In your NestJS main.ts file
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
